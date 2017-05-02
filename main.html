@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+	<head>
+	<title>CityGrid</title>
+
+	<style>
+		body{ background-color: grey; }
+		canvas{ background-color: white; }
+		textarea{ background-color: black; foreground-color: white;}
+	</style>
+
+
+	</head>
+
+	<body>
+	<center>
+
+		<h1>CityGrid</h1>
+		<h2>Sistemas Gráficos - 66.71</h2>
+		<h3>Alumnos</h3>
+		<h4>Primer Cuatrimestre 2017</h4>
+
+		<canvas id="my-canvas" width="900" height="500">
+		Your browser does not support the HTML5 canvas element.
+		</canvas>
+
+	</center>
+
+	<script>
+
+	function initWebGL(){
+
+		canvas = document.getElementById("my-canvas");  // obtengo referencia al canvas
+
+		try {
+			gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+	  	} catch(e){
+		   	alert("Error al obtener el contexto");
+		}
+
+		if(gl){
+			// Codigo Aqui
+			gl.clearColor(0.1, 0.1, 0.5, 1.0);
+			gl.clear( gl.COLOR_BUFFER_BIT);		// pinto el fondo de azul
+
+		} else {
+			alert("Error: Your browser does not appear to support WebGL.");
+		}
+
+	}
+
+	window.onload=initWebGL;
+	</script>
+
+</body>
+</html>
