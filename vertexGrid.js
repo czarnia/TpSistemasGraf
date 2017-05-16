@@ -1,8 +1,8 @@
 
 //VertexGrid de ejercicio semanal.
-function VertexGrid (_rows, _cols) {
-    this.cols = _cols;
-    this.rows = _rows;
+function VertexGrid () {
+    this.cols = null;
+    this.rows = null;
     this.index_buffer = null;
 
     this.position_buffer = null;
@@ -11,6 +11,11 @@ function VertexGrid (_rows, _cols) {
     this.webgl_position_buffer = null;
     this.webgl_color_buffer = null;
     this.webgl_index_buffer = null;
+
+    this.create = function(_rows, _cols){
+      this.cols = _cols;
+      this.rows = _rows;
+    }
 
     this.createIndexBuffer = function(){
 
