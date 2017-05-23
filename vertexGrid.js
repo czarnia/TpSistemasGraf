@@ -17,6 +17,45 @@ function VertexGrid () {
       this.rows = _rows;
     }
 
+    this.rotate = function(p, plano){
+      var position_buffer_aux = [];
+      m4=mat4.create();
+      mat4.rotate(m4, m4, p, vec3.fromValues(plano[0], plano[1], plano[2]));
+
+      vec_aux = []
+      for (i = 0; i < this.position_buffer.length; i++) {
+        vec_aux.push(this.position_buffer[i]);
+        if ((i+1)%3 == 0){
+          vec = vec3.fromValues(vec_aux[i-2], vec_aux[i-1], vec_aux[i]);
+          vec = vec*m4;
+          position_buffer_aux.push(vec[i-2]);
+          position_buffer_aux.push(vec[i-1]);
+          position_buffer_aux.push(vec[i]);
+          vec=vec3.create();
+        }
+      };
+      this.position_buffer = position_buffer_aux;
+    }
+
+    this.translate = function(p){
+      var position_buffer_aux = [];
+      m4=mat4.create();
+      mat4.translate(m4, m4, vec3.fromValues(p[0], p[1], p[2]));
+      vec_aux = []
+      for (i = 0; i < this.position_buffer.length; i++) {
+        vec_aux.push(this.position_buffer[i]);
+        if ((i+1)%3 == 0){
+          vec = vec3.fromValues(vec_aux[i-2], vec_aux[i-1], vec_aux[i]);
+          vec = vec*m4;
+          position_buffer_aux.push(vec[i-2]);
+          position_buffer_aux.push(vec[i-1]);
+          position_buffer_aux.push(vec[i]);
+          vec=vec3.create();
+        }
+      };
+      this.position_buffer = position_buffer_aux;
+    }
+
     this.createIndexBuffer = function(){
 
         this.index_buffer = []

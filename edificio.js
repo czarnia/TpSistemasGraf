@@ -3,28 +3,68 @@ function Edificio(){
   this.z = null;
   this.x = null;
   this.y = null;
-  this.vertices = null;
+  this.lados = [];
 
   this.create = function(_x, _y, _z) {
     this.x = _x;
     this.y = _y
     this.x = _z;
 
-    this.vertices = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vertices);
+    grid = new VertexGrid();
+    grid.create(_x, _y);
+    grid.createSinPlaneGrid();
+    grid.createIndexBuffer();
+    grid.rotate(Math.pi/2, [0,1,1]);
+    this.lados.push(grid);
 
-    var vertices_aux = [
-      0, 0, 0,
-      _x, 0, 0,
-      _x, 0, _z,
-      _x, _y, 0,
-      0, _y, 0,
-      _x, _y, _z,
-      0, 0, _z,
-      0, _y, _z,
-    ]
+    grid = new VertexGrid();
+    grid.create(_x, _y);
+    grid.createSinPlaneGrid();
+    grid.createIndexBuffer();
+    grid.rotate(Math.pi/2, [0,1,1]);
+    grid.translate([0,0,_z]);
+    this.lados.push(grid);
 
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(vertices_aux), gl.STATIC_DRAW);
+    grid = new VertexGrid();
+    grid.create(_x, _z);
+    grid.createSinPlaneGrid();
+    grid.createIndexBuffer();
+    grid.rotate(Math.pi/2, [1,1,0]);
+    grid.translate([0,_y,0]);
+    this.lados.push(grid);
+
+    grid = new VertexGrid();
+    grid.create(_x, _z);
+    grid.createSinPlaneGrid();
+    grid.createIndexBuffer();
+    grid.rotate(Math.pi/2, [1,1,0]);
+    this.lados.push(grid);
+
+    grid = new VertexGrid();
+    grid.create(_y, _z);
+    grid.createSinPlaneGrid();
+    grid.createIndexBuffer();
+    this.lados.push(grid);
+
+    grid = new VertexGrid();
+    grid.create(_y, _z);
+    grid.createSinPlaneGrid();
+    grid.createIndexBuffer();
+    grid.translate([_x,0,0]);
+    this.lados.push(grid);
+  }
+
+  this.setupWebGLBuffers = function (){
+    for (i = 0; i < 6; i++){
+      grid = this.lados[i];
+      grid.setupWebGLBuffers();
+    };
+  }
+
+  this.draw = function(){
+    for (i = 0; i < 6; i++) {
+      this.lados[i].drawVertexGrid();
+    };
   }
 
 }
