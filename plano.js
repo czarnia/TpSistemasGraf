@@ -1,10 +1,10 @@
-function VertexGrid () {
+function Plano () {
     this.cols = null;
     this.rows = null;
     this.index_buffer = null;
 
-    this.position_buffer = null;
-    this.color_buffer = null;
+    this.position_buffer = [];
+    this.color_buffer = [];
 
     this.webgl_position_buffer = null;
     this.webgl_color_buffer = null;
@@ -14,6 +14,8 @@ function VertexGrid () {
       this.cols = _cols;
       this.rows = _rows;
 
+      //Vértices
+
       this.position_buffer.push(-_rows/2.0);
       this.position_buffer.push(-_cols/2.0);
       this.position_buffer.push(0);
@@ -23,12 +25,30 @@ function VertexGrid () {
       this.position_buffer.push(0);
 
       this.position_buffer.push(-_rows/2.0);
-      this.position_buffer.push(-_cols/2.0);
+      this.position_buffer.push(_cols/2.0);
       this.position_buffer.push(0);
 
       this.position_buffer.push(_rows/2.0);
       this.position_buffer.push(_cols/2.0);
       this.position_buffer.push(0);
+
+      //Color
+
+      this.color_buffer.push(0.9);
+      this.color_buffer.push(0.5);
+      this.color_buffer.push(0.5);
+
+      this.color_buffer.push(0.5);
+      this.color_buffer.push(0.9);
+      this.color_buffer.push(0.5);
+
+      this.color_buffer.push(0.5);
+      this.color_buffer.push(0.5);
+      this.color_buffer.push(0.9);
+
+      this.color_buffer.push(0.9);
+      this.color_buffer.push(0.9);
+      this.color_buffer.push(0.9);
     }
 
     this.rotate = function(p, plano){
@@ -75,19 +95,18 @@ function VertexGrid () {
         this.index_buffer = []
         var i, j;
 
-        for (i = 0.0; i < this.rows-1.0; i++){
-          for (j = 0.0; j < this.cols; j++){
+        for (i = 0.0; i < 1.0; i++){
+          for (j = 0.0; j < 2.0; j++){
             if (i%2 == 0.0){
-              this.index_buffer.push(this.cols*i+j);
-              this.index_buffer.push(this.cols*(i+1.0)+j);
+              this.index_buffer.push(2.0*i+j);
+              this.index_buffer.push(2.0*(i+1.0)+j);
             }else{
-              this.index_buffer.push(this.cols*i+(this.cols-j-1.0));
-              this.index_buffer.push(this.cols*(i+1.0)+(this.cols-j-1.0));
+              this.index_buffer.push(2.0*i+(2.0-j-1.0));
+              this.index_buffer.push(2.0*(i+1.0)+(2.0-j-1.0));
             }
           };
         };
     }
-
 
     // Esta funci�n crea e incializa los buffers dentro del pipeline para luego
     // utlizarlos a la hora de renderizar.
