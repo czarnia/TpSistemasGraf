@@ -1,5 +1,3 @@
-
-//VertexGrid de ejercicio semanal.
 function VertexGrid () {
     this.cols = null;
     this.rows = null;
@@ -15,6 +13,22 @@ function VertexGrid () {
     this.create = function(_rows, _cols){
       this.cols = _cols;
       this.rows = _rows;
+
+      this.position_buffer.push(-_rows/2.0);
+      this.position_buffer.push(-_cols/2.0);
+      this.position_buffer.push(0);
+
+      this.position_buffer.push(_rows/2.0);
+      this.position_buffer.push(-_cols/2.0);
+      this.position_buffer.push(0);
+
+      this.position_buffer.push(-_rows/2.0);
+      this.position_buffer.push(-_cols/2.0);
+      this.position_buffer.push(0);
+
+      this.position_buffer.push(_rows/2.0);
+      this.position_buffer.push(_cols/2.0);
+      this.position_buffer.push(0);
     }
 
     this.rotate = function(p, plano){
@@ -74,61 +88,6 @@ function VertexGrid () {
         };
     }
 
-    // Esta funci�n inicializa el position_buffer y el color buffer de forma de
-    // crear un plano de color gris que se extiende sobre el plano XY, con Z=0
-    // El plano se genera centrado en el origen.
-    // El prop�sito de esta funci�n es a modo de ejemplo de como inicializar y cargar
-    // los buffers de las posiciones y el color para cada v�rtice.
-    this.createUniformPlaneGrid = function(){
-
-        this.position_buffer = [];
-        this.color_buffer = [];
-
-        for (var i = 0.0; i < this.rows; i++) {
-           for (var j = 0.0; j < this.cols; j++) {
-
-               // Para cada v�rtice definimos su posici�n
-               // como coordenada (x, y, z=0)
-               this.position_buffer.push(i-(this.rows-1.0)/2.0);
-               this.position_buffer.push(j-(this.rows-1.0)/2.0);
-               this.position_buffer.push(0.0);
-
-               // Para cada v�rtice definimos su color
-               this.color_buffer.push(1.0/this.rows * i);
-               this.color_buffer.push(0.2);
-               this.color_buffer.push(1.0/this.cols * j);
-
-           };
-        };
-    }
-
-    // ACTIVIDAD 2.
-    // Crear alguna otra funci�n similar a la anterior createUniformPlaneGrid()
-    // que cree una superficie en donde la altura ya no sea z=0 sino que tenga aluna forma
-    // o part�n en particular.
-
-    this.createSinPlaneGrid = function(){
-
-        this.position_buffer = [];
-        this.color_buffer = [];
-
-        for (var i = 0.0; i < this.rows; i++) {
-           for (var j = 0.0; j < this.cols; j++) {
-
-               // Para cada v�rtice definimos su posici�n
-               // como coordenada (x, y, z=0)
-               this.position_buffer.push(i-(this.rows-1.0)/2.0);
-               this.position_buffer.push(j-(this.rows-1)/2.0);
-               this.position_buffer.push((j-(this.rows-1)/2.0)*Math.sin(i-(this.rows-1.0)/2.0));
-
-               // Para cada v�rtice definimos su color
-               this.color_buffer.push(1.0/this.rows * i);
-               this.color_buffer.push(0.2);
-               this.color_buffer.push(1.0/this.cols * j);
-
-           };
-        };
-    }
 
     // Esta funci�n crea e incializa los buffers dentro del pipeline para luego
     // utlizarlos a la hora de renderizar.
@@ -156,11 +115,7 @@ function VertexGrid () {
     }
 
 
-    // Esta funci�n es la que se encarga de configurar todo lo necesario
-    // para dibujar el VertexGrid.
-    // En el caso del ejemplo puede observarse que la �ltima l�nea del m�todo
-    // indica dibujar tri�ngulos utilizando los 6 �ndices cargados en el Index_Buffer.
-    this.drawVertexGrid = function(){
+    this.draw = function(){
 
         var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
         gl.enableVertexAttribArray(vertexPositionAttribute);
