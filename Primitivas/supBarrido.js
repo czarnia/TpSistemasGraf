@@ -1,7 +1,7 @@
 function supBarrido(){
 	this.curvaBase = null;
 	this.curvaCamino = null;
-	this.grilla = new vertexGrid();
+	this.grilla = new VertexGrid();
 
 	this.create = function(camino, filas, puntos_forma){
 		var cols = puntos_forma.length; //Las columnas tendran los puntos de la forma
@@ -18,11 +18,10 @@ function supBarrido(){
 
 		this.grilla.createIndexBuffer();
 
-		long_base = base.length();
 		long_camino = camino.length();
 
 		for (var i = 0; i < this.filas; ++i) {
-			var nivel = i * long_camino / this.filas; //Ver si bien el denominador
+			var nivel = i * long_camino / (this.filas - 1); //Ver si bien el denominador
 			//Acomodo normal, tangente y binormal
 			//Crear funciones en curva que sean: 
 			//posicionar y recibe el nivel
@@ -35,7 +34,7 @@ function supBarrido(){
 			//Traslado la curva camino al punto del nivel 
 			var mat_traslacion = mat4.create();
 			mat4.identity(mat_traslacion);
-			mat4.translate(mat_traslacion, mat_traslacion, punto_nivel);
+			mat4.translate(mat_traslacion, mat_traslacion, punto);
 
 			//La forma debe tener la orientacion de la normal, entonces la roto acorde
 			/*var mat_rotacion = mat4.create();
@@ -49,6 +48,9 @@ function supBarrido(){
 			//Creo una matriz con las normales
 			//Recorro cada punto de la figura
 			for (var i = 0; i < cols; i += 3) {
+				console.log("Cols ", cols);
+				console.log("Punto ");
+				console.log(puntos_forma[i]);
 				var punto_figura = vec3.fromValues(puntos_forma[i], puntos_forma[i + 1], puntos_forma[i + 2]);
 				//Traslado el punto a la posicion del nivel en el camino
 				vec3.transformMat4(punto_figura, punto_figura, mat_traslacion);
@@ -62,6 +64,9 @@ function supBarrido(){
 				this.grilla.color_buffer.push(0);
 			}
 
+		}
+		for (var i = 0; i < this.grilla.position_buffer.length; i++) {
+			console.log(this.grilla.position_buffer[i]);
 		}
 		this.grilla.setupWebGLBuffers();
 	}
