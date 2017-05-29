@@ -77,53 +77,48 @@ function curvaBspline3(){
 
   this.create = function(puntos) {
     this.puntosDeControl = puntos;
-    this.paso = paso;
     this.valores_u = puntos.length - 3;
-/*    var puntos_curva = [];
-    var indice = 0;
-    if(tf % paso != 0)
-        console.log("El tf debe ser divisible por el paso");*/
-
-    //Conviene devolver el resultado de la funcion en un t que le pasen que devolver todos los puntos
-
-    /*for(var j = 0; j < this.puntosDeControl.length; ++j){
-        for(var i = 0; i <= (tf / paso); ++i){
-            puntos_curva[indice + i] = this.puntosDeControl[j] * this.base0(to + i * paso) 
-                    + this.puntosDeControl[j + 1] * this.base1(to + i * paso) 
-                    + this.puntosDeControl[j + 2] * this.base2(to + i * paso) 
-                    + this.puntosDeControl[j + 3] * this.base3(to + i * paso);
-        }
-        indice += i;*/
     }
-    //Podria agarrar y devolver los puntos
-    //Lo mismo con la tangente, la normal y la binormal de la curva
-  
+
+    this.length = function(){
+        return this.valores_u;
+    }
 
     this.get_punto = function(u){
         //Modifico para que el punto este de 0 a 1
         var aux = Math.floor(u);
-        var t_local = u - aux;
-        //Los puntos de control van a ser los que esten cerca de t creo
-        return this.puntosDeControl[aux] * this.base0(t_local) 
-                + this.puntosDeControl[aux + 1] * this.base1(t_local) 
-                + this.puntosDeControl[aux + 2] * this.base2(t_local) 
-                + this.puntosDeControl[aux + 3] * this.base3(t_local);
+        var u_local = u - aux;
+
+        if (this.valores_u <= u){
+            aux = this.valores_u - 1;
+            u_local = 1;
+        }
+
+        return this.puntosDeControl[aux] * this.base0(u_local) 
+                + this.puntosDeControl[aux + 1] * this.base1(u_local) 
+                + this.puntosDeControl[aux + 2] * this.base2(u_local) 
+                + this.puntosDeControl[aux + 3] * this.base3(u_local);
         //DUDA: ver si se puede calcular asi
     }
 
     this.get_tan = function(u){
         //Modifico para que el punto este de 0 a 1
         var aux = Math.floor(u);
-        var t_local = u - aux;
-        //Los puntos de control van a ser los que esten cerca de t creo
-        return this.puntosDeControl[aux] * this.base0der(t_local) 
-                + this.puntosDeControl[aux + 1] * this.base1der(t_local) 
-                + this.puntosDeControl[aux + 2] * this.base2der(t_local) 
-                + this.puntosDeControl[aux + 3] * this.base3der(t_local);
+        var u_local = u - aux;
+
+        if (this.valores_u <= u){
+            aux = this.valores_u - 1;
+            u_local = 1;
+        }
+
+        return this.puntosDeControl[aux] * this.base0der(u_local) 
+                + this.puntosDeControl[aux + 1] * this.base1der(u_local) 
+                + this.puntosDeControl[aux + 2] * this.base2der(u_local) 
+                + this.puntosDeControl[aux + 3] * this.base3der(u_local);
     }
 
     this.get_normal = function(u){
-        vec3 normal = vec3.create();
+        var normal = vec3.create();
         vec3.cross(normal, this.binormal, this.get_tan(u));
         return normal;
     }
