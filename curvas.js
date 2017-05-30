@@ -47,6 +47,13 @@ function curvaBspline3(){
   this.binormal = vec3.fromValues(0.0,0.0,1.0);
   this.grilla = null;
 
+  this.position_buffer = null;
+  this.color_buffer = null;
+  this.index_buffer = null;
+  this.webgl_position_buffer = null;
+  this.webgl_color_buffer = null;
+  this.webgl_index_buffer = null;
+
   //Bases
   this.base0 = function(u) {
     return (1-3*u+3*u*u-u*u*u)*1/6;
@@ -101,12 +108,6 @@ function curvaBspline3(){
         vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 3], this.base3(u_local));
 
         return vector_aux;
-
-/*        return this.puntosDeControl[aux] * this.base0(u_local) 
-                + this.puntosDeControl[aux + 1] * this.base1(u_local) 
-                + this.puntosDeControl[aux + 2] * this.base2(u_local) 
-                + this.puntosDeControl[aux + 3] * this.base3(u_local);*/
-        //DUDA: ver si se puede calcular asi
     }
 
     this.get_tan = function(u){
@@ -120,17 +121,29 @@ function curvaBspline3(){
             u_local = 1;
         }
 
+        var ok = true;
+        for (var i = 1; i < 4; i++) {
+            for (var j = 0; j < 3; j++){
+                if (this.puntosDeControl[aux][j] != this.puntosDeControl[aux + i][j])
+                    ok = false;
+            }
+        }
+
+        if (ok == true){
+            if ((aux + 4) < this.puntosDeControl.length){
+                vec3.subtract(vector_aux, this.puntosDeControl[aux + 4], this.puntosDeControl[aux]); 
+                return vector_aux;
+            }
+            vec3.subtract(vector_aux, this.puntosDeControl[aux], this.puntosDeControl[aux - 1]); 
+            return vector_aux;
+        }
+
         vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux], this.base0der(u_local));
         vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 1], this.base1der(u_local));
         vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 2], this.base2der(u_local));
         vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 3], this.base3der(u_local));
 
         return vector_aux;
-
-/*        return this.puntosDeControl[aux] * this.base0der(u_local) 
-                + this.puntosDeControl[aux + 1] * this.base1der(u_local) 
-                + this.puntosDeControl[aux + 2] * this.base2der(u_local) 
-                + this.puntosDeControl[aux + 3] * this.base3der(u_local);*/
     }
 
     this.get_normal = function(u){
@@ -139,23 +152,65 @@ function curvaBspline3(){
         return normal;
     }
 
-    //No muy practico usar grilla para dibujar la curva asi q ver esto
-    this.setupWebGLBuffers = function(){
-        //Hacemos que la grilla dibuje la curva
-        this.grilla = new VertexGrid();
-        this.grilla.create(this.valores_u.length, 1);
-        this.grilla.createIndexBuffer();
-        for (var t = 0; t < this.valores_u.length; t++) {
-            var punto = this.get_punto(t);
-            this.grilla.position_buffer.push(punto[0]);
-            this.grilla.position_buffer.push(punto[1]);
-            this.grilla.position_buffer.push(punto[2]);
+    this.curva_prueba = function(){
+        this.position_buffer = [];
+        this.color_buffer = [];
+        this.index_buffer = [];
+
+        var aux = vec3.create();
+        for (var i = 0; i < (this.valores_u * 10); i += 1) {
+           aux = this.get_punto(i/10);
+
+           this.position_buffer.push(aux[0]);
+           this.position_buffer.push(aux[1]);
+           this.position_buffer.push(aux[2]);
+
+           this.color_buffer.push(1.0);
+           this.color_buffer.push(1.0);
+           this.color_buffer.push(1.0);
+
+           this.index_buffer.push(i);
         }
-        this.grilla.setupWebGLBuffers();
+    }
+
+    this.setupWebGLBuffers = function(){
+        // 1. Creamos un buffer para las posicioens dentro del pipeline.
+        this.webgl_position_buffer = gl.createBuffer();
+        // 2. Le decimos a WebGL que las siguientes operaciones que vamos a ser se aplican sobre el buffer que
+        // hemos creado.
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+        // 3. Cargamos datos de las posiciones en el buffer.
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
+
+        // Repetimos los pasos 1. 2. y 3. para la informaci�n del color
+        this.webgl_color_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
+
+        // Repetimos los pasos 1. 2. y 3. para la informaci�n de los �ndices
+        // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
+        // Notar tambi�n que se usa un array de enteros en lugar de floats.
+        this.webgl_index_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
     }
 
     this.draw = function(){
-        this.grilla.drawVertexGrid();
+        
+        var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
+        gl.enableVertexAttribArray(vertexPositionAttribute);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+        gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+        var vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
+        gl.enableVertexAttribArray(vertexColorAttribute);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
+        gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+
+        // Dibujamos.
+        gl.drawElements(gl.LINE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
     }
 }
  
