@@ -84,7 +84,8 @@ function curvaBspline3(){
         return this.valores_u;
     }
 
-    this.get_punto = function(u){
+    this.get_punto = function(u){        
+        var vector_aux = vec3.fromValues(0.0, 0.0, 0.0);
         //Modifico para que el punto este de 0 a 1
         var aux = Math.floor(u);
         var u_local = u - aux;
@@ -94,14 +95,22 @@ function curvaBspline3(){
             u_local = 1;
         }
 
-        return this.puntosDeControl[aux] * this.base0(u_local) 
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux], this.base0(u_local));
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 1], this.base1(u_local));
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 2], this.base2(u_local));
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 3], this.base3(u_local));
+
+        return vector_aux;
+
+/*        return this.puntosDeControl[aux] * this.base0(u_local) 
                 + this.puntosDeControl[aux + 1] * this.base1(u_local) 
                 + this.puntosDeControl[aux + 2] * this.base2(u_local) 
-                + this.puntosDeControl[aux + 3] * this.base3(u_local);
+                + this.puntosDeControl[aux + 3] * this.base3(u_local);*/
         //DUDA: ver si se puede calcular asi
     }
 
     this.get_tan = function(u){
+        var vector_aux = vec3.fromValues(0.0, 0.0, 0.0);
         //Modifico para que el punto este de 0 a 1
         var aux = Math.floor(u);
         var u_local = u - aux;
@@ -111,10 +120,17 @@ function curvaBspline3(){
             u_local = 1;
         }
 
-        return this.puntosDeControl[aux] * this.base0der(u_local) 
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux], this.base0der(u_local));
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 1], this.base1der(u_local));
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 2], this.base2der(u_local));
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 3], this.base3der(u_local));
+
+        return vector_aux;
+
+/*        return this.puntosDeControl[aux] * this.base0der(u_local) 
                 + this.puntosDeControl[aux + 1] * this.base1der(u_local) 
                 + this.puntosDeControl[aux + 2] * this.base2der(u_local) 
-                + this.puntosDeControl[aux + 3] * this.base3der(u_local);
+                + this.puntosDeControl[aux + 3] * this.base3der(u_local);*/
     }
 
     this.get_normal = function(u){

@@ -4,7 +4,7 @@ function supBarrido(){
 	this.grilla = new VertexGrid();
 
 	this.create = function(camino, filas, puntos_forma){
-		var cols = puntos_forma.length; //Las columnas tendran los puntos de la forma
+		var cols = puntos_forma.length * 3; //Las columnas tendran los puntos de la forma
 										//Las filas la cantidad de repeticiones de la forma
 		this.grilla.create(filas, cols);
 
@@ -20,7 +20,7 @@ function supBarrido(){
 
 		long_camino = camino.length();
 
-		for (var i = 0; i < this.filas; ++i) {
+		for (var i = 0; i < this.filas; i++) {
 			var nivel = i * long_camino / (this.filas - 1); //Ver si bien el denominador
 			//Acomodo normal, tangente y binormal
 			//Crear funciones en curva que sean: 
@@ -47,11 +47,11 @@ function supBarrido(){
 			mat4.rotate(mat_rotacion, mat_rotacion, normal, normal);*/
 			//Creo una matriz con las normales
 			//Recorro cada punto de la figura
-			for (var i = 0; i < cols; i += 3) {
+			for (var j = 0.0; j < puntos_forma.length; j++) {
 				console.log("Cols ", cols);
 				console.log("Punto ");
-				console.log(puntos_forma[i]);
-				var punto_figura = vec3.fromValues(puntos_forma[i], puntos_forma[i + 1], puntos_forma[i + 2]);
+				console.log(puntos_forma[j]);
+				var punto_figura = vec3.fromValues(puntos_forma[j][0], puntos_forma[j][1], puntos_forma[j][2]);
 				//Traslado el punto a la posicion del nivel en el camino
 				vec3.transformMat4(punto_figura, punto_figura, mat_traslacion);
 				this.grilla.position_buffer.push(punto_figura[0]);
@@ -59,16 +59,21 @@ function supBarrido(){
 				this.grilla.position_buffer.push(punto_figura[2]);
 
 				//Le meto un color solo para probar
-				this.grilla.color_buffer.push(0);
-				this.grilla.color_buffer.push(0);
-				this.grilla.color_buffer.push(0);
+				this.grilla.color_buffer.push(0.0);
+				this.grilla.color_buffer.push(0.0);
+				this.grilla.color_buffer.push(0.0);
 			}
 
 		}
-		for (var i = 0; i < this.grilla.position_buffer.length; i++) {
-			console.log(this.grilla.position_buffer[i]);
-		}
 		this.grilla.setupWebGLBuffers();
+/*		console.log("Tamaño index buffer: ", this.grilla.index_buffer.length);
+		for (var i = 0; i < this.grilla.index_buffer.length; i++) {
+			console.log(this.grilla.index_buffer[i]);
+		}*/
+		console.log("Tamaño position_buffer: ", this.grilla.position_buffer.length);
+		for (var k = 0; k < this.grilla.position_buffer.length; k++) {
+			console.log(this.grilla.position_buffer[k]);
+		}
 	}
 
 	this.draw = function(){
