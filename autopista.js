@@ -11,21 +11,24 @@ function Autopista(){
 		this.perfil.forma = [];
 		this.perfil.normal = [];
 
-		this.perfil.forma.push([0.0, 0.0, 0.0]);
-		this.perfil.forma.push([5.0, 0.0, 0.0]);
-		this.perfil.forma.push([5.0, 3.0, 0.0]);
-		this.perfil.forma.push([0.0, 3.0, 0.0]);
-
-
+		this.perfil.forma.push([-2.5, 1.5, 0.0]);
+		this.perfil.forma.push([2.5, 1.5, 0.0]);
+		this.perfil.forma.push([2.5, -1.5, 0.0]);
+		this.perfil.forma.push([-2.5, -1.5, 0.0]);
 		//De vuelta primer punto para cerrar
-		this.perfil.forma.push([0.0, 0.0, 0.0]);
+		this.perfil.forma.push([-2.5, 1.5, 0.0]);
+
+		//Para que matchee con la tangente de la curva
+		this.perfil.normal.push([0.0, 0.0, 1.0]);
+		//Para que matchee con la normal de la curva
+		this.perfil.normal.push([0.0, 1.0, 0.0]);
 	}
 
 	this.create = function(curva_camino){
 		this.crear_perfil();
 		this.camino = camino;
 
-		this.superficie.create(this.camino, 3.0, this.perfil.forma);
+		this.superficie.create(this.camino, 100.0, this.perfil.forma, this.perfil.normal);
 	}
 
 	this.draw = function(){
