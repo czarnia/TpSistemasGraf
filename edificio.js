@@ -10,49 +10,49 @@ function Edificio(){
     this.y = _y;
     this.z = _z;
 
-    var grid = new VertexGrid();
-    grid.create(2, 2);
-    grid.createUniformPlaneGrid();
+    // Cara 0 (yz)
+    var grid = new Plano();
+    grid.create(_x, _z);
     grid.createIndexBuffer();
     grid.rotate(Math.PI/2, [1,0,0]);
+    grid.translate([0,_y/2,0]);
     this.lados.push(grid);
 
-    grid = new VertexGrid();
-    grid.create(2, 2);
-    grid.createUniformPlaneGrid();
+    // Cara 1 (yz)
+    grid = new Plano();
+    grid.create(_x, _z);
     grid.createIndexBuffer();
     grid.rotate(Math.PI/2, [1,0,0]);
-    grid.translate([0,1,0]);
+    grid.translate([0,-_y/2,0]);
     this.lados.push(grid);
 
-    grid = new VertexGrid();
-    grid.create(2, 2);
-    grid.createUniformPlaneGrid();
+
+    // Cara 2 (xz)
+    grid = new Plano();
+    grid.create(_z, _y);
     grid.createIndexBuffer();
     grid.rotate(Math.PI/2, [0,1,0]);
-    grid.translate([0.5,0.5,0]);
+    grid.translate([_x*0.5,0,0]);
     this.lados.push(grid);
 
-    grid = new VertexGrid();
-    grid.create(2, 2);
-    grid.createUniformPlaneGrid();
+    // Cara 3 (xz)
+    grid = new Plano();
+    grid.create(_z, _y);
     grid.createIndexBuffer();
     grid.rotate(Math.PI/2, [0,1,0]);
-    grid.translate([-0.5,0.5,0]);
+    grid.translate([-_x*0.5,0,0]);
     this.lados.push(grid);
 
-    grid = new VertexGrid();
-    grid.create(2, 2);
-    grid.createUniformPlaneGrid();
+    grid = new Plano();
+    grid.create(_x, _y);
     grid.createIndexBuffer();
-    grid.translate([0,0.5,0.5]);
+    grid.translate([0,0,_z*0.5]);
     this.lados.push(grid);
 
-    grid = new VertexGrid();
-    grid.create(2, 2);
-    grid.createUniformPlaneGrid();
+    grid = new Plano();
+    grid.create(_x, _y);
     grid.createIndexBuffer();
-    grid.translate([0,0.5,-0.5]);
+    grid.translate([0,0,-_z*0.5]);
     this.lados.push(grid);
   }
 
@@ -64,9 +64,9 @@ function Edificio(){
   }
 
   this.draw = function(){
-    //this.lados[0].drawVertexGrid();
+    //this.lados[0].drawPlano();
     for (i = 0; i < 6; i++) {
-      this.lados[i].drawVertexGrid();
+      this.lados[i].draw();
     };
   }
 

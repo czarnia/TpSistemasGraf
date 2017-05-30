@@ -13,8 +13,9 @@ function Autopista(){
 
 		this.perfil.forma.push([0.0, 0.0, 0.0]);
 		this.perfil.forma.push([5.0, 0.0, 0.0]);
-		this.perfil.forma.push([0.0, 3.0, 0.0]);
 		this.perfil.forma.push([5.0, 3.0, 0.0]);
+		this.perfil.forma.push([0.0, 3.0, 0.0]);
+
 
 		//De vuelta primer punto para cerrar
 		this.perfil.forma.push([0.0, 0.0, 0.0]);
@@ -24,7 +25,7 @@ function Autopista(){
 		this.crear_perfil();
 		this.camino = camino;
 
-		this.superficie.create(this.camino, 2.0, this.perfil.forma);
+		this.superficie.create(this.camino, 3.0, this.perfil.forma);
 	}
 
 	this.draw = function(){

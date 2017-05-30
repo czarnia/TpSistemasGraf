@@ -4,7 +4,7 @@ function supBarrido(){
 	this.grilla = new VertexGrid();
 
 	this.create = function(camino, filas, puntos_forma){
-		var cols = puntos_forma.length * 3; //Las columnas tendran los puntos de la forma
+		var cols = puntos_forma.length; //Las columnas tendran los puntos de la forma
 										//Las filas la cantidad de repeticiones de la forma
 		this.grilla.create(filas, cols);
 
@@ -23,7 +23,7 @@ function supBarrido(){
 		for (var i = 0; i < this.filas; i++) {
 			var nivel = i * long_camino / (this.filas - 1); //Ver si bien el denominador
 			//Acomodo normal, tangente y binormal
-			//Crear funciones en curva que sean: 
+			//Crear funciones en curva que sean:
 			//posicionar y recibe el nivel
 			//tangente q calcula la tangente
 			//normal q calcula la normal igual me parece que es siempre 1 en z en este caso
@@ -31,7 +31,7 @@ function supBarrido(){
 			var tan = this.curvaCamino.get_tan(nivel);
 			var normal = this.curvaCamino.get_normal(nivel);
 			//La binormal es el producto vectorial entre la normal y la tangente
-			//Traslado la curva camino al punto del nivel 
+			//Traslado la curva camino al punto del nivel
 			var mat_traslacion = mat4.create();
 			mat4.identity(mat_traslacion);
 			mat4.translate(mat_traslacion, mat_traslacion, punto);
@@ -42,7 +42,7 @@ function supBarrido(){
 
 			tan.normalize(tan, tan);/
 			normal.normalize(normal, normal);
-			var angulo = 
+			var angulo =
 
 			mat4.rotate(mat_rotacion, mat_rotacion, normal, normal);*/
 			//Creo una matriz con las normales
@@ -59,9 +59,9 @@ function supBarrido(){
 				this.grilla.position_buffer.push(punto_figura[2]);
 
 				//Le meto un color solo para probar
-				this.grilla.color_buffer.push(0.0);
-				this.grilla.color_buffer.push(0.0);
-				this.grilla.color_buffer.push(0.0);
+				this.grilla.color_buffer.push(1.0);
+				this.grilla.color_buffer.push(1.0);
+				this.grilla.color_buffer.push(1.0);
 			}
 
 		}
