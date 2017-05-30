@@ -3,14 +3,11 @@ function supBarrido(){
 	this.curvaCamino = null;
 	this.grilla = new VertexGrid();
 
-	this.create = function(camino, filas, puntos_forma){
+	this.create = function(camino, filas, puntos_forma, normales_forma){
 		var cols = puntos_forma.length; //Las columnas tendran los puntos de la forma
 										//Las filas la cantidad de repeticiones de la forma
 		this.grilla.create(filas, cols);
 
-		var normal_figura = vec3.fromValues(0,1,0); //y es la normal
-
-		this.filas = filas;
 		this.curvaCamino = camino;
 
 		this.grilla.position_buffer = [];
@@ -20,8 +17,8 @@ function supBarrido(){
 
 		long_camino = camino.length();
 
-		for (var i = 0; i < this.filas; i++) {
-			var nivel = i * long_camino / (this.filas - 1); //Ver si bien el denominador
+		for (var i = 0; i < filas; i++) {
+			var nivel = i * long_camino / (filas - 1); 
 			//Acomodo normal, tangente y binormal
 			//Crear funciones en curva que sean:
 			//posicionar y recibe el nivel
@@ -36,32 +33,56 @@ function supBarrido(){
 			mat4.identity(mat_traslacion);
 			mat4.translate(mat_traslacion, mat_traslacion, punto);
 
+			//******PARA QUE COINCIDA CON LA TANGENTE*******
+			vec3.normalize(tan, tan);
+			vec3.normalize(normales_forma[0], normales_forma[0]);
+			var angulo = Math.acos(vec3.dot(tan, normales_forma[0]));
+
+			var eje = vec3.create();
+			vec3.cross(eje, tan, normales_forma[0]);
+
 			//La forma debe tener la orientacion de la normal, entonces la roto acorde
-			/*var mat_rotacion = mat4.create();
-			mat4.identity(mat_rotacion);
+			var mat_rotacion_tan = mat4.create();			
+			mat4.identity(mat_rotacion_tan);			
+			mat4.rotate(mat_rotacion_tan, mat_rotacion_tan, angulo, eje);
 
-			tan.normalize(tan, tan);/
-			normal.normalize(normal, normal);
-			var angulo =
+			//******PARA QUE COINCIDA CON LA NORMAL*******
+			normal_mod = vec3.create();
+			vec3.transformMat4(normal_mod, normales_forma[1], mat_rotacion_tan);
+			vec3.normalize(normal, normal);
+			vec3.normalize(normal_mod, normal_mod);
+			var angulo_norm = Math.acos(vec3.dot(normal, normal_mod));
 
-			mat4.rotate(mat_rotacion, mat_rotacion, normal, normal);*/
+			var eje_norm = vec3.create();
+			//Para que gire para el otro lado
+			vec3.cross(eje_norm, normal_mod, normal);//Por ahi hacer antes de normalizar
+
+			var mat_rotacion_norm = mat4.create();
+			mat4.identity(mat_rotacion_norm);
+			mat4.rotate(mat_rotacion_norm, mat_rotacion_norm, angulo_norm, eje_norm);
+
 			//Creo una matriz con las normales
 			//Recorro cada punto de la figura
-			for (var j = 0.0; j < puntos_forma.length; j++) {
+			for (var j = 0; j < puntos_forma.length; j++) {
 				console.log("Cols ", cols);
 				console.log("Punto ");
 				console.log(puntos_forma[j]);
 				var punto_figura = vec3.fromValues(puntos_forma[j][0], puntos_forma[j][1], puntos_forma[j][2]);
+				//Roto
+				vec3.transformMat4(punto_figura, punto_figura, mat_rotacion_tan);
+				//Roto para que coincidan las normales
+				vec3.transformMat4(punto_figura, punto_figura, mat_rotacion_norm);
 				//Traslado el punto a la posicion del nivel en el camino
 				vec3.transformMat4(punto_figura, punto_figura, mat_traslacion);
+
 				this.grilla.position_buffer.push(punto_figura[0]);
 				this.grilla.position_buffer.push(punto_figura[1]);
 				this.grilla.position_buffer.push(punto_figura[2]);
 
 				//Le meto un color solo para probar
-				this.grilla.color_buffer.push(1.0);
-				this.grilla.color_buffer.push(1.0);
-				this.grilla.color_buffer.push(1.0);
+				this.grilla.color_buffer.push(0.8 * j);
+				this.grilla.color_buffer.push(0.1 * j);
+				this.grilla.color_buffer.push(0.3 * j);
 			}
 
 		}
