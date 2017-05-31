@@ -1,6 +1,6 @@
 function Luminaria(){
 	this.poste = new supBarrido();
-  //this.foco = new Cuadrado();
+  this.foco = new Cuadrado();
 	this.perfil = {
 		forma:null,
 		normal:null
@@ -11,18 +11,20 @@ function Luminaria(){
 		var puntos_control = [];
 		//Quiero que interpole el punto inicial
 		puntos_control.push([0,0,0]);
-		//puntos_control.push([0,0,0]);
-		//puntos_control.push([0,0,0]);
-		//puntos_control.push([0,0,0]);
+		puntos_control.push([0,0,0]);
+		puntos_control.push([0,0,0]);
+		puntos_control.push([0,0,0]);
 
 		puntos_control.push([0,25,0]);
+		puntos_control.push([0,50,0]);
+		puntos_control.push([0,75,0]);
 		puntos_control.push([0,100,0]);
 
 		//Quiero que interpole el punto final
-		puntos_control.push([-30,100,0]);
-		//puntos_control.push([-2,5,0]);
-		//puntos_control.push([-2,5,0]);
-		//puntos_control.push([-2,5,0]);
+		puntos_control.push([-25,100,0]);
+		puntos_control.push([-25,100,0]);
+		puntos_control.push([-25,100,0]);
+		puntos_control.push([-25,100,0]);
 
 		camino.create(puntos_control);
 		return camino;
@@ -32,14 +34,19 @@ function Luminaria(){
     var puntos_forma = devolver_puntos_circulo(1, 30);
     var camino = this.camino();
     this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1]);
-    //this.foco.create(1,2,2);
+    this.foco.create(8,3,6);
 
-    //var ubic_foco = camino[camino.length];
-    //this.foco.ubicar(ubic_foco);
+    var ubic_foco = camino.puntosDeControl[camino.puntosDeControl.length-1];
+    this.foco.translate(ubic_foco);
 	}
 
 	this.draw = function(){
 		this.poste.draw();
+		this.foco.draw();
+	}
+
+	this.setupWebGLBuffers = function(){
+		this.foco.setupWebGLBuffers();
 	}
 }
 
