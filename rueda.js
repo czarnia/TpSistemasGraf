@@ -22,7 +22,7 @@ function Rueda(){
     this.radio = radio;
     this.profundidad = profundidad;
 		this.crear_perfil();
-		this.superficie.create([0,1,0], this.perfil, Math.PI*2, 40.0);
+		this.superficie.create([0,1,0], this.perfil.forma, Math.PI*2, 40.0);
 	}
 
 	this.draw = function(){
