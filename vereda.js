@@ -16,10 +16,10 @@ function Vereda(){
     puntos_control.push([0,0,0]);
     puntos_control.push([0,0,0]);
 
-    puntos_control.push([0,2,0]);
-    puntos_control.push([0,2,0]);
-    puntos_control.push([0,2,0]);
-    puntos_control.push([0,2,0]);
+    puntos_control.push([0,0.5,0]);
+    puntos_control.push([0,0.5,0]);
+    puntos_control.push([0,0.5,0]);
+    puntos_control.push([0,0.5,0]);
 
 		camino.create(puntos_control);
 		return camino;
@@ -105,10 +105,10 @@ function Vereda(){
 	this.create = function(){
     var camino = this.camino();
     this.crear_perfil(100);
-    this.superficie.create(camino, 40, this.perfil.forma, this.perfil.normal);
+    this.superficie.create(camino, 40, this.perfil.forma, this.perfil.normal, 1);
     this.tapa1.create(this.perfil.forma);
     this.tapa2.create(this.perfil.forma);
-    this.tapa2.translate([0,2,0]);
+    this.tapa2.translate([0,0.5,0]);
 	}
 
 	this.draw = function(){
