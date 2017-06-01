@@ -3,7 +3,7 @@ function supBarrido(){
 	this.curvaCamino = null;
 	this.grilla = new VertexGrid();
 
-	this.create = function(camino, filas, puntos_forma, normales_forma){
+	this.create = function(camino, filas, puntos_forma, normales_forma, color){
 		var cols = puntos_forma.length; //Las columnas tendran los puntos de la forma
 										//Las filas la cantidad de repeticiones de la forma
 		this.grilla.create(filas, cols);
@@ -80,9 +80,9 @@ function supBarrido(){
 				this.grilla.position_buffer.push(punto_figura[2]);
 
 				//Le meto un color solo para probar
-				this.grilla.color_buffer.push(0.8 * j);
-				this.grilla.color_buffer.push(0.1 * j);
-				this.grilla.color_buffer.push(0.3 * j);
+				this.grilla.color_buffer.push(color);
+				this.grilla.color_buffer.push(color);
+				this.grilla.color_buffer.push(color);
 			}
 
 		}

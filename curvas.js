@@ -226,8 +226,9 @@ function curvaBspline3(){
             u_local = 1;
         }
 
-        var ok = true;
-        for (var i = 1; i < 4; i++) {
+        //Considero el caso en el que el vector tangente da 0
+        var ok = false;
+/*        for (var i = 1; i < 4; i++) {
             for (var j = 0; j < 3; j++){
                 if (this.puntosDeControl[aux][j] != this.puntosDeControl[aux + i][j])
                     ok = false;
@@ -241,12 +242,26 @@ function curvaBspline3(){
             }
             vec3.subtract(vector_aux, this.puntosDeControl[aux], this.puntosDeControl[aux - 1]);
             return vector_aux;
-        }
+        }*/
 
         vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux], this.base0der(u_local));
         vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 1], this.base1der(u_local));
         vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 2], this.base2der(u_local));
         vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 3], this.base3der(u_local));
+
+        for(var i = 0; i < vector_aux.length; i++){
+            if(vector_aux[i] != 0)
+                ok = true;
+        }
+
+        if (ok == false){
+            if ((aux + 4) < this.puntosDeControl.length){
+                vec3.subtract(vector_aux, this.puntosDeControl[aux + 4], this.puntosDeControl[aux]);
+                return vector_aux;
+            }
+            vec3.subtract(vector_aux, this.puntosDeControl[aux], this.puntosDeControl[aux - 1]);
+            return vector_aux;
+        }
 
         return vector_aux;
     }
