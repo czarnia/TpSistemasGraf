@@ -33,8 +33,9 @@ function Luminaria(){
 	this.create = function(){
     var puntos_forma = devolver_puntos_circulo(1, 30);
     var camino = this.camino();
-    this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1],1);
-    this.foco.create(8,3,6);
+		var color = [1,0.843,0];
+    this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1], color);
+    this.foco.create(8, 3, 6);
 
     var ubic_foco = camino.puntosDeControl[camino.puntosDeControl.length-1];
     this.foco.translate(ubic_foco);

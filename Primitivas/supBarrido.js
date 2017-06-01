@@ -80,9 +80,9 @@ function supBarrido(){
 				this.grilla.position_buffer.push(punto_figura[2]);
 
 				//Le meto un color solo para probar
-				this.grilla.color_buffer.push(color);
-				this.grilla.color_buffer.push(color);
-				this.grilla.color_buffer.push(color);
+				this.grilla.color_buffer.push(color[0]);
+				this.grilla.color_buffer.push(color[0]);
+				this.grilla.color_buffer.push(color[0]);
 			}
 
 		}

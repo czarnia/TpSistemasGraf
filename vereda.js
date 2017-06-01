@@ -102,12 +102,12 @@ function Vereda(){
     this.tapa2.setupWebGLBuffers();
   }
 
-	this.create = function(){
+	this.create = function(color){
     var camino = this.camino();
     this.crear_perfil(100);
-    this.superficie.create(camino, 40, this.perfil.forma, this.perfil.normal, 1);
-    this.tapa1.create(this.perfil.forma);
-    this.tapa2.create(this.perfil.forma);
+    this.superficie.create(camino, 40, this.perfil.forma, this.perfil.normal, color);
+    this.tapa1.create(this.perfil.forma, color);
+    this.tapa2.create(this.perfil.forma, color);
     this.tapa2.translate([0,0.5,0]);
 	}
 
