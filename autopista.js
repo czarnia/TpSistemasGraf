@@ -1,37 +1,14 @@
 function Autopista(){
-	this.superficie = new supBarrido();
-	this.camino = new curvaBspline3();
-	this.perfil = {
-		forma:null,
-		normal:null
-	}
-
-	//Hardcodeo todo para probar despues vamos a valores reales
-	this.crear_perfil = function(){
-		this.perfil.forma = [];
-		this.perfil.normal = [];
-
-		this.perfil.forma.push([-2.5, 1.5, 0.0]);
-		this.perfil.forma.push([2.5, 1.5, 0.0]);
-		this.perfil.forma.push([2.5, -1.5, 0.0]);
-		this.perfil.forma.push([-2.5, -1.5, 0.0]);
-		//De vuelta primer punto para cerrar
-		this.perfil.forma.push([-2.5, 1.5, 0.0]);
-
-		//Para que matchee con la tangente de la curva
-		this.perfil.normal.push([0.0, 0.0, 1.0]);
-		//Para que matchee con la normal de la curva
-		this.perfil.normal.push([0.0, 1.0, 0.0]);
-	}
+	this.calle = new Calle();
+	this.borde = new Borde();
 
 	this.create = function(curva_camino){
-		this.crear_perfil();
-		this.camino = camino;
-
-		this.superficie.create(this.camino, 100.0, this.perfil.forma, this.perfil.normal);
+		this.calle.create(curva_camino);
+		this.borde.create(curva_camino);
 	}
 
 	this.draw = function(){
-		this.superficie.draw();
+		this.calle.draw();
+		this.borde.draw();
 	}
 }
