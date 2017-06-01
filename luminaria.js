@@ -58,6 +58,7 @@ function devolver_puntos_circulo(radio, step){
 	var valores = [];
 
 	normales.push([0,1,0]); //normal al plano dónde está la figura
+	normales.push([0,0,1]);
 
 	for (var i = 0; i < step; i++){
 		var angulo_nivel = i * Math.PI*2 / (step-1);
@@ -70,7 +71,7 @@ function devolver_puntos_circulo(radio, step){
 		puntos.push(punto);
 
 		var normal = vec3.fromValues(punto[0],punto[1],punto[2]); //la circunferencia esta en el 0,0,0
-		normales.push(normal);
+		//normales.push(normal);
 	};
 	valores.push(puntos);
 	valores.push(normales);

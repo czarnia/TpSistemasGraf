@@ -18,7 +18,7 @@ function supBarrido(){
 		long_camino = camino.length();
 
 		for (var i = 0; i < filas; i++) {
-			var nivel = i * long_camino / (filas - 1); 
+			var nivel = i * long_camino / (filas - 1);
 			//Acomodo normal, tangente y binormal
 			//Crear funciones en curva que sean:
 			//posicionar y recibe el nivel
@@ -42,8 +42,8 @@ function supBarrido(){
 			vec3.cross(eje, tan, normales_forma[0]);
 
 			//La forma debe tener la orientacion de la normal, entonces la roto acorde
-			var mat_rotacion_tan = mat4.create();			
-			mat4.identity(mat_rotacion_tan);			
+			var mat_rotacion_tan = mat4.create();
+			mat4.identity(mat_rotacion_tan);
 			mat4.rotate(mat_rotacion_tan, mat_rotacion_tan, angulo, eje);
 
 			//******PARA QUE COINCIDA CON LA NORMAL*******
