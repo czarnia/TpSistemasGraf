@@ -3,8 +3,9 @@ function Autopista(){
 	this.borde_ida = new Borde();
 	this.calle_vuelta = new Calle();
 	this.borde_vuelta = new Borde();
+	this.pilares = [];
 
-	this.create = function(curva_camino){
+	this.create = function(curva_camino, dist_pilares){
 		this.calle_ida.create_perfil(6, 0.5);
 		this.calle_ida.mover_perfil([-6, 0.75, 0]);
 		this.calle_ida.create(curva_camino);
@@ -20,6 +21,20 @@ function Autopista(){
 		this.borde_vuelta.create_perfil();
 		this.borde_vuelta.mover_perfil(6);
 		this.borde_vuelta.create(curva_camino);
+
+/*		for (var i = 0; i < dist_pilares; i += dist_pilares) {
+			var pilar = new PilarAutopista();
+			pilar.create();
+			var punto = curva_camino.get_punto(i);
+			pilar.translate(punto);
+			var tan = curva_camino.get_tan(i);
+			//Hacer lo mismo q cuando hice sup de barrido
+			//Rotar para que coincidan normales y tangentes
+			//Ver si alcanza con implementar una fc de rotate
+			//que use la de la grilla
+			
+			pilar.rotate(,);
+		}*/
 	}
 
 	this.coincide = function(xcomienzo, ancho, zcomienzo, largo){
