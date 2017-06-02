@@ -39,7 +39,8 @@ function Calle(){
 	this.create = function(curva_camino){
 		this.path = curva_camino;
 
-		this.superficie.create(this.path, 100.0, this.perfil.forma, this.perfil.normal, 0.0);
+		this.superficie.create(this.path, 100.0, this.perfil.forma, this.perfil.normal,
+				 [0.0, 0.0, 0.0]);
 	}
 
 	this.create_calle_escena = function(dimension, final){
