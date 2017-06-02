@@ -5,7 +5,7 @@ function Edificio(){
   this.y = null;
   this.lados = [];
 
-  this.create = function(_x, _y, _z) {
+  this.create = function(_x, _y, _z, pos) {
     this.x = _x;
     this.y = _y;
     this.z = _z;
@@ -54,6 +54,11 @@ function Edificio(){
     grid.createIndexBuffer();
     grid.translate([0,0,-_z*0.5]);
     this.lados.push(grid);
+
+    for (var i = 0; i < 6; i++){
+      var grid = this.lados[i];
+      grid.translate(pos);
+    };
   }
 
   this.setupWebGLBuffers = function (){
@@ -64,9 +69,20 @@ function Edificio(){
   }
 
   this.draw = function(){
-    //this.lados[0].drawPlano();
     for (i = 0; i < 6; i++) {
       this.lados[i].draw();
+    };
+  }
+
+  this.translate = function(v){
+    for (i = 0; i < 6; i++) {
+      this.lados[i].translate(v);
+    };
+  }
+
+  this.rotate = function(v, plano){
+    for (i = 0; i < 6; i++) {
+      this.lados[i].rotate(v, plano);
     };
   }
 
