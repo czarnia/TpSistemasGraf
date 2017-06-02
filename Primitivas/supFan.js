@@ -10,16 +10,16 @@ function SupFan(){
   this.webgl_color_buffer = null;
 
   this.create = function(perfil){
-    for (var i; i < perfil.length; i++){
+    for (var i = 0; i < perfil.length; i++){
       this.position_buffer.push(perfil[i][0]);
       this.position_buffer.push(perfil[i][1]);
       this.position_buffer.push(perfil[i][2]);
 
       this.index_buffer.push(i);
 
-      this.color_buffer.push(0.8 * j);
-      this.color_buffer.push(0.1 * j);
-      this.color_buffer.push(0.3 * j);
+      this.color_buffer.push(0.8 * i);
+      this.color_buffer.push(0.1 * i);
+      this.color_buffer.push(0.3 * i);
     }
   }
 
@@ -90,10 +90,6 @@ function SupFan(){
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
       // Dibujamos.
-      gl.drawElements(gl.TRIANGLE_FUN, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
+      gl.drawElements(gl.TRIANGLE_FAN, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
   }
-
-
-
-
 }
