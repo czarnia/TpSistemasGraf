@@ -12,6 +12,7 @@ function Manzana(){
     var profundidad = ; //z
 
     this.terreno.create([0.631,0.631,0.718]);
+    var pos_acum = [, , profundidad/2];
 
     for (var i = 0; i < 16; i++){
       var alto = alto_min + Math.random() * (alto_max-alto_min);
@@ -32,8 +33,26 @@ function Manzana(){
         ancho -= edificios[0].z + edificios[14].z + edificios[13].z + edificios[12].z;
       }
 
-      var pos = []
-      e.create(ancho, alto, profundidad);
+      if ((i =< 4) && (i > 0)){
+        pos_acum[x] += edificios[i-1].x + ancho/2;
+      }else if (i =< 8){
+        pos_acum[z] += edificios[i-1].z + profundidad/2;
+      }else if (i <= 12){
+        pos_acum[x] -= edificios[i-1].x + ancho/2;
+      }else{
+        pos_acum[z] -= edificios[i-1].z + profundidad/2;
+      }
+
+      e.create(ancho, alto, profundidad, pos_acum);
+
+      if ((i <= 8) && (i >= 5)){
+        e.rotate(Math.PI/2, [0,1,0]);
+      }
+      if ((i <= 15) && (i >= 13)){
+        e.rotate(-Math.PI/2, [0,1,0]);
+      }
+
+      this.edificios.push(e);
     }
 
   }
