@@ -55,8 +55,8 @@ function supBarrido(){
 
 			var eje_norm = vec3.create();
 			//Para que gire para el otro lado
-			vec3.cross(eje_norm, normal_mod, normal);//Por ahi hacer antes de normalizar
-
+			vec3.cross(eje_norm, normal_mod, normal); //VERSION BIEN
+		
 			var mat_rotacion_norm = mat4.create();
 			mat4.identity(mat_rotacion_norm);
 			mat4.rotate(mat_rotacion_norm, mat_rotacion_norm, angulo_norm, eje_norm);
@@ -64,9 +64,6 @@ function supBarrido(){
 			//Creo una matriz con las normales
 			//Recorro cada punto de la figura
 			for (var j = 0; j < puntos_forma.length; j++) {
-				console.log("Cols ", cols);
-				console.log("Punto ");
-				console.log(puntos_forma[j]);
 				var punto_figura = vec3.fromValues(puntos_forma[j][0], puntos_forma[j][1], puntos_forma[j][2]);
 				//Roto
 				vec3.transformMat4(punto_figura, punto_figura, mat_rotacion_tan);
@@ -87,14 +84,11 @@ function supBarrido(){
 
 		}
 		this.grilla.setupWebGLBuffers();
-/*		console.log("Tamaño index buffer: ", this.grilla.index_buffer.length);
-		for (var i = 0; i < this.grilla.index_buffer.length; i++) {
-			console.log(this.grilla.index_buffer[i]);
-		}*/
-		console.log("Tamaño position_buffer: ", this.grilla.position_buffer.length);
+
+/*		console.log("Tamaño position_buffer: ", this.grilla.position_buffer.length);
 		for (var k = 0; k < this.grilla.position_buffer.length; k++) {
 			console.log(this.grilla.position_buffer[k]);
-		}
+		}*/
 	}
 
 	this.draw = function(){
