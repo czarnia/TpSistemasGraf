@@ -103,9 +103,10 @@ function Vereda(){
         this.tapa2.translate(mov);
     }
 
-    this.setupWebGLBuffers = function(){punto
+    this.setupWebGLBuffers = function(){
         this.tapa1.setupWebGLBuffers();
         this.tapa2.setupWebGLBuffers();
+        this.superficie.setupWebGLBuffers();
     }
 
 
