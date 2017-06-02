@@ -17,9 +17,9 @@ function SupFan(){
 
       this.index_buffer.push(i);
 
-      this.color_buffer.push(0.8);
-      this.color_buffer.push(0.1);
-      this.color_buffer.push(0.3);
+      this.color_buffer.push(0.8 * i);
+      this.color_buffer.push(0.1 * i);
+      this.color_buffer.push(0.3 * i);
     }
   }
 
@@ -92,8 +92,4 @@ function SupFan(){
       // Dibujamos.
       gl.drawElements(gl.TRIANGLE_FAN, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
   }
-
-
-
-
 }
