@@ -78,8 +78,8 @@ function supBarrido(){
 
 				//Le meto un color solo para probar
 				this.grilla.color_buffer.push(color[0]);
-				this.grilla.color_buffer.push(color[0]);
-				this.grilla.color_buffer.push(color[0]);
+				this.grilla.color_buffer.push(color[1]);
+				this.grilla.color_buffer.push(color[2]);
 			}
 
 		}
