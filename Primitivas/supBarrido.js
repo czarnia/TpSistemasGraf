@@ -91,6 +91,10 @@ function supBarrido(){
 		}*/
 	}
 
+	this.setupWebGLBuffers = function(){
+		this.grilla.setupWebGLBuffers();
+	}
+
 	this.draw = function(){
 		this.grilla.drawVertexGrid();
 	}
