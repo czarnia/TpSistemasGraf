@@ -33,8 +33,9 @@ function Luminaria(){
 	this.create = function(){
     var puntos_forma = devolver_puntos_circulo(1, 30);
     var camino = this.camino();
-    this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1]);
-    this.foco.create(8,3,6);
+		var color = [1,0.843,0];
+    this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1], color);
+    this.foco.create(8, 3, 6);
 
     var ubic_foco = camino.puntosDeControl[camino.puntosDeControl.length-1];
     this.foco.translate(ubic_foco);
@@ -58,6 +59,7 @@ function devolver_puntos_circulo(radio, step){
 	var valores = [];
 
 	normales.push([0,1,0]); //normal al plano dónde está la figura
+	normales.push([0,0,1]);
 
 	for (var i = 0; i < step; i++){
 		var angulo_nivel = i * Math.PI*2 / (step-1);
@@ -70,7 +72,7 @@ function devolver_puntos_circulo(radio, step){
 		puntos.push(punto);
 
 		var normal = vec3.fromValues(punto[0],punto[1],punto[2]); //la circunferencia esta en el 0,0,0
-		normales.push(normal);
+		//normales.push(normal);
 	};
 	valores.push(puntos);
 	valores.push(normales);

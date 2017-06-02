@@ -35,66 +35,66 @@ function curvaBesier(){
     this.create = function(puntos) {
       this.puntosDeControl = puntos;
       this.valores_u = puntos.length - 3;
-      }
+    }
 
-      this.length = function(){
-          return this.valores_u;
-      }
+    this.length = function(){
+        return this.valores_u;
+    }
 
-      this.get_punto = function(u){
-          var vector_aux = vec3.fromValues(0.0, 0.0, 0.0);
-          //Modifico para que el punto este de 0 a 1
-          var aux = Math.floor(u);
-          var u_local = u - aux;
+    this.get_punto = function(u){
+        var vector_aux = vec3.fromValues(0.0, 0.0, 0.0);
+        //Modifico para que el punto este de 0 a 1
+        var aux = Math.floor(u);
+        var u_local = u - aux;
 
-          if (this.valores_u <= u){
-              aux = this.valores_u - 1;
-              u_local = 1;
-          }
+        if (this.valores_u <= u){
+            aux = this.valores_u - 1;
+            u_local = 1;
+        }
 
-          vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux], this.base0(u_local));
-          vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 1], this.base1(u_local));
-          vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 2], this.base2(u_local));
-          vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 3], this.base3(u_local));
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux], this.base0(u_local));
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 1], this.base1(u_local));
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 2], this.base2(u_local));
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 3], this.base3(u_local));
 
-          return vector_aux;
-      }
+        return vector_aux;
+    }
 
-      this.get_tan = function(u){
-          var vector_aux = vec3.fromValues(0.0, 0.0, 0.0);
-          //Modifico para que el punto este de 0 a 1
-          var aux = Math.floor(u);
-          var u_local = u - aux;
+    this.get_tan = function(u){
+        var vector_aux = vec3.fromValues(0.0, 0.0, 0.0);
+        //Modifico para que el punto este de 0 a 1
+        var aux = Math.floor(u);
+        var u_local = u - aux;
 
-          if (this.valores_u <= u){
-              aux = this.valores_u - 1;
-              u_local = 1;
-          }
+        if (this.valores_u <= u){
+            aux = this.valores_u - 1;
+            u_local = 1;
+        }
 
-          var ok = true;
-          for (var i = 1; i < 4; i++) {
-              for (var j = 0; j < 3; j++){
-                  if (this.puntosDeControl[aux][j] != this.puntosDeControl[aux + i][j])
-                      ok = false;
-              }
-          }
+        var ok = true;
+        for (var i = 1; i < 4; i++) {
+            for (var j = 0; j < 3; j++){
+                if (this.puntosDeControl[aux][j] != this.puntosDeControl[aux + i][j])
+                    ok = false;
+            }
+        }
 
-          if (ok == true){
-              if ((aux + 4) < this.puntosDeControl.length){
-                  vec3.subtract(vector_aux, this.puntosDeControl[aux + 4], this.puntosDeControl[aux]);
-                  return vector_aux;
-              }
-              vec3.subtract(vector_aux, this.puntosDeControl[aux], this.puntosDeControl[aux - 1]);
-              return vector_aux;
-          }
+        if (ok == true){
+            if ((aux + 4) < this.puntosDeControl.length){
+                vec3.subtract(vector_aux, this.puntosDeControl[aux + 4], this.puntosDeControl[aux]);
+                return vector_aux;
+            }
+            vec3.subtract(vector_aux, this.puntosDeControl[aux], this.puntosDeControl[aux - 1]);
+            return vector_aux;
+        }
 
-          vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux], this.base0der(u_local));
-          vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 1], this.base1der(u_local));
-          vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 2], this.base2der(u_local));
-          vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 3], this.base3der(u_local));
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux], this.base0der(u_local));
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 1], this.base1der(u_local));
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 2], this.base2der(u_local));
+        vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 3], this.base3der(u_local));
 
-          return vector_aux;
-      }
+        return vector_aux;
+    }
 
       this.get_normal = function(u){
           var normal = vec3.create();
@@ -139,8 +139,8 @@ function curvaBesier(){
           gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
           // Dibujamos.
-          gl.drawElements(gl.LINE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
-      }
+        gl.drawElements(gl.LINE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
+    }
 
 }
 

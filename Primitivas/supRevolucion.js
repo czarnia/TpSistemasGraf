@@ -6,7 +6,7 @@ function supRevolucion(){
 
   this.create = function(eje, perfil, angulo, step){
     var muestreo = angulo/step;
-		this.grilla.create(step, perfil.forma.length);
+		this.grilla.create(step, perfil.length);
 
 		var normal_figura = vec3.fromValues(0,1,0); //y es la normal
 
@@ -25,8 +25,8 @@ function supRevolucion(){
       mat4.identity(mat_rotacion);
       mat4.rotate(mat_rotacion, mat_rotacion, angulo_nivel, eje);
 
-      for (var j = 0; j < perfil.forma.length; j++) {
-				var punto = vec3.fromValues(this.perfil.forma[j][0], this.perfil.forma[j][1], this.perfil.forma[j][2]);
+      for (var j = 0; j < perfil.length; j++) {
+				var punto = vec3.fromValues(this.perfil[j][0], this.perfil[j][1], this.perfil[j][2]);
 				vec3.transformMat4(punto, punto, mat_rotacion);
 				this.grilla.position_buffer.push(punto[0]);
 				this.grilla.position_buffer.push(punto[1]);
