@@ -5,7 +5,6 @@ function Escena(){
 	this.lado_manzana = null;
 	this.calles = null;
 	this.plano = new Plano();
-	this.plaza = new Plaza();
 	this.plazas = null;
 
 	this.create_manzanas = function(cant_manzanas, lado_manzana,
@@ -14,7 +13,6 @@ function Escena(){
 		this.ancho_calle = ancho_calle;
 		this.autopista = autopista;
 		this.lado_manzana = lado_manzana;
-		this.plaza.create();
 	}
 
 	this.create_calles = function(lado){
@@ -44,12 +42,15 @@ function Escena(){
 				if(this.autopista.coincide(j*(this.lado_manzana + this.ancho_calle), this.lado_manzana,
 					 i * (this.lado_manzana + this.ancho_calle), this.lado_manzana) == true){
 					//Crear plaza
-					this.plaza.create();
-					//this.plaza.translate([this.lado_manzana/2 + j*(this.lado_manzana + this.ancho_calle),
-										  // 0.0,
-										  // this.lado_manzana/2 + i*(this.lado_manzana + this.ancho_calle)]);
-					this.plaza.setupWebGLBuffers();
-					this.plazas.push(this.plaza);
+					var plaza = new Plaza();
+					plaza.create();
+					plaza.translate([this.lado_manzana/2 + j*(this.lado_manzana + this.ancho_calle),
+										  0.0,
+									this.lado_manzana/2 + i * (this.lado_manzana + this.ancho_calle)]);
+
+					// plaza.translate([0.0, 0.0, 0.0]);
+					plaza.setupWebGLBuffers();
+					this.plazas.push(plaza);
 					console.log("PLAZA");
 				}
 				else
@@ -78,5 +79,6 @@ function Escena(){
 		for (var i = 0; i < this.plazas.length; i++) {
 			this.plazas[i].draw();
 		}
+
 	}
 }
