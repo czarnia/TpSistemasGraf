@@ -40,6 +40,11 @@ function supRevolucion(){
     this.grilla.setupWebGLBuffers();
   }
 
+  this.translate = function(mov){
+    this.grilla.translate(mov);
+    this.grilla.setupWebGLBuffers();
+  }
+
   this.draw = function(){
     this.grilla.drawVertexGrid();
   }

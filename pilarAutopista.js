@@ -50,6 +50,10 @@ function PilarAutopista(){
 		this.perfil.push(base);
 	}
 
+	this.translate = function(vec){
+		this.superficie.translate(vec);
+	}
+
 	this.draw = function(){
 		this.superficie.draw();
 	}
