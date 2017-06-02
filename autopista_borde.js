@@ -51,7 +51,7 @@ function Borde(){
 	this.create = function(curva_camino){
 		this.camino = curva_camino;
 
-		this.superficie.create(this.camino, 100.0, this.perfil.forma, this.perfil.normal, 0.66);
+		this.superficie.create(this.camino, 100.0, this.perfil.forma, this.perfil.normal, [0.66, 0.66, 0.66]);
 	}
 
 	this.draw = function(){
