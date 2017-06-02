@@ -147,53 +147,65 @@ function curvaBesier(){
 
 //Curva Bspline base 3
 function curvaBspline3(){
-  this.puntosDeControl = null;
-  this.valores_u = null;
-  this.binormal = vec3.fromValues(0.0,0.0,1.0);
-  this.grilla = null;
+    this.puntosDeControl = null;
+    this.valores_u = null;
+    this.binormal = vec3.fromValues(0.0,0.0,1.0);
+    this.grilla = null;
 
-  this.position_buffer = null;
-  this.color_buffer = null;
-  this.index_buffer = null;
-  this.webgl_position_buffer = null;
-  this.webgl_color_buffer = null;
-  this.webgl_index_buffer = null;
+    this.position_buffer = null;
+    this.color_buffer = null;
+    this.index_buffer = null;
+    this.webgl_position_buffer = null;
+    this.webgl_color_buffer = null;
+    this.webgl_index_buffer = null;
 
-  //Bases
-  this.base0 = function(u) {
+    //Bases
+    this.base0 = function(u) {
     return (1-3*u+3*u*u-u*u*u)*1/6;
-  }
-  this.base1 = function(u) {
+    }
+    this.base1 = function(u) {
     return (4-6*u*u+3*u*u*u)*1/6;
-  }
-  this.base2 = function(u) {
+    }
+    this.base2 = function(u) {
     return (1+3*u+3*u*u-3*u*u*u)*1/6;
-  }
-  this.base3 = function(u) {
+    }
+    this.base3 = function(u) {
     return (u*u*u)*1/6;
-  }
+    }
 
-  //Derivadas de las bases
-  this.base0der = function(u) {
+    //Derivadas de las bases
+    this.base0der = function(u) {
     return (-3 +6*u -3*u*u)/6;
-  }
-  this.base1der = function(u) {
+    }
+    this.base1der = function(u) {
     return (-12*u+9*u*u)/6;
-  }
-  this.base2der = function(u) {
+    }
+    this.base2der = function(u) {
     return (3+6*u-9*u*u)/6;
-  }
-  this.base3der = function(u) {
+    }
+    this.base3der = function(u) {
     return (3*u*u)*1/6;
-  }
+    }
 
-  this.create = function(puntos) {
-    this.puntosDeControl = puntos;
-    this.valores_u = puntos.length - 3;
+    this.create = function(puntos) {
+        this.puntosDeControl = puntos;
+        this.valores_u = puntos.length - 3;
+        this.position_buffer = [];
+        this.color_buffer = [];
+        this.index_buffer = [];
     }
 
     this.length = function(){
         return this.valores_u;
+    }
+
+    this.translate = function(mov){
+        var v_mov = vec3.fromValues(mov, mov, mov);
+        for (var i = 0; i < this.puntosDeControl.length; i++) {
+            console.log("Antes: ", this.puntosDeControl[i]);
+            vec3.add(this.puntosDeControl[i], v_mov, this.puntosDeControl[i]);
+            console.log("Despues: ", this.puntosDeControl[i]);
+        }
     }
 
     this.get_punto = function(u){
@@ -228,27 +240,28 @@ function curvaBspline3(){
 
         //Considero el caso en el que el vector tangente da 0
         var ok = false;
-/*        for (var i = 1; i < 4; i++) {
+        for (var i = 1; i < 4; i++) {
             for (var j = 0; j < 3; j++){
                 if (this.puntosDeControl[aux][j] != this.puntosDeControl[aux + i][j])
-                    ok = false;
+                    ok = true;
             }
         }
 
-        if (ok == true){
+        if (ok == false){
             if ((aux + 4) < this.puntosDeControl.length){
                 vec3.subtract(vector_aux, this.puntosDeControl[aux + 4], this.puntosDeControl[aux]);
                 return vector_aux;
             }
             vec3.subtract(vector_aux, this.puntosDeControl[aux], this.puntosDeControl[aux - 1]);
             return vector_aux;
-        }*/
+        }
 
         vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux], this.base0der(u_local));
         vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 1], this.base1der(u_local));
         vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 2], this.base2der(u_local));
         vec3.scaleAndAdd(vector_aux, vector_aux, this.puntosDeControl[aux + 3], this.base3der(u_local));
 
+        ok = false;
         for(var i = 0; i < vector_aux.length; i++){
             if(vector_aux[i] != 0)
                 ok = true;
@@ -256,7 +269,7 @@ function curvaBspline3(){
 
         if (ok == false){
             if ((aux + 4) < this.puntosDeControl.length){
-                vec3.subtract(vector_aux, this.puntosDeControl[aux + 4], this.puntosDeControl[aux]);
+                vec3.subtract(vector_aux, this.puntosDeControl[aux + 3], this.puntosDeControl[aux]);
                 return vector_aux;
             }
             vec3.subtract(vector_aux, this.puntosDeControl[aux], this.puntosDeControl[aux - 1]);
@@ -269,14 +282,11 @@ function curvaBspline3(){
     this.get_normal = function(u){
         var normal = vec3.create();
         vec3.cross(normal, this.binormal, this.get_tan(u));
+        //vec3.cross(normal, this.get_tan(u), this.binormal);
         return normal;
     }
 
     this.curva_prueba = function(){
-        this.position_buffer = [];
-        this.color_buffer = [];
-        this.index_buffer = [];
-
         var aux = vec3.create();
         for (var i = 0; i < (this.valores_u * 10); i += 1) {
            aux = this.get_punto(i/10);
