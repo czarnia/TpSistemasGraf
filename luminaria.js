@@ -38,7 +38,6 @@ function Luminaria(){
     this.foco.create(_x, _y, _z); //8,3,6
 
     var ubic_foco = camino.puntosDeControl[camino.puntosDeControl.length-1];
-		var ubic_foco[0] -= _x/2; 
     this.foco.translate(ubic_foco);
 	}
 
