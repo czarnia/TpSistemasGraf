@@ -5,7 +5,7 @@ function Edificio(){
   this.y = null;
   this.lados = [];
 
-  this.create = function(_x, _y, _z, pos) {
+  this.create = function(_x, _y, _z, pos, color) {
     this.x = _x;
     this.y = _y;
     this.z = _z;

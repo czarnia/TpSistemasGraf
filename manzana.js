@@ -4,9 +4,9 @@ function Manzana(){
   this.lado = null;
   this.alto = null;
 
-  this.crear_largos_x = function(largo_disponible){
-    var largo_min = ;
-    var largo_max = ;
+  this.crear_largos = function(largo_disponible){
+    var largo_min = largo_disponible/6;
+    var largo_max = largo_disponible/4;
     var largo_total = 0;
     var largos = [];
 
@@ -15,7 +15,9 @@ function Manzana(){
       largos.push(largo);
       largo_total += largo;
     }
-    largos.push(largo_disponible-largo_total);  
+    largos.push(largo_disponible-largo_total);
+
+    return largos;
   }
 
   this.create = function(lado, alto){
@@ -24,11 +26,12 @@ function Manzana(){
     this.alto = alto;
     var profundidad = lado/5;
     var lado_edif = 4*(lado/5);
-    var alto_min = lado*7;
-    var alto_max = lado*5;
+    var alto_min = lado*4;
+    var alto_max = lado*2;
+    var color = [0.6, 0.3, 0];
 
-    lados_x = this.crear_largos(lado_edif);
-    lados_z = this.crear_largos(lado_edif-profundidad*2);
+    var lados_x = this.crear_largos(lado_edif);
+    var lados_z = this.crear_largos(lado_edif-profundidad*2);
 
     //Lados x
     var pos_z = lado_edif/2;
@@ -37,8 +40,10 @@ function Manzana(){
       for (var j = 0; j < 5; j++){
          var alto = alto_min + Math.random() * (alto_max-alto_min);
          var edif = new Edificio();
-         edif.create(lados_x[j], alto, profundidad, [pos_x+(lados_x[j]/2), alto/2+terreno.alto, pos_z+(profundidad/2)]);
-         edificios.push(edif);
+         color[0] = color[1]*j*0.2;
+         color[2] = j*0.2;
+         edif.create(lados_x[j], alto, profundidad, [pos_x+(lados_x[j]/2), alto/2+this.terreno.alto, pos_z+(profundidad/2)], color);
+         this.edificios.push(edif);
          pos_x += lados_x[j];
       }
       pos_z = -lado_edif/2;
@@ -51,8 +56,8 @@ function Manzana(){
       for (var j = 0; j < 5; j++){
         var alto = alto_min + Math.random() * (alto_max-alto_min);
         var edif = new Edificio();
-        edif.create(profundidad, alto, lados_z[j], [pos_x+(profundidad/2), alto/2+terreno.alto, pos_z+(lados_z[j]/2)]);
-        edificios.push(edif);
+        edif.create(profundidad, alto, lados_z[j], [pos_x+(profundidad/2), alto/2+this.terreno.alto, pos_z+(lados_z[j]/2)], color);
+        this.edificios.push(edif);
         pos_z += lados_z[j];
       }
       pos_x = -lado_edif/2;
