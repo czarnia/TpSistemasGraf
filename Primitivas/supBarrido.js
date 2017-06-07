@@ -2,11 +2,12 @@ function supBarrido(){
 	this.curvaBase = null;
 	this.curvaCamino = null;
 	this.grilla = new VertexGrid();
+	this.final = null;
 
-	this.create = function(camino, filas, puntos_forma, normales_forma, color){
+	this.create = function(camino, niveles, puntos_forma, normales_forma, color){
 		var cols = puntos_forma.length; //Las columnas tendran los puntos de la forma
-										//Las filas la cantidad de repeticiones de la forma
-		this.grilla.create(filas, cols);
+										//Los niveles son la cantidad de repeticiones de la forma
+		this.grilla.create(niveles, cols);
 
 		this.curvaCamino = camino;
 
@@ -17,13 +18,9 @@ function supBarrido(){
 
 		long_camino = camino.length();
 
-		for (var i = 0; i < filas; i++) {
-			var nivel = i * long_camino / (filas - 1);
+		for (var i = 0; i < niveles; i++) {
+			var nivel = i * long_camino / (niveles - 1);
 			//Acomodo normal, tangente y binormal
-			//Crear funciones en curva que sean:
-			//posicionar y recibe el nivel
-			//tangente q calcula la tangente
-			//normal q calcula la normal igual me parece que es siempre 1 en z en este caso
 			var punto = this.curvaCamino.get_punto(nivel);
 			var tan = this.curvaCamino.get_tan(nivel);
 			var normal = this.curvaCamino.get_normal(nivel);
@@ -83,6 +80,10 @@ function supBarrido(){
 			}
 
 		}
+		//Ver si salio de scope o se mantiene
+		this.final = punto;
+		console.log("Final sup: ", punto);
+
 		this.grilla.setupWebGLBuffers();
 
 /*		console.log("Tamaño position_buffer: ", this.grilla.position_buffer.length);

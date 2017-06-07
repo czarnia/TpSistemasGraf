@@ -5,6 +5,7 @@ function Calle(){
 		forma:null,
 		normal:null
 	}
+	this.final_curva = null;
 
 	//Hardcodeo todo para probar despues vamos a valores reales
 	this.create_perfil = function(ancho, alto){
@@ -41,6 +42,8 @@ function Calle(){
 
 		this.superficie.create(this.path, 100.0, this.perfil.forma, this.perfil.normal,
 				 [0.0, 0.0, 0.0]);
+		
+		this.final_curva = this.superficie.final;
 	}
 
 	this.create_calle_escena = function(dimension, final){

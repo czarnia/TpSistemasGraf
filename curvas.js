@@ -202,9 +202,7 @@ function curvaBspline3(){
     this.translate = function(mov){
         var v_mov = vec3.fromValues(mov, mov, mov);
         for (var i = 0; i < this.puntosDeControl.length; i++) {
-            console.log("Antes: ", this.puntosDeControl[i]);
             vec3.add(this.puntosDeControl[i], v_mov, this.puntosDeControl[i]);
-            console.log("Despues: ", this.puntosDeControl[i]);
         }
     }
 
