@@ -6,7 +6,7 @@ function Luminaria(){
 		normal:null
 	}
 
-  this.camino = function(){
+  this.camino = function(alto, largo){
 		var camino = new curvaBspline3();
 		var puntos_control = [];
 		//Quiero que interpole el punto inicial
@@ -15,29 +15,30 @@ function Luminaria(){
 		puntos_control.push([0,0,0]);
 		puntos_control.push([0,0,0]);
 
-		puntos_control.push([0,25,0]);
-		puntos_control.push([0,50,0]);
-		puntos_control.push([0,75,0]);
-		puntos_control.push([0,100,0]);
+		puntos_control.push([0,alto/4,0]);
+		puntos_control.push([0,(alto/4)*2,0]);
+		puntos_control.push([0,(alto/4)*3,0]);
+		puntos_control.push([0,alto,0]);
 
 		//Quiero que interpole el punto final
-		puntos_control.push([-25,100,0]);
-		puntos_control.push([-25,100,0]);
-		puntos_control.push([-25,100,0]);
-		puntos_control.push([-25,100,0]);
+		puntos_control.push([-largo,alto,0]);
+		puntos_control.push([-largo,alto,0]);
+		puntos_control.push([-largo,alto,0]);
+		puntos_control.push([-largo,alto,0]);
 
 		camino.create(puntos_control);
 		return camino;
   }
 
-	this.create = function(){
-    var puntos_forma = devolver_puntos_circulo(1, 30);
-    var camino = this.camino();
+	this.create = function(radio, alto, largo, _x, _y, _z){
+    var puntos_forma = devolver_puntos_circulo(radio, 30);
+    var camino = this.camino(alto, largo);
 		var color = [1,0.843,0];
     this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1], color);
-    this.foco.create(8, 3, 6);
+    this.foco.create(_x, _y, _z); //8,3,6
 
     var ubic_foco = camino.puntosDeControl[camino.puntosDeControl.length-1];
+		var ubic_foco[0] -= _x/2; 
     this.foco.translate(ubic_foco);
 	}
 
