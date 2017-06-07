@@ -42,7 +42,7 @@ function Calle(){
 
 		this.superficie.create(this.path, 100.0, this.perfil.forma, this.perfil.normal,
 				 [0.0, 0.0, 0.0]);
-		
+
 		this.final_curva = this.superficie.final;
 	}
 
@@ -70,6 +70,10 @@ function Calle(){
 		this.path.create(puntos);
 		this.path.setupWebGLBuffers();
 		this.create(this.path);
+	}
+
+	this.translate = function(mov){
+		this.superficie.translate(mov);
 	}
 
 	this.draw = function(){

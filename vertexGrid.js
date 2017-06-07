@@ -57,13 +57,13 @@ function VertexGrid () {
     }
 
     this.scale = function(_x, _y, _z){
-      for (var i = 0; i < position_buffer.length; i++){
+      for (var i = 0; i < this.position_buffer.length; i++){
         if ((i+1)%2 == 0){
-          position_buffer[i] = position_buffer[i]*_y;
+          this.position_buffer[i] = this.position_buffer[i]*_y;
         }else if ((i+1)%3 == 0){
-          position_buffer[i] = position_buffer[i]*_z;
+          this.position_buffer[i] = this.position_buffer[i]*_z;
         }else{
-          position_buffer[i] = position_buffer[i]*_x;
+          this.position_buffer[i] = this.position_buffer[i]*_x;
         }
       }
     }

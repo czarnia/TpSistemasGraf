@@ -45,6 +45,11 @@ function supRevolucion(){
     this.grilla.setupWebGLBuffers();
   }
 
+  this.rotate = function(grados, eje){
+    this.grilla.rotate(grados, eje);
+    this.grilla.setupWebGLBuffers();
+  }
+
   this.scale = function(_x, _y, _z){
     this.grilla.scale(_x,_y,_z);
     this.grilla.setupWebGLBuffers();

@@ -19,6 +19,7 @@ function supBarrido(){
 		long_camino = camino.length();
 
 		for (var i = 0; i < niveles; i++) {
+			//Calculo el step
 			var nivel = i * long_camino / (niveles - 1);
 			//Acomodo normal, tangente y binormal
 			var punto = this.curvaCamino.get_punto(nivel);
@@ -90,6 +91,11 @@ function supBarrido(){
 		for (var k = 0; k < this.grilla.position_buffer.length; k++) {
 			console.log(this.grilla.position_buffer[k]);
 		}*/
+	}
+
+	this.translate = function(mov){
+		this.grilla.translate(mov);
+		this.grilla.setupWebGLBuffers();
 	}
 
 	this.setupWebGLBuffers = function(){
