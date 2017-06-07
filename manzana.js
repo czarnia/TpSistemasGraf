@@ -1,77 +1,76 @@
 function Manzana(){
   this.terreno = new Vereda();
   this.edificios = [];
+  this.lado = null;
+  this.alto = null;
 
-  this.create = function(){
-    var e = new Edificio();
+  this.crear_largos_x = function(largo_disponible){
+    var largo_min = ;
+    var largo_max = ;
+    var largo_total = 0;
+    var largos = [];
 
-    var alto_max = 10; //y
-    var alto_min = 5;
-    var ancho_max = 0.65; //x
-    var ancho_min = 0.4;
-    var profundidad = 0.5; //z
+    for (var i = 0; i < 4; i++){
+      var largo = largo_min + Math.random() * (largo_max-largo_min);
+      largos.push(largo);
+      largo_total += largo;
+    }
+    largos.push(largo_disponible-largo_total);  
+  }
 
-    this.terreno.create([0.631,0.631,0.718]);
-    var pos_acum = [-3, -3, profundidad/2];
+  this.create = function(lado, alto){
+    this.terreno.create([0.631,0.631,0.718], lado, alto);
+    this.lado = lado;
+    this.alto = alto;
+    var profundidad = lado/5;
+    var lado_edif = 4*(lado/5);
+    var alto_min = lado*7;
+    var alto_max = lado*5;
 
-    var i = 0;
-    for (i; i < 16; i++){
-      var alto = alto_min + Math.random() * (alto_max-alto_min);
-      var ancho = ancho_min + Math.random() * (ancho_max-ancho_min);
+    lados_x = this.crear_largos(lado_edif);
+    lados_z = this.crear_largos(lado_edif-profundidad*2);
 
-      if ((i % 4 == 0) && (i != 0)){
-        var ancho = 3;
-        for (var j = 0; j < 4; j++){
-          if (i == 8){
-            ancho -= this.edificios[i-1-j].x;
-          }else{
-            ancho -= this.edificios[i-1-j].x;
-          }
-        }
+    //Lados x
+    var pos_z = lado_edif/2;
+    for (var i = 0; i < 2; i++){
+      var pos_x = 0;
+      for (var j = 0; j < 5; j++){
+         var alto = alto_min + Math.random() * (alto_max-alto_min);
+         var edif = new Edificio();
+         edif.create(lados_x[j], alto, profundidad, [pos_x+(lados_x[j]/2), alto/2+terreno.alto, pos_z+(profundidad/2)]);
+         edificios.push(edif);
+         pos_x += lados_x[j];
       }
-      if (i == 15){
-        var ancho = 3;
-        ancho -= this.edificios[0].z + this.edificios[14].z + this.edificios[13].z + this.edificios[12].z;
-      }
-
-      if (i != 0){
-        if (i < 5){
-          pos_acum[0] += this.edificios[i-1].x + ancho/2;
-        }else if (i <= 8){
-          pos_acum[3] += this.edificios[i-1].z + profundidad/2;
-        }else if (i <= 12){
-          pos_acum[0] -= this.edificios[i-1].x + ancho/2;
-        }else{
-          pos_acum[3] -= this.edificios[i-1].z + profundidad/2;
-        }
-      }
-
-      e.create(ancho, alto, profundidad, pos_acum);
-
-      if (i <= 8 && i >= 5){
-        e.rotate(Math.PI/2, [0,1,0]);
-      }
-      if (i <= 15 && i >= 13){
-        e.rotate(-Math.PI/2, [0,1,0]);
-      }
-
-      this.edificios.push(e);
+      pos_z = -lado_edif/2;
     }
 
+    //Lados z
+    pos_x = lado_edif/2;
+    for (var i = 0; i < 2; i++){
+      var pos_z = profundidad;
+      for (var j = 0; j < 5; j++){
+        var alto = alto_min + Math.random() * (alto_max-alto_min);
+        var edif = new Edificio();
+        edif.create(profundidad, alto, lados_z[j], [pos_x+(profundidad/2), alto/2+terreno.alto, pos_z+(lados_z[j]/2)]);
+        edificios.push(edif);
+        pos_z += lados_z[j];
+      }
+      pos_x = -lado_edif/2;
+    }
   }
 
   this.draw = function(){
     this.terreno.draw();
-    //for (var i = 0; i < 16; i++){
-      //this.edificios[i].draw();
-    //}
+    for (var i = 0; i < 16; i++){
+      this.edificios[i].draw();
+    }
   }
 
   this.setupWebGLBuffers = function(){
     this.terreno.setupWebGLBuffers();
-    //for (var i = 0; i < 1; i++){
-      //this.edificios[i].setupWebGLBuffers();
-    //}
+    for (var i = 0; i < 16; i++){
+      this.edificios[i].setupWebGLBuffers();
+    }
   }
 
 }
