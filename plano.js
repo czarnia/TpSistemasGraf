@@ -10,7 +10,7 @@ function Plano () {
     this.webgl_color_buffer = null;
     this.webgl_index_buffer = null;
 
-    this.create = function(_rows, _cols){
+    this.create = function(_rows, _cols, color){
       this.cols = _cols;
       this.rows = _rows;
 
@@ -34,21 +34,11 @@ function Plano () {
 
       //Color
 
-      this.color_buffer.push(0.9);
-      this.color_buffer.push(0.5);
-      this.color_buffer.push(0.5);
-
-      this.color_buffer.push(0.5);
-      this.color_buffer.push(0.9);
-      this.color_buffer.push(0.5);
-
-      this.color_buffer.push(0.5);
-      this.color_buffer.push(0.5);
-      this.color_buffer.push(0.9);
-
-      this.color_buffer.push(0.9);
-      this.color_buffer.push(0.9);
-      this.color_buffer.push(0.9);
+      for (var i = 0; i < 4; i++){
+        this.color_buffer.push(color[0]);
+        this.color_buffer.push(color[1]);
+        this.color_buffer.push(color[2]);
+      }
     }
 
     this.rotate = function(p, plano){

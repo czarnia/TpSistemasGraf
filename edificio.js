@@ -12,7 +12,7 @@ function Edificio(){
 
     // Cara 0 (yz)
     var grid = new Plano();
-    grid.create(_x, _z);
+    grid.create(_x, _z, color);
     grid.createIndexBuffer();
     grid.rotate(Math.PI/2, [1,0,0]);
     grid.translate([0,_y/2,0]);
@@ -20,7 +20,7 @@ function Edificio(){
 
     // Cara 1 (yz)
     grid = new Plano();
-    grid.create(_x, _z);
+    grid.create(_x, _z, color);
     grid.createIndexBuffer();
     grid.rotate(Math.PI/2, [1,0,0]);
     grid.translate([0,-_y/2,0]);
@@ -29,7 +29,7 @@ function Edificio(){
 
     // Cara 2 (xz)
     grid = new Plano();
-    grid.create(_z, _y);
+    grid.create(_z, _y, color);
     grid.createIndexBuffer();
     grid.rotate(Math.PI/2, [0,1,0]);
     grid.translate([_x*0.5,0,0]);
@@ -37,20 +37,20 @@ function Edificio(){
 
     // Cara 3 (xz)
     grid = new Plano();
-    grid.create(_z, _y);
+    grid.create(_z, _y, color);
     grid.createIndexBuffer();
     grid.rotate(Math.PI/2, [0,1,0]);
     grid.translate([-_x*0.5,0,0]);
     this.lados.push(grid);
 
     grid = new Plano();
-    grid.create(_x, _y);
+    grid.create(_x, _y, color);
     grid.createIndexBuffer();
     grid.translate([0,0,_z*0.5]);
     this.lados.push(grid);
 
     grid = new Plano();
-    grid.create(_x, _y);
+    grid.create(_x, _y, color);
     grid.createIndexBuffer();
     grid.translate([0,0,-_z*0.5]);
     this.lados.push(grid);

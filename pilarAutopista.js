@@ -57,4 +57,8 @@ function PilarAutopista(){
 	this.draw = function(){
 		this.superficie.draw();
 	}
+
+	this.scale = function(_x, _y, _z){
+		this.superficie.scale(_x, _y, _z);
+	}
 }
