@@ -20,7 +20,7 @@ function Manzana(){
     return largos;
   }
 
-  this.create = function(lado, alto){
+  this.create = function(lado, alto, t){
     this.terreno.create([0.631,0.631,0.718], lado, alto);
     this.lado = lado;
     this.alto = alto;
@@ -41,8 +41,8 @@ function Manzana(){
          var alto = alto_min + Math.random() * (alto_max-alto_min);
          var edif = new Edificio();
          color[0] = color[1]*j*0.2;
-         color[2] = j*0.2;
-         edif.create(lados_x[j], alto, profundidad, [pos_x+(lados_x[j]/2), alto/2+this.terreno.alto, pos_z+(profundidad/2)], color);
+         color[2] = j*0.5;
+         edif.create(lados_x[j], alto, profundidad, [pos_x+(lados_x[j]/2), this.terreno.alto, pos_z+(profundidad/2)], color, t);
          this.edificios.push(edif);
          pos_x += lados_x[j];
       }
@@ -56,13 +56,19 @@ function Manzana(){
       for (var j = 0; j < 3; j++){
         var alto = alto_min + Math.random() * (alto_max-alto_min);
         var edif = new Edificio();
-        color[0] = color[1]*j*0.2;
+        color[0] = color[1]*j*0.3;
         color[2] = j*0.2;
-        edif.create(profundidad, alto, lados_z[j], [pos_x+(profundidad/2), alto/2+this.terreno.alto, pos_z+(lados_z[j]/2)], color);
+        edif.create(profundidad, alto, lados_z[j], [pos_x+(profundidad/2), this.terreno.alto, pos_z+(lados_z[j]/2)], color, t);
         this.edificios.push(edif);
         pos_z += lados_z[j];
       }
       pos_x = -lado_edif/2;
+    }
+  }
+
+  this.tick = function(t){
+    for (var i = 0; i < 16; i++){
+      this.edificios[i].tick(t);
     }
   }
 
