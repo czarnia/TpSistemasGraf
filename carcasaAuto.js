@@ -22,7 +22,7 @@ function CarcasaAuto(){
     this.tapa2.translate([0,0,ancho]);
   }
 
-  this.camino = function(alto){
+  this.camino = function(){
 		var camino = new curvaBspline3();
 		var puntos_control = [];
 
@@ -31,10 +31,10 @@ function CarcasaAuto(){
         puntos_control.push([0,0,0]);
         puntos_control.push([0,0,0]);
 
-        puntos_control.push([0,0,this.alto]);
-        puntos_control.push([0,0,this.alto]);
-        puntos_control.push([0,0,this.alto]);
-        puntos_control.push([0,0,this.alto]);
+        puntos_control.push([0,0,this.ancho]);
+        puntos_control.push([0,0,this.ancho]);
+        puntos_control.push([0,0,this.ancho]);
+        puntos_control.push([0,0,this.ancho]);
 
 		camino.create(puntos_control);
 		return camino;
