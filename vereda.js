@@ -32,60 +32,60 @@ function Vereda(){
     var camino = new curvaBspline3();
 		var puntos_control = [];
 
-    puntos_control.push([-(this.lado)+(this.lado/5),0,-this.lado]);
-    puntos_control.push([-(this.lado)+(this.lado/5),0,-this.lado]);
-    puntos_control.push([-(this.lado)+(this.lado/5),0,-this.lado]);
-    puntos_control.push([-(this.lado)+(this.lado/5),0,-this.lado]);
+    puntos_control.push([-(this.lado/2)+(this.lado/10),0,-this.lado/2]);
+    puntos_control.push([-(this.lado/2)+(this.lado/10),0,-this.lado/2]);
+    puntos_control.push([-(this.lado/2)+(this.lado/10),0,-this.lado/2]);
+    puntos_control.push([-(this.lado/2)+(this.lado/10),0,-this.lado/2]);
 
-    puntos_control.push([(this.lado)-(this.lado/5),0,-this.lado]);
-    puntos_control.push([(this.lado)-(this.lado/5),0,-this.lado]);
-    puntos_control.push([(this.lado)-(this.lado/5),0,-this.lado]);
-    puntos_control.push([(this.lado)-(this.lado/5),0,-this.lado]);
+    puntos_control.push([(this.lado/2)-(this.lado/10),0,-this.lado/2]);
+    puntos_control.push([(this.lado/2)-(this.lado/10),0,-this.lado/2]);
+    puntos_control.push([(this.lado/2)-(this.lado/10),0,-this.lado/2]);
+    puntos_control.push([(this.lado/2)-(this.lado/10),0,-this.lado/2]);
 
-    puntos_control.push([this.lado,0,-(this.lado)]);
+    puntos_control.push([this.lado/2,0,-(this.lado/2)]);
 
-    puntos_control.push([this.lado,0,-(this.lado)+(this.lado/5)]);
-    puntos_control.push([this.lado,0,-(this.lado)+(this.lado/5)]);
-    puntos_control.push([this.lado,0,-(this.lado)+(this.lado/5)]);
-    puntos_control.push([this.lado,0,-(this.lado)+(this.lado/5)]);
+    puntos_control.push([this.lado/2,0,-(this.lado/2)+(this.lado/10)]);
+    puntos_control.push([this.lado/2,0,-(this.lado/2)+(this.lado/10)]);
+    puntos_control.push([this.lado/2,0,-(this.lado/2)+(this.lado/10)]);
+    puntos_control.push([this.lado/2,0,-(this.lado/2)+(this.lado/10)]);
 
-    puntos_control.push([this.lado,0,(this.lado)-(this.lado/5)]);
-    puntos_control.push([this.lado,0,(this.lado)-(this.lado/5)]);
-    puntos_control.push([this.lado,0,(this.lado)-(this.lado/5)]);
-    puntos_control.push([this.lado,0,(this.lado)-(this.lado/5)]);
+    puntos_control.push([this.lado/2,0,(this.lado/2)-(this.lado/10)]);
+    puntos_control.push([this.lado/2,0,(this.lado/2)-(this.lado/10)]);
+    puntos_control.push([this.lado/2,0,(this.lado/2)-(this.lado/10)]);
+    puntos_control.push([this.lado/2,0,(this.lado/2)-(this.lado/10)]);
 
-    puntos_control.push([this.lado,0,this.lado]);
+    puntos_control.push([this.lado/2,0,this.lado/2]);
 
-    puntos_control.push([(this.lado)-(this.lado/5),0,this.lado]);
-    puntos_control.push([(this.lado)-(this.lado/5),0,this.lado]);
-    puntos_control.push([(this.lado)-(this.lado/5),0,this.lado]);
-    puntos_control.push([(this.lado)-(this.lado/5),0,this.lado]);
+    puntos_control.push([(this.lado/2)-(this.lado/10),0,this.lado/2]);
+    puntos_control.push([(this.lado/2)-(this.lado/10),0,this.lado/2]);
+    puntos_control.push([(this.lado/2)-(this.lado/10),0,this.lado/2]);
+    puntos_control.push([(this.lado/2)-(this.lado/10),0,this.lado/2]);
 
-    puntos_control.push([-(this.lado)+(this.lado/5),0,this.lado]);
-    puntos_control.push([-(this.lado)+(this.lado/5),0,this.lado]);
-    puntos_control.push([-(this.lado)+(this.lado/5),0,this.lado]);
-    puntos_control.push([-(this.lado)+(this.lado/5),0,this.lado]);
+    puntos_control.push([-(this.lado/2)+(this.lado/10),0,this.lado/2]);
+    puntos_control.push([-(this.lado/2)+(this.lado/10),0,this.lado/2]);
+    puntos_control.push([-(this.lado/2)+(this.lado/10),0,this.lado/2]);
+    puntos_control.push([-(this.lado/2)+(this.lado/10),0,this.lado/2]);
 
-    puntos_control.push([-(this.lado),0,this.lado]);
+    puntos_control.push([-(this.lado/2),0,this.lado/2]);
 
-    puntos_control.push([-(this.lado),0,(this.lado)-(this.lado/5)]);
-    puntos_control.push([-(this.lado),0,(this.lado)-(this.lado/5)]);
-    puntos_control.push([-(this.lado),0,(this.lado)-(this.lado/5)]);
-    puntos_control.push([-(this.lado),0,(this.lado)-(this.lado/5)]);
+    puntos_control.push([-(this.lado/2),0,(this.lado/2)-(this.lado/10)]);
+    puntos_control.push([-(this.lado/2),0,(this.lado/2)-(this.lado/10)]);
+    puntos_control.push([-(this.lado/2),0,(this.lado/2)-(this.lado/10)]);
+    puntos_control.push([-(this.lado/2),0,(this.lado/2)-(this.lado/10)]);
 
-    puntos_control.push([-(this.lado),0,-(this.lado)+(this.lado/5)]);
-    puntos_control.push([-(this.lado),0,-(this.lado)+(this.lado/5)]);
-    puntos_control.push([-(this.lado),0,-(this.lado)+(this.lado/5)]);
-    puntos_control.push([-(this.lado),0,-(this.lado)+(this.lado/5)]);
+    puntos_control.push([-(this.lado/2),0,-(this.lado/2)+(this.lado/10)]);
+    puntos_control.push([-(this.lado/2),0,-(this.lado/2)+(this.lado/10)]);
+    puntos_control.push([-(this.lado/2),0,-(this.lado/2)+(this.lado/10)]);
+    puntos_control.push([-(this.lado/2),0,-(this.lado/2)+(this.lado/10)]);
 
-    puntos_control.push([-this.lado,0,-this.lado]);
+    puntos_control.push([-this.lado/2,0,-this.lado/2]);
 
     //repito el primer punto para cerrar la curva
 
-    puntos_control.push([-(this.lado)+(this.lado/5),0,-this.lado]);
-    puntos_control.push([-(this.lado)+(this.lado/5),0,-this.lado]);
-    puntos_control.push([-(this.lado)+(this.lado/5),0,-this.lado]);
-    puntos_control.push([-(this.lado)+(this.lado/5),0,-this.lado]);
+    puntos_control.push([-(this.lado/2)+(this.lado/10),0,-this.lado/2]);
+    puntos_control.push([-(this.lado/2)+(this.lado/10),0,-this.lado/2]);
+    puntos_control.push([-(this.lado/2)+(this.lado/10),0,-this.lado/2]);
+    puntos_control.push([-(this.lado/2)+(this.lado/10),0,-this.lado/2]);
 
 		camino.create(puntos_control);
 
