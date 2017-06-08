@@ -54,6 +54,10 @@ function Borde(){
 		this.superficie.create(this.camino, 100.0, this.perfil.forma, this.perfil.normal, [0.66, 0.66, 0.66]);
 	}
 
+	this.translate = function(mov){
+		this.superficie.translate(mov);
+	}
+
 	this.draw = function(){
 		this.superficie.draw();
 	}

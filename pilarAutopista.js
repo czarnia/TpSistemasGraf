@@ -54,6 +54,10 @@ function PilarAutopista(){
 		this.superficie.translate(vec);
 	}
 
+	this.rotate = function(grados, eje){
+		this.superficie.rotate(grados, eje);
+	}
+
 	this.draw = function(){
 		this.superficie.draw();
 	}
