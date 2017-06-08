@@ -17,8 +17,8 @@ function CarcasaAuto(){
     var camino = this.camino();
     this.crear_perfil(100);
     this.superficie.create(camino, 40, this.perfil.forma, this.perfil.normal, color);
-    this.tapa1.create(this.perfil.forma);
-    this.tapa2.create(this.perfil.forma);
+    this.tapa1.create(this.perfil.forma, color);
+    this.tapa2.create(this.perfil.forma, color);
     this.tapa2.translate([0,0,ancho]);
   }
 
@@ -26,15 +26,15 @@ function CarcasaAuto(){
 		var camino = new curvaBspline3();
 		var puntos_control = [];
 
-        puntos_control.push([0,0,0]);
-        puntos_control.push([0,0,0]);
-        puntos_control.push([0,0,0]);
-        puntos_control.push([0,0,0]);
+    puntos_control.push([0,0,0]);
+    puntos_control.push([0,0,0]);
+    puntos_control.push([0,0,0]);
+    puntos_control.push([0,0,0]);
 
-        puntos_control.push([0,0,this.ancho]);
-        puntos_control.push([0,0,this.ancho]);
-        puntos_control.push([0,0,this.ancho]);
-        puntos_control.push([0,0,this.ancho]);
+    puntos_control.push([0,0,this.ancho]);
+    puntos_control.push([0,0,this.ancho]);
+    puntos_control.push([0,0,this.ancho]);
+    puntos_control.push([0,0,this.ancho]);
 
 		camino.create(puntos_control);
 		return camino;
