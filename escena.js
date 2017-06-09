@@ -67,6 +67,8 @@ function Escena(){
 				this.calles[(this.cant_manzanas-1) + i].superficie.grilla.setupWebGLBuffers();
 			}
 		}
+
+		
 	}
 
 	this.draw = function(){

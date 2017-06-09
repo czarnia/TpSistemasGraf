@@ -29,14 +29,44 @@ function Autopista(){
 		this.borde_vuelta.create(curva_camino);
 		this.borde_vuelta.translate([0.0, 0.0, sube]);
 
-		var final_curva = this.calle_ida.final_curva;
+		curva_camino.discretizar();
+
+		var dist = 0;
+		var i = 0, j = 0;
+
+		while((i < curva_camino.discretizaciones.length) && (j < cant_pilares)){
+			if(curva_camino.distancias_discret[i] >= dist){	
+				if(curva_camino.distancias_discret[i] > dist){
+					var u = (curva_camino.discretizaciones[i - 1] + curva_camino.discretizaciones[i]) / 2;
+					var punto = curva_camino.get_punto(u);
+				}
+
+				if(curva_camino.distancias_discret[i] == dist){
+					var punto = curva_camino.get_punto(curva_camino.discretizaciones[i]);
+				}
+
+				var pilar = new PilarAutopista();
+				pilar.create();
+				pilar.scale(0.1, 0.1, 0.1);
+				pilar.rotate(-Math.PI/2, [1.0, 0.0, 0.0]);
+				pilar.translate(punto);
+				this.pilares.push(pilar);
+				j++;
+				dist += dist_pilares;
+			}
+			i++;
+		}
+
+/*		var final_curva = this.calle_ida.final_curva;
 		var dist = 1;
 
-		for (var i = 0; i < (cant_pilares*dist_pilares); i += dist_pilares) {
-			var step = i * curva_camino.length() / (cant_pilares - 1);
+
+
+		for (var i = 0.0; i < (cant_pilares*dist_pilares); i += dist_pilares) {
+			// var step = i * curva_camino.length() / (cant_pilares - 1);
 			var pilar = new PilarAutopista();
 			pilar.create();
-			var punto = curva_camino.get_punto(step);
+			var punto = curva_camino.get_punto(i);
 			pilar.scale(0.1, 0.1, 0.1);
 			pilar.rotate(-Math.PI/2, [1.0, 0.0, 0.0]);
 			pilar.translate(punto);
@@ -50,7 +80,28 @@ function Autopista(){
 			this.pilares.push(pilar);
 			// vec3.min(aux, final_curva, punto);
 			// dist = vec3.squaredDistance(aux, final_curva);
-		}
+		}*/
+
+/*		var ant = vec3.fromValues(0.0, 0.0, 0.0);
+		var dist = 0;
+		var i = 0;
+		var j = 0;
+
+		while((i < cant_pilares) && (j < this.calle_ida.superficie.puntos_curva.length)){
+			dist = vec3.distance(ant, this.calle_ida.superficie.puntos_curva[j]);
+			dist = Math.floor(dist);
+			if(dist == dist_pilares){
+				var pilar = new PilarAutopista();
+				pilar.create();
+				pilar.scale(0.1, 0.1, 0.1);
+				pilar.rotate(-Math.PI/2, [1.0, 0.0, 0.0]);
+				pilar.translate(this.calle_ida.superficie.puntos_curva[j]);
+				this.pilares.push(pilar);
+				i++;
+				ant = this.calle_ida.superficie.puntos_curva[j];
+			}
+			j++;
+		}*/
 	}
 
 	this.coincide = function(xcomienzo, ancho, zcomienzo, largo){
