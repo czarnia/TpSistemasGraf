@@ -3,6 +3,8 @@ function Manzana(){
   this.edificios = [];
   this.lado = null;
   this.alto = null;
+  this.tick_ini = null;
+  this.t = null;
 
   this.crear_largos = function(largo_disponible, cantidad_largos){
     var largo_min = largo_disponible/6;
@@ -20,10 +22,13 @@ function Manzana(){
     return largos;
   }
 
-  this.create = function(lado, alto, t){
+  this.create = function(lado, alto, t, tick_ini){
     this.terreno.create([0.631,0.631,0.718], lado, alto);
     this.lado = lado;
     this.alto = alto;
+    this.tick_ini = tick_ini;
+    this.t = 0;
+
     var profundidad = lado/5;
     var lado_edif = 4*(lado/5);
     var alto_min = lado*4;
@@ -56,7 +61,7 @@ function Manzana(){
       for (var j = 0; j < 3; j++){
         var alto = alto_min + Math.random() * (alto_max-alto_min);
         var edif = new Edificio();
-        color[0] = color[1]*j*0.3;
+        color[1] = color[1]*j*0.3;
         color[2] = j*0.2;
         edif.create(profundidad, alto, lados_z[j], [pos_x+(profundidad/2), this.terreno.alto, pos_z+(lados_z[j]/2)], color, t);
         this.edificios.push(edif);
@@ -67,6 +72,10 @@ function Manzana(){
   }
 
   this.tick = function(t){
+    this.t += t;
+    if (this.t <= this.tick_ini){
+      return;
+    }
     for (var i = 0; i < 16; i++){
       this.edificios[i].tick(t);
     }
@@ -83,6 +92,13 @@ function Manzana(){
     this.terreno.setupWebGLBuffers();
     for (var i = 0; i < 16; i++){
       this.edificios[i].setupWebGLBuffers();
+    }
+  }
+
+  this.translate = function(v){
+    this.terreno.translate(v);
+    for (var i = 0; i < 16; i++){
+      this.edificios[i].translate(v);
     }
   }
 
