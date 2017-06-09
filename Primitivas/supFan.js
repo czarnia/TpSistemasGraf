@@ -9,7 +9,7 @@ function SupFan(){
   this.color_buffer = [];
   this.webgl_color_buffer = null;
 
-  this.create = function(perfil){
+  this.create = function(perfil, color){
     for (var i = 0; i < perfil.length; i++){
       this.position_buffer.push(perfil[i][0]);
       this.position_buffer.push(perfil[i][1]);
@@ -17,9 +17,9 @@ function SupFan(){
 
       this.index_buffer.push(i);
 
-      this.color_buffer.push(0.8 * i);
-      this.color_buffer.push(0.1 * i);
-      this.color_buffer.push(0.3 * i);
+      this.color_buffer.push(color[0]);
+      this.color_buffer.push(color[1]);
+      this.color_buffer.push(color[2]);
     }
   }
 
