@@ -4,7 +4,7 @@ function supRevolucion(){
   this.angulo = null;
   this.grilla = new VertexGrid();
 
-  this.create = function(eje, perfil, angulo, step){
+  this.create = function(eje, perfil, angulo, step, color){
     var muestreo = angulo/step;
 		this.grilla.create(step, perfil.length);
 
@@ -32,9 +32,9 @@ function supRevolucion(){
 				this.grilla.position_buffer.push(punto[1]);
 				this.grilla.position_buffer.push(punto[2]);
 
-				this.grilla.color_buffer.push(0.5*(j+1));
-				this.grilla.color_buffer.push(0.9*(j-1));
-				this.grilla.color_buffer.push(0.2*j);
+				this.grilla.color_buffer.push(color[0]);
+				this.grilla.color_buffer.push(color[1]);
+				this.grilla.color_buffer.push(color[2]);
 			};
     };
     this.grilla.setupWebGLBuffers();
