@@ -3,6 +3,7 @@ function supBarrido(){
 	this.curvaCamino = null;
 	this.grilla = new VertexGrid();
 	this.final = null;
+	this.puntos_curva = [];
 
 	this.create = function(camino, niveles, puntos_forma, normales_forma, color){
 		var cols = puntos_forma.length; //Las columnas tendran los puntos de la forma
@@ -23,6 +24,7 @@ function supBarrido(){
 			var nivel = i * long_camino / (niveles - 1);
 			//Acomodo normal, tangente y binormal
 			var punto = this.curvaCamino.get_punto(nivel);
+			this.puntos_curva.push(punto);
 			var tan = this.curvaCamino.get_tan(nivel);
 			var normal = this.curvaCamino.get_normal(nivel);
 			//La binormal es el producto vectorial entre la normal y la tangente

@@ -159,6 +159,9 @@ function curvaBspline3(){
     this.webgl_color_buffer = null;
     this.webgl_index_buffer = null;
 
+    this.discretizaciones = null;
+    this.distancias_discret = null;
+
     //Bases
     this.base0 = function(u) {
     return (1-3*u+3*u*u-u*u*u)*1/6;
@@ -298,6 +301,21 @@ function curvaBspline3(){
            this.color_buffer.push(1.0);
 
            this.index_buffer.push(i);
+        }
+    }
+
+    this.discretizar = function(){
+        this.discretizaciones = [];
+        this.distancias_discret = [];
+        var aux = vec3.create();
+        var ant = vec3.fromValues(0.0, 0.0, 0.0);
+        var dist = 0;
+        for (var i = 0; i < (this.valores_u * 10); i += 1) {
+            aux = this.get_punto(i/10);
+            this.discretizaciones.push(i/10);            
+            dist += vec3.distance(ant, aux);
+            this.distancias_discret.push(dist);
+            ant = aux;
         }
     }
 
