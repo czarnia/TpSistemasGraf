@@ -97,7 +97,17 @@ function supBarrido(){
 
 	this.translate = function(mov){
 		this.grilla.translate(mov);
-		this.grilla.setupWebGLBuffers();
+		this.setupWebGLBuffers();
+	}
+
+	this.rotate = function(p, plano){
+		this.grilla.rotate(p, plano);
+		this.setupWebGLBuffers();
+	}
+
+	this.scale = function(_x, _y, _z){
+		this.grilla.scale(_x, _y, _z);
+		this.setupWebGLBuffers();
 	}
 
 	this.setupWebGLBuffers = function(){

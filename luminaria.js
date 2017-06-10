@@ -31,23 +31,41 @@ function Luminaria(){
   }
 
 	this.create = function(radio, alto, largo, _x, _y, _z){
-    var puntos_forma = devolver_puntos_circulo(radio, 30);
-    var camino = this.camino(alto, largo);
+	    var puntos_forma = devolver_puntos_circulo(radio, 30);
+	    var camino = this.camino(alto, largo);
 		var color = [1,0.843,0];
-    this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1], color);
-    this.foco.create(_x, _y, _z); //8,3,6
+	    this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1], color);
+	    this.foco.create(_x, _y, _z, color); //8,3,6
 
-    var ubic_foco = camino.puntosDeControl[camino.puntosDeControl.length-1];
-    this.foco.translate(ubic_foco);
+	    var ubic_foco = camino.puntosDeControl[camino.puntosDeControl.length-1];
+	    this.foco.translate(ubic_foco);
+	}
+
+	this.setupWebGLBuffers = function(){
+		this.foco.setupWebGLBuffers();
+	}
+
+	this.translate = function(mov){
+		this.poste.translate(mov);
+		this.foco.translate(mov);
+		this.setupWebGLBuffers();
+	}
+
+	this.scale = function(_x, _y, _z){
+		this.poste.scale(_x, _y, _z);
+		this.foco.scale(_x, _y, _z);
+		this.setupWebGLBuffers();
+	}
+
+	this.rotate = function(p, plano){
+		this.poste.rotate(p, plano);
+		this.foco.rotate(p, plano);
+		this.setupWebGLBuffers();
 	}
 
 	this.draw = function(){
 		this.poste.draw();
 		this.foco.draw();
-	}
-
-	this.setupWebGLBuffers = function(){
-		this.foco.setupWebGLBuffers();
 	}
 }
 
