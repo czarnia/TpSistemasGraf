@@ -106,15 +106,21 @@ function CarcasaAuto(){
   }
 
   this.setupWebGLBuffers = function(){
-      this.tapa1.setupWebGLBuffers();
-      this.tapa2.setupWebGLBuffers();
-      this.superficie.setupWebGLBuffers();
+    this.tapa1.setupWebGLBuffers();
+    this.tapa2.setupWebGLBuffers();
+    this.superficie.setupWebGLBuffers();
   }
 
   this.draw = function(){
-      this.superficie.draw();
-      this.tapa1.draw();
-      this.tapa2.draw();
+    this.superficie.draw();
+    this.tapa1.draw();
+    this.tapa2.draw();
+  }
+
+  this.translate = function(v){
+    this.superficie.translate(v);
+    this.tapa1.translate(v);
+    this.tapa2.translate(v);
   }
 
 }
