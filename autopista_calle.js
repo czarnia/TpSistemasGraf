@@ -76,6 +76,14 @@ function Calle(){
 		this.superficie.translate(mov);
 	}
 
+	this.rotate = function(p, plano){
+		this.superficie.rotate(p, plano);
+	}
+
+	this.scale = function(_x, _y, _z){
+		this.superficie.scale(_x, _y, _z);
+	}
+
 	this.draw = function(){
 		this.superficie.draw();
 	}

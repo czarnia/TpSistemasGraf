@@ -85,14 +85,8 @@ function supBarrido(){
 		}
 		//Ver si salio de scope o se mantiene
 		this.final = punto;
-		console.log("Final sup: ", punto);
 
 		this.grilla.setupWebGLBuffers();
-
-/*		console.log("Tamaño position_buffer: ", this.grilla.position_buffer.length);
-		for (var k = 0; k < this.grilla.position_buffer.length; k++) {
-			console.log(this.grilla.position_buffer[k]);
-		}*/
 	}
 
 	this.translate = function(mov){
