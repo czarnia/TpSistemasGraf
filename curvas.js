@@ -287,7 +287,7 @@ function curvaBspline3(){
         return normal;
     }
 
-    this.curva_prueba = function(){
+    this.curva_2D = function(){
         var aux = vec3.create();
         for (var i = 0; i < (this.valores_u * 10); i += 1) {
            aux = this.get_punto(i/10);
@@ -296,9 +296,9 @@ function curvaBspline3(){
            this.position_buffer.push(aux[1]);
            this.position_buffer.push(aux[2]);
 
-           this.color_buffer.push(1.0);
-           this.color_buffer.push(1.0);
-           this.color_buffer.push(1.0);
+           this.color_buffer.push(0.0);
+           this.color_buffer.push(0.0);
+           this.color_buffer.push(0.0);
 
            this.index_buffer.push(i);
         }
