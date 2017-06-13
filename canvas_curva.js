@@ -37,7 +37,15 @@ init_canvas_curva = function(){
 		gl_canvas.viewport(0, 0, canvas_curva.width, canvas_curva.height);
 
 		//Hacer init shaders para este canvas y lo demas
+		var j = 0;
 		initShaders_canvas_curva();
+		for (var i = 0; i < puntos_curva.length; i++){
+			position_buffer[j] = puntos_curva[i][0];
+			position_buffer[j + 1] = puntos_curva[i][1];
+			position_buffer[j + 2] = puntos_curva[i][2];
+			j += 3;
+		}
+
 		dibujar_curva();
 
 		canvas_curva.onmousedown = handleMouseDown_curva;
@@ -76,7 +84,7 @@ function initShaders_canvas_curva(){
 
 	var u_proj_matrix = gl_canvas.getUniformLocation(glProgram_canvas, "uPMatrix");
 	// VER
-	mat4.ortho(pMatrix, -canvas_curva.width, canvas_curva.width, -canvas_curva.height, canvas_curva.height, -10, 10);
+	mat4.ortho(pMatrix, 0.0, 80.0, 0.0, 40.0, -10, 10);
 	gl_canvas.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 
 	var u_model_view_matrix = gl_canvas.getUniformLocation(glProgram_canvas, "uMVMatrix");
@@ -87,21 +95,21 @@ function initShaders_canvas_curva(){
 }
 
 function handleMouseDown_curva(event) {
-    mouseX = event.screenX;
-    mouseY = event.screenY;
+    mouseX = event.pageX;
+    mouseY = event.pageY;
 
-    puntoX = mouseX - (canvas_curva.width/2);
-    puntoY = mouseY - (canvas_curva.height/1.25);
+    puntoX = canvas_curva.offsetLeft + canvas_curva.width - mouseX;
+    puntoY = canvas_curva.offsetTop + canvas_curva.height - mouseY;
 
-    console.log("Punto x: ", mouseX);
-    console.log("Punto y: ", mouseY);
+    console.log("Punto x: ", mouseX, "Transformado: ", puntoX);
+    console.log("Punto y: ", mouseY, "Transformado: ", puntoY);
 
-    puntos_curva.push([mouseX, mouseY, 0.0]);
+    puntos_curva.push([puntoX, puntoY, 0.0]);
 
-    position_buffer.push(mouseX);
-    position_buffer.push(mouseY);
+    position_buffer.push(puntoX);
+    position_buffer.push(puntoY);
     position_buffer.push(0.0);
-    draw_puntos();
+    // draw_puntos();
     dibujar_curva();
 }
 
@@ -113,6 +121,7 @@ transformar_puntos = function(){
 
 dibujar_curva = function(){
 	gl_canvas.clear(gl_canvas.COLOR_BUFFER_BIT|gl_canvas.DEPTH_BUFFER_BIT);
+	draw_puntos();
 	var curva = new curvaBspline3();
 	curva.create(puntos_curva);
 	curva.curva_2D();
@@ -131,15 +140,8 @@ click_regenerar = function(){
 	drawScene();
 }
 
-draw_puntos = function(punto){
-	// var position_buffer = vec3.create();
+draw_puntos = function(){
 	var webgl_position_buffer = gl_canvas.createBuffer();
-
-/*	for(var i = 0; i < puntos_curva.length; i += 3){
-		position_buffer[i] = puntos_curva[i][0];
-		position_buffer[i + 1] = puntos_curva[i][1];
-		position_buffer[i + 2] = puntos_curva[i][2];
-	}*/
 
 	gl_canvas.bindBuffer(gl_canvas.ARRAY_BUFFER, webgl_position_buffer);
 	gl_canvas.bufferData(gl_canvas.ARRAY_BUFFER, new Float32Array(position_buffer), gl_canvas.STATIC_DRAW);
