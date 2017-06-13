@@ -3,7 +3,20 @@
 			glProgram_canvas = null;
 	var mouseX = null;
 	var mouseY = null;
-	puntos_curva = [];
+	var puntos_curva = [];
+	puntos_curva.push([0.0, 0.0, 0.0]);
+	puntos_curva.push([0.0, 0.0, 0.0]);
+	puntos_curva.push([0.0, 0.0, 0.0]);
+	puntos_curva.push([0.0, 0.0, 0.0]);
+	puntos_curva.push([40.0, 0.0, 0.0]);
+	puntos_curva.push([40.0, 0.0, 0.0]);
+	puntos_curva.push([60.0, 0.0, 0.0]);
+	puntos_curva.push([60.0, 40.0, 0.0]);
+	puntos_curva.push([80.0, 40.0, 0.0]);
+	puntos_curva.push([80.0, 40.0, 0.0]);
+	puntos_curva.push([80.0, 40.0, 0.0]);
+	puntos_curva.push([80.0, 40.0, 0.0]);
+	var position_buffer = [];
 
 init_canvas_curva = function(){
 	canvas_curva = document.getElementById("second-canvas");
@@ -21,10 +34,11 @@ init_canvas_curva = function(){
 		gl_canvas.depthFunc(gl_canvas.LEQUAL);
 		gl_canvas.clear(gl_canvas.COLOR_BUFFER_BIT|gl_canvas.DEPTH_BUFFER_BIT);
 
-		gl_canvas.viewport(0, 0, canvas.width, canvas.height);
+		gl_canvas.viewport(0, 0, canvas_curva.width, canvas_curva.height);
 
 		//Hacer init shaders para este canvas y lo demas
 		initShaders_canvas_curva();
+		dibujar_curva();
 
 		canvas_curva.onmousedown = handleMouseDown_curva;
 	}else{
@@ -66,6 +80,10 @@ function handleMouseDown_curva(event) {
     console.log("Punto y: ", mouseY);
 
     puntos_curva.push([mouseX, mouseY, 0.0]);
+
+    position_buffer.push(mouseX);
+    position_buffer.push(mouseY);
+    position_buffer.push(0.0);
     draw_puntos();
 }
 
@@ -74,7 +92,7 @@ dibujar_curva = function(){
 	var curva = new curvaBspline3();
 	curva.create(puntos_curva);
 	curva.curva_2D();
-	curva.setupWebGLBuffers();
+	curva.setupWebGLBuffers2D();
 	curva.draw();
 }
 
@@ -90,13 +108,25 @@ click_regenerar = function(){
 }
 
 draw_puntos = function(punto){
-	var position_buffer = gl_canvas.createBuffer();
+	// var position_buffer = vec3.create();
+	var webgl_position_buffer = gl_canvas.createBuffer();
 
-	gl_canvas.bindBuffer(gl_canvas.ARRAY_BUFFER, position_buffer);
-	gl_canvas.bufferData(gl_canvas.ARRAY_BUFFER, new Float32Array(puntos_curva), gl_canvas.STATIC_DRAW);
-	position_buffer.itemSize = 3;
-	position_buffer.numItems = puntos_curva.length/3;
-	gl_canvas.vertexAttribPointer(glProgram_canvas.aVertexPosition, 3, gl_canvas.FLOAT, false, 0, 0);
+/*	for(var i = 0; i < puntos_curva.length; i += 3){
+		position_buffer[i] = puntos_curva[i][0];
+		position_buffer[i + 1] = puntos_curva[i][1];
+		position_buffer[i + 2] = puntos_curva[i][2];
+	}*/
+
+	gl_canvas.bindBuffer(gl_canvas.ARRAY_BUFFER, webgl_position_buffer);
+	gl_canvas.bufferData(gl_canvas.ARRAY_BUFFER, new Float32Array(position_buffer), gl_canvas.STATIC_DRAW);
+	webgl_position_buffer.itemSize = 3;
+	webgl_position_buffer.numItems = position_buffer.length/3;
+
+	var vertexPositionAttribute = gl_canvas.getAttribLocation(glProgram_canvas, "aVertexPosition");
+    gl_canvas.enableVertexAttribArray(vertexPositionAttribute);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+    // gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+	gl_canvas.vertexAttribPointer(vertexPositionAttribute, 3, gl_canvas.FLOAT, false, 0, 0);
 		
-	gl_canvas.drawArrays(gl_canvas.POINTS, 0, position_buffer.numItems);
+	gl_canvas.drawArrays(gl_canvas.POINTS, 0, webgl_position_buffer.numItems);
 }
