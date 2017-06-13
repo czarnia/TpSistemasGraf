@@ -158,6 +158,8 @@ function curvaBspline3(){
     this.webgl_position_buffer = null;
     this.webgl_color_buffer = null;
     this.webgl_index_buffer = null;
+    this.webgl_index_buffer2D = null;
+    this.webgl_position_buffer2D = null;
 
     this.discretizaciones = null;
     this.distancias_discret = null;
@@ -359,10 +361,10 @@ function curvaBspline3(){
 
     this.draw = function(){
 
-        var vertexPositionAttribute = gl_canvas.getAttribLocation(glProgram_canvas, "aVertexPosition");
-        gl_canvas.enableVertexAttribArray(vertexPositionAttribute);
+        var vertexPositionAttribute2D = gl_canvas.getAttribLocation(glProgram_canvas, "aVertexPosition");
+        gl_canvas.enableVertexAttribArray(vertexPositionAttribute2D);
         gl_canvas.bindBuffer(gl_canvas.ARRAY_BUFFER, this.webgl_position_buffer2D);
-        gl_canvas.vertexAttribPointer(vertexPositionAttribute, 3, gl_canvas.FLOAT, false, 0, 0);
+        gl_canvas.vertexAttribPointer(vertexPositionAttribute2D, 3, gl_canvas.FLOAT, false, 0, 0);
 
 /*        var vertexColorAttribute = gl_canvas.getAttribLocation(glProgram_canvas, "aVertexColor");
         gl_canvas.enableVertexAttribArray(vertexColorAttribute);
@@ -370,8 +372,24 @@ function curvaBspline3(){
         gl_canvas.vertexAttribPointer(vertexColorAttribute, 3, gl_canvas.FLOAT, false, 0, 0);*/
 
         gl_canvas.bindBuffer(gl_canvas.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer2D);
-
-        // Dibujamos.
-        gl_canvas.drawElements(gl_canvas.LINE_STRIP, this.webgl_index_buffer2D.length, gl_canvas.UNSIGNED_SHORT, 0);
+          // Dibujamos.
+        gl_canvas.drawElements(gl_canvas.LINE_STRIP, this.index_buffer.length, gl_canvas.UNSIGNED_SHORT, 0);
     }
+
+
+
+/*          var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
+          gl.enableVertexAttribArray(vertexPositionAttribute);
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+          gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+          var vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
+          gl.enableVertexAttribArray(vertexColorAttribute);
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
+          gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+
+          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+
+          // Dibujamos.
+        gl.drawElements(gl.LINE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);*/
 }

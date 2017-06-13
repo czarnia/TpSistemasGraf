@@ -1,6 +1,6 @@
-	var gl_canvas = null,
-			canvas_curva = null,
-			glProgram_canvas = null;
+	var gl_canvas = null;
+	var canvas_curva = null;
+	var glProgram_canvas = null;
 	var mouseX = null;
 	var mouseY = null;
 	var puntos_curva = [];
@@ -70,11 +70,28 @@ function initShaders_canvas_curva(){
 
 	// Le decimos a WebGL que de aqu� en adelante use el programa generado.
 	gl_canvas.useProgram(glProgram_canvas);
+
+	var pMatrix = mat4.create();
+	var mvMatrix = mat4.create();
+
+	var u_proj_matrix = gl_canvas.getUniformLocation(glProgram_canvas, "uPMatrix");
+	// VER
+	mat4.ortho(pMatrix, -canvas_curva.width, canvas_curva.width, -canvas_curva.height, canvas_curva.height, -10, 10);
+	gl_canvas.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
+
+	var u_model_view_matrix = gl_canvas.getUniformLocation(glProgram_canvas, "uMVMatrix");
+	// Preparamos una matriz de modelo+vista.
+	mat4.identity(mvMatrix);
+	// mat4.translate(mvMatrix, mvMatrix, [-50.0, -10.5, -100.0]);
+	gl_canvas.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
 }
 
 function handleMouseDown_curva(event) {
-    mouseX = event.clientX;
-    mouseY = event.clientY;
+    mouseX = event.screenX;
+    mouseY = event.screenY;
+
+    puntoX = mouseX - (canvas_curva.width/2);
+    puntoY = mouseY - (canvas_curva.height/1.25);
 
     console.log("Punto x: ", mouseX);
     console.log("Punto y: ", mouseY);
@@ -85,6 +102,13 @@ function handleMouseDown_curva(event) {
     position_buffer.push(mouseY);
     position_buffer.push(0.0);
     draw_puntos();
+    dibujar_curva();
+}
+
+transformar_puntos = function(){
+	var factorX = canvas.width / canvas_curva.width;
+	var factorY = canvas.height / canvas_curva.height;
+
 }
 
 dibujar_curva = function(){
@@ -124,9 +148,23 @@ draw_puntos = function(punto){
 
 	var vertexPositionAttribute = gl_canvas.getAttribLocation(glProgram_canvas, "aVertexPosition");
     gl_canvas.enableVertexAttribArray(vertexPositionAttribute);
-    // gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-    // gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 	gl_canvas.vertexAttribPointer(vertexPositionAttribute, 3, gl_canvas.FLOAT, false, 0, 0);
 		
 	gl_canvas.drawArrays(gl_canvas.POINTS, 0, webgl_position_buffer.numItems);
+}
+
+draw_canvas = function(){
+/*	var pMatrix = mat4.create();
+	var mvMatrix = mat4.create();
+
+	var u_proj_matrix = gl_canvas.getUniformLocation(glProgram_canvas, "uPMatrix");
+	// Preparamos una matriz de perspectiva.
+	mat4.perspective(pMatrix, 45, 640.0/480.0, 0.1, 200.0);
+	gl_canvas.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
+
+	var u_model_view_matrix = gl_canvas.getUniformLocation(glProgram_canvas, "uMVMatrix");
+	// Preparamos una matriz de modelo+vista.
+	mat4.identity(mvMatrix);
+	mat4.translate(mvMatrix, mvMatrix, [-10.0, -10.5, -50.0]);
+	gl_canvas.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);*/
 }
