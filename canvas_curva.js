@@ -98,13 +98,15 @@ function handleMouseDown_curva(event) {
     mouseX = event.pageX;
     mouseY = event.pageY;
 
-    puntoX = canvas_curva.offsetLeft + canvas_curva.width - mouseX;
-    puntoY = canvas_curva.offsetTop + canvas_curva.height - mouseY;
+    //DESCOMENTAR CUANDO AGREGUE LOS PUNTOS EN ORDEN
+    puntoX = (-canvas_curva.offsetLeft + mouseX) * /*puntos_curva[puntos_curva.length - 1][0]*/80 / canvas_curva.width;
+    puntoY = (canvas_curva.offsetTop + canvas_curva.height - mouseY) * /*puntos_curva[puntos_curva.length - 1][1]*/40 / canvas_curva.height;
 
-    console.log("Punto x: ", mouseX, "Transformado: ", puntoX);
-    console.log("Punto y: ", mouseY, "Transformado: ", puntoY);
+    console.log("Punto x: ", mouseX,"Movido: ",(-canvas_curva.offsetLeft + mouseX),"Transformado: ", puntoX);
+    console.log("Punto y: ", mouseY,"Movido: ",(canvas_curva.offsetTop + canvas_curva.height - mouseY), "Transformado: ", puntoY);
 
     puntos_curva.push([puntoX, puntoY, 0.0]);
+    puntos_curva.sort(comparador);
 
     position_buffer.push(puntoX);
     position_buffer.push(puntoY);
@@ -112,11 +114,13 @@ function handleMouseDown_curva(event) {
     // draw_puntos();
     dibujar_curva();
 }
-
-transformar_puntos = function(){
-	var factorX = canvas.width / canvas_curva.width;
-	var factorY = canvas.height / canvas_curva.height;
-
+//VER SI SE PUEDE MEJORAR
+comparador = function(a, b){
+/*	if ((a[0] - b[0]) >= (a[1] - b[1]))
+		return (a[0] - b[0]);
+	else
+		return (a[1] - b[1]);*/
+	return (a[0] - b[0]);
 }
 
 dibujar_curva = function(){
