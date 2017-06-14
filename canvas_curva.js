@@ -102,9 +102,6 @@ function handleMouseDown_curva(event) {
     puntoX = (-canvas_curva.offsetLeft + mouseX) * /*puntos_curva[puntos_curva.length - 1][0]*/80 / canvas_curva.width;
     puntoY = (canvas_curva.offsetTop + canvas_curva.height - mouseY) * /*puntos_curva[puntos_curva.length - 1][1]*/40 / canvas_curva.height;
 
-    console.log("Punto x: ", mouseX,"Movido: ",(-canvas_curva.offsetLeft + mouseX),"Transformado: ", puntoX);
-    console.log("Punto y: ", mouseY,"Movido: ",(canvas_curva.offsetTop + canvas_curva.height - mouseY), "Transformado: ", puntoY);
-
     puntos_curva.push([puntoX, puntoY, 0.0]);
     puntos_curva.sort(comparador);
 
@@ -114,7 +111,7 @@ function handleMouseDown_curva(event) {
     // draw_puntos();
     dibujar_curva();
 }
-//VER SI SE PUEDE MEJORAR
+//VER SI SE PUEDE HACER Q SE MUEVA Y TMB
 comparador = function(a, b){
 /*	if ((a[0] - b[0]) >= (a[1] - b[1]))
 		return (a[0] - b[0]);
@@ -136,7 +133,7 @@ dibujar_curva = function(){
 click_regenerar = function(){
 	dibujar_curva();
 
-	escena.create_manzanas(23.0, 4.0, 5.0, 1.0);
+	escena.create_manzanas(6.0, 5.0, 1.0);
 	escena.ubicar_autopista(puntos_curva, 10, 10);
 	escena.create_calles();
 	escena.create_mapa();
