@@ -216,6 +216,7 @@
 							canvas.onmousedown = handleMouseDown;
         					document.onmouseup = handleMouseUp;
         					document.onmousemove = handleMouseMove;
+        					document.onkeydown = handleKeyDown;
 
 							setInterval(drawScene, 10);
 					}else{
@@ -318,7 +319,8 @@
 					ruta.create(camino, 10, 10);*/
 					escena = new Escena();					
 					
-					escena.create_manzanas(23.0, 4.0, 5.0, 1.0);
+					//Cant manzanas, lado manzana, ancho calle
+					escena.create_manzanas(6.0, 5.0, 1.0);
 					escena.ubicar_autopista(puntos, 10, 10);
 					escena.create_calles();
 					escena.create_mapa();
@@ -343,6 +345,8 @@
 
 		    var escenaRotationMatrix = mat4.create();
 		    mat4.identity(escenaRotationMatrix);
+		    var zoomMatrix = mat4.create();
+		    mat4.identity(zoomMatrix);
 
 		    function handleMouseDown(event) {
 		        mouseDown = true;
@@ -377,6 +381,17 @@
 		        lastMouseY = newY;
 		    }
 
+		    function handleKeyDown(event) {
+		    	switch(event.keyCode){
+		    		case 171:
+		    			mat4.translate(zoomMatrix, zoomMatrix, [0.0, 0.0, 10.0]);
+		    			break;
+		    		case 173:
+		    			mat4.translate(zoomMatrix, zoomMatrix, [0.0, 0.0, -10.0]);
+		    			break;
+		    	}
+		    }
+
 			function drawScene(){
 				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 				var u_proj_matrix = gl.getUniformLocation(glProgram, "uPMatrix");
@@ -388,6 +403,7 @@
 				// Preparamos una matriz de modelo+vista.
 				mat4.identity(mvMatrix);
 				mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
+				mat4.multiply(mvMatrix, mvMatrix, zoomMatrix);
 
 				mat4.multiply(mvMatrix, mvMatrix, escenaRotationMatrix);
 				//Traslado ancho ciudad / 2 
