@@ -40,7 +40,16 @@ function Auto(){
   }
 
   this.mover = function(v){
-    this.translate(v);
+    if (this.ubic == 0){
+      var pos_ant = this.movimientos[this.movimientos.length-1];
+    }else{
+      var pos_ant = this.movimientos[this.ubic-1];
+    }
+    var pos_act = this.movimientos[this.ubic];
+    var d_x = pos_act[0]-pos_ant[0];
+    var d_y = pos_act[1]-pos_ant[1];
+    var d_z = pos_act[2]-pos_ant[2];
+    this.translate([d_x, d_y, d_z]);
   }
 
   this.agregar_movimiento = function(curva, step){
@@ -57,10 +66,10 @@ function Auto(){
       //return;
     //}
     //this.t = 0;
-    this.mover(this.movimientos[this.ubic]);
-    this.ubic += 1;
+    this.ubic += 1;  
     if (this.ubic >= this.movimientos.length){
       this.ubic = 0;
     }
+    this.mover(this.movimientos[this.ubic]);
   }
 }
