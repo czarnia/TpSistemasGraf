@@ -4,14 +4,14 @@ function Escena(){
 	this.ancho_calle = null;
 	this.lado_manzana = null;
 	this.calles = null;
-	this.plano = new Plano();
+	// this.plano = new Plano();
 	this.plazas = null;
 	this.manzanas = null;
 	this.autopista = null;
 
-	this.create_manzanas = function(lado, cant_manzanas, lado_manzana,
+	this.create_manzanas = function(cant_manzanas, lado_manzana,
 							ancho_calle){
-		this.lado = lado;
+		this.lado = cant_manzanas * lado_manzana + ancho_calle * (cant_manzanas - 1);
 		this.cant_manzanas = cant_manzanas;
 		this.ancho_calle = ancho_calle;
 		this.lado_manzana = lado_manzana;
@@ -30,11 +30,11 @@ function Escena(){
 	}
 
 	this.create_mapa = function(){
-		this.plano.create(this.lado, this.lado, [0.5, 0.0, 0.0]);
+/*		this.plano.create(this.lado, this.lado, [0.5, 0.0, 0.0]);
 		this.plano.createIndexBuffer();
 		this.plano.rotate(Math.PI/2, [1.0, 0.0, 0.0]);
 		this.plano.translate([this.lado/2, 0.0, this.lado/2]);
-		this.plano.setupWebGLBuffers();
+		this.plano.setupWebGLBuffers();*/
 
 		this.plazas = [];
 		this.manzanas = [];		
@@ -47,23 +47,21 @@ function Escena(){
 					var plaza = new Plaza();
 					plaza.create(this.lado_manzana, 0.5);
 					//PREGUNTAR ANA CUANTO TRASLADAR
-					plaza.translate([this.lado_manzana/2 + j*(this.lado_manzana + this.ancho_calle),
+					plaza.translate([this.lado_manzana/2 - (this.lado_manzana/10) + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
-									this.lado_manzana/2 + i * (this.lado_manzana + this.ancho_calle)]);
+									this.lado_manzana/2 - (this.lado_manzana/10) + i * (this.lado_manzana + this.ancho_calle)]);
 
 					plaza.setupWebGLBuffers();
-					this.plazas.push(plaza);
-					console.log("PLAZA");
+					this.plazas.push(plaza);					
 				}else{
 					var manzana = new Manzana();
 					manzana.create(this.lado_manzana, 0.5, 200.0, j * 100);
-					manzana.translate([this.lado_manzana/2 + j*(this.lado_manzana + this.ancho_calle),
+					manzana.translate([this.lado_manzana/2 - (this.lado_manzana/10) + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
-									this.lado_manzana/2 + i * (this.lado_manzana + this.ancho_calle)]);
+									this.lado_manzana/2 - (this.lado_manzana/10) + i * (this.lado_manzana + this.ancho_calle)]);
 					manzana.setupWebGLBuffers();
 					this.manzanas.push(manzana);
-					//Crear manzana
-					console.log("MANZANA");
+					//Crear manzana					
 				}
 				if(i == 0 && (j < this.cant_manzanas - 1)){
 					this.calles[j].superficie.grilla.rotate(Math.PI/2, [0.0, 1.0, 0.0]);
@@ -94,7 +92,7 @@ function Escena(){
 	}
 
 	this.draw = function(){
-		this.plano.draw();
+		// this.plano.draw();
 
 		for (var i = 0; i < this.calles.length; i++) {
 			this.calles[i].draw();
