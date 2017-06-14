@@ -109,9 +109,6 @@ function Autopista(){
 				// coincide = false;
 
 			if (coincide == true){
-				console.log("Estoy en x: ", xcomienzo, " z: ", zcomienzo);
-				console.log("Coincide en ", this.borde_ida.superficie.grilla.position_buffer[i],
-				 " z: ", this.borde_ida.superficie.grilla.position_buffer[i + 2]);
 				return coincide;
 			}
 
@@ -127,15 +124,8 @@ function Autopista(){
 				// coincide = false;
 
 			if (coincide == true){
-				console.log("Estoy en x: ", xcomienzo, " z: ", zcomienzo);
-				console.log("Coincide en ", this.borde_ida.superficie.grilla.position_buffer[i],
-				 " z: ", this.borde_ida.superficie.grilla.position_buffer[i + 2]);
 				return coincide;
 			}
-
-/*			console.log("Estoy en x: ", xcomienzo, " z: ", zcomienzo);
-			console.log("NO Coincide en ", this.borde_ida.superficie.grilla.position_buffer[i],
-			 " z: ", this.borde_ida.superficie.grilla.position_buffer[i + 2]);		*/
 		}
 	}
 
