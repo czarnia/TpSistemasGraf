@@ -41,6 +41,18 @@ function Plano () {
       }
     }
 
+    this.scale = function(_x, _y, _z){
+      for (var i = 0; i < this.position_buffer.length; i++){
+        if ((i+1)%2 == 0){
+          this.position_buffer[i] = this.position_buffer[i]*_y;
+        }else if ((i+1)%3 == 0){
+          this.position_buffer[i] = this.position_buffer[i]*_z;
+        }else{
+          this.position_buffer[i] = this.position_buffer[i]*_x;
+        }
+      }
+    }
+
     this.rotate = function(p, plano){
       var position_buffer_aux = [];
       var m4=mat4.create();

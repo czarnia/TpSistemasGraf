@@ -85,19 +85,23 @@ function supBarrido(){
 		}
 		//Ver si salio de scope o se mantiene
 		this.final = punto;
-		console.log("Final sup: ", punto);
 
 		this.grilla.setupWebGLBuffers();
-
-/*		console.log("Tamaño position_buffer: ", this.grilla.position_buffer.length);
-		for (var k = 0; k < this.grilla.position_buffer.length; k++) {
-			console.log(this.grilla.position_buffer[k]);
-		}*/
 	}
 
 	this.translate = function(mov){
 		this.grilla.translate(mov);
-		this.grilla.setupWebGLBuffers();
+		this.setupWebGLBuffers();
+	}
+
+	this.rotate = function(p, plano){
+		this.grilla.rotate(p, plano);
+		this.setupWebGLBuffers();
+	}
+
+	this.scale = function(_x, _y, _z){
+		this.grilla.scale(_x, _y, _z);
+		this.setupWebGLBuffers();
 	}
 
 	this.setupWebGLBuffers = function(){

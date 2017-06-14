@@ -73,6 +73,21 @@ function Cuadrado(){
     for (i = 0; i < 6; i++) {
       this.lados[i].translate(v);
     };
+    this.setupWebGLBuffers();
+  }
+
+  this.scale = function(_x, _y, _z){
+    for (i = 0; i < 6; i++) {
+      this.lados[i].scale(_x, _y, _z);
+    }
+    this.setupWebGLBuffers();
+  }
+
+  this.rotate = function(p, plano){
+    for (i = 0; i < 6; i++) {
+      this.lados[i].rotate(p, plano);
+    }
+    this.setupWebGLBuffers();
   }
 
 }

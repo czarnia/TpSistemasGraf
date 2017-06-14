@@ -14,7 +14,7 @@ function PilarAutopista(){
 			}
 		}
 
-		this.superficie.create([0,1,0], puntos_perfil, Math.PI*2, 60.0);
+		this.superficie.create([0,1,0], puntos_perfil, Math.PI*2, 60.0, [0.66, 0.66, 0.66]);
 	}
 
 	this.crear_perfil = function(){

@@ -4,8 +4,8 @@ function Vereda(){
 		forma:[],
 		normal:[]
 	}
-  this.tapa1 = new SupFan();
-  this.tapa2 = new SupFan();
+    this.tapa1 = new SupFan();
+    this.tapa2 = new SupFan();
 	this.lado = null;
 	this.alto = null;
 
@@ -113,19 +113,19 @@ function Vereda(){
 
 
 	this.create = function(color, lado, alto){
-			this.lado = lado;
-			this.alto = alto;
-      var camino = this.camino();
-      this.crear_perfil(100);
-      this.superficie.create(camino, 40, this.perfil.forma, this.perfil.normal, color);
-      this.tapa1.create(this.perfil.forma, color);
-      this.tapa2.create(this.perfil.forma, color);
-      this.tapa2.translate([0,alto,0]);
+        this.lado = lado;
+        this.alto = alto;
+        var camino = this.camino();
+        this.crear_perfil(100);
+        this.superficie.create(camino, 40, this.perfil.forma, this.perfil.normal, color);
+        this.tapa1.create(this.perfil.forma, color);
+        this.tapa2.create(this.perfil.forma, color);
+        this.tapa2.translate([0,alto,0]);
 	}
 
 	this.draw = function(){
-    	this.superficie.draw();
-      this.tapa1.draw();
-      this.tapa2.draw();
+        this.superficie.draw();
+        this.tapa1.draw();
+        this.tapa2.draw();
 	}
 }
