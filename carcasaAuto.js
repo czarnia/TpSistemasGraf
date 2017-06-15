@@ -15,10 +15,11 @@ function CarcasaAuto(){
   	this.alto = alto;
     this.ancho = ancho;
     var camino = this.camino();
+    var color_tapa = [color[0]+0.2, color[1]+0.2, color[2]+0.5];
     this.crear_perfil(100);
     this.superficie.create(camino, 40, this.perfil.forma, this.perfil.normal, color);
-    this.tapa1.create(this.perfil.forma, color);
-    this.tapa2.create(this.perfil.forma, color);
+    this.tapa1.create(this.perfil.forma, color_tapa);
+    this.tapa2.create(this.perfil.forma, color_tapa);
     this.tapa1.translate([0,0,-ancho/2]);
     this.tapa2.translate([0,0,ancho/2]);
   }
@@ -106,15 +107,27 @@ function CarcasaAuto(){
   }
 
   this.setupWebGLBuffers = function(){
-      this.tapa1.setupWebGLBuffers();
-      this.tapa2.setupWebGLBuffers();
-      this.superficie.setupWebGLBuffers();
+    this.tapa1.setupWebGLBuffers();
+    this.tapa2.setupWebGLBuffers();
+    this.superficie.setupWebGLBuffers();
   }
 
   this.draw = function(){
-      this.superficie.draw();
-      this.tapa1.draw();
-      this.tapa2.draw();
+    this.superficie.draw();
+    this.tapa1.draw();
+    this.tapa2.draw();
+  }
+
+  this.translate = function(v){
+    this.superficie.translate(v);
+    this.tapa1.translate(v);
+    this.tapa2.translate(v);
+  }
+
+  this.rotate = function(eje, angulo){
+    this.superficie.rotate(angulo,eje);
+    this.tapa1.rotate(angulo,eje);
+    this.tapa2.rotate(angulo,eje);
   }
 
 }

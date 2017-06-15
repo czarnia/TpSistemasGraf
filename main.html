@@ -302,8 +302,8 @@
 
 					ruta = new Autopista();
 					ruta.create(camino, 10, 10);*/
-					escena = new Escena();					
-					
+					escena = new Escena();
+
 					//Cant manzanas, lado manzana, ancho calle
 					escena.create_manzanas(6.0, 5.0, 1.0);
 					escena.ubicar_autopista(puntos, 10, 10);
@@ -324,7 +324,7 @@
 		        return degrees * Math.PI / 180;
 		    }
 
-			//Para manejar los eventos del mouse			
+			//Para manejar los eventos del mouse
 		    var mouseDown = false;
 		    var lastMouseX = null;
 		    var lastMouseY = null;
@@ -488,17 +488,20 @@
 				mat4.multiply(mvMatrix, mvMatrix, zoomMatrix);
 
 				mat4.multiply(mvMatrix, mvMatrix, escenaRotationMatrix);
+
 				mat4.multiply(mvMatrix, mvMatrix, cameraMatrix);
-				//Traslado ancho ciudad / 2 
+				
+				//Traslado ancho y alto ciudad
 				mat4.translate(mvMatrix, mvMatrix, [-11.5, 0.0, -11.5]);
 				// mat4.rotate(mvMatrix, mvMatrix, t, [1.0, 0.0, 0.0]);
-				// t = t + 0.1;
+				t = t + 0.1;
 
 				gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
 
 				//cuadrado.draw();
 				// camino.draw();
 				// ruta.draw();
+				escena.tick(t);
 				escena.draw();
 				// plaza.draw();
 				// pilar.draw();
