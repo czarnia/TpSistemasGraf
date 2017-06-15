@@ -33,8 +33,8 @@ function supRevolucion(){
 				this.grilla.position_buffer.push(punto[2]);
 
 				this.grilla.color_buffer.push(color[0]);
-				this.grilla.color_buffer.push(color[1]);
-				this.grilla.color_buffer.push(color[2]);
+				this.grilla.color_buffer.push(color[1] * i/step);
+				this.grilla.color_buffer.push(color[2] * j/step);
 			};
     };
     this.grilla.setupWebGLBuffers();
