@@ -58,4 +58,8 @@ function supRevolucion(){
   this.draw = function(){
     this.grilla.drawVertexGrid();
   }
+
+  this.setupWebGLBuffers = function(){
+    this.grilla.setupWebGLBuffers();
+  }
 }

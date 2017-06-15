@@ -36,4 +36,8 @@ function Rueda(){
 	this.rotate = function(grados, eje){
 		this.superficie.rotate(grados, eje);
 	}
+
+	this.setupWebGLBuffers = function(){
+		this.superficie.setupWebGLBuffers();
+	}
 }
