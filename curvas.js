@@ -375,21 +375,4 @@ function curvaBspline3(){
           // Dibujamos.
         gl_canvas.drawElements(gl_canvas.LINE_STRIP, this.index_buffer.length, gl_canvas.UNSIGNED_SHORT, 0);
     }
-
-
-
-/*          var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
-          gl.enableVertexAttribArray(vertexPositionAttribute);
-          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-          gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-
-          var vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
-          gl.enableVertexAttribArray(vertexColorAttribute);
-          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-          gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
-
-          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-
-          // Dibujamos.
-        gl.drawElements(gl.LINE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);*/
 }

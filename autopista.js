@@ -5,6 +5,8 @@ function Autopista(){
 	this.borde_vuelta = new Borde();
 	this.pilares = [];
 	this.faroles = [];
+	this.punto_medio = null;
+	this.comienzo = null;
 
 	this.create = function(curva_camino, dist_pilares, dist_faroles){
 		var aux = vec3.create();
@@ -31,6 +33,10 @@ function Autopista(){
 		this.borde_vuelta.translate([0.0, 0.0, sube]);
 
 		curva_camino.discretizar();
+
+		var medio = curva_camino.discretizaciones[curva_camino.discretizaciones.length / 2];
+		this.punto_medio = curva_camino.get_punto(medio);
+		this.comienzo = curva_camino.get_punto(curva_camino.discretizaciones[0]);
 
 		var dist_p = 0, dist_f = 0;
 		var i = 0, signo = 1;
@@ -140,6 +146,8 @@ function Autopista(){
 		for (var i = 0; i < this.faroles.length; i++) {
 			this.faroles[i].rotate(p, plano);
 		}
+		// this.comienzo.rotate(p, plano);
+		// this.punto_medio.rotate(p, plano);
 	}
 
 	this.scale = function(_x, _y, _z){
@@ -153,6 +161,8 @@ function Autopista(){
 		for (var i = 0; i < this.faroles.length; i++) {
 			this.faroles[i].scale(_x, _y, _z);
 		}
+		// vec3.scale(this.comienzo, this.comienzo, [_x, _y, _z]);
+		// vec3.scale(this.punto_medio, this.punto_medio, [_x, _y, _z]);
 	}
 
 	this.draw = function(){

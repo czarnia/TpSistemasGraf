@@ -8,10 +8,10 @@
 	puntos_curva.push([0.0, 0.0, 0.0]);
 	puntos_curva.push([0.0, 0.0, 0.0]);
 	puntos_curva.push([0.0, 0.0, 0.0]);
-	puntos_curva.push([40.0, 0.0, 0.0]);
-	puntos_curva.push([40.0, 0.0, 0.0]);
+	puntos_curva.push([40.0, 20.0, 0.0]);
+	// puntos.push([40.0, 0.0, 0.0]);
+	// puntos.push([60.0, 0.0, 0.0]);
 	puntos_curva.push([60.0, 0.0, 0.0]);
-	puntos_curva.push([60.0, 40.0, 0.0]);
 	puntos_curva.push([80.0, 40.0, 0.0]);
 	puntos_curva.push([80.0, 40.0, 0.0]);
 	puntos_curva.push([80.0, 40.0, 0.0]);
@@ -84,7 +84,10 @@ function initShaders_canvas_curva(){
 
 	var u_proj_matrix = gl_canvas.getUniformLocation(glProgram_canvas, "uPMatrix");
 	// VER
-	mat4.ortho(pMatrix, 0.0, 80.0, 0.0, 40.0, -10, 10);
+	var max_x = puntos_curva[puntos_curva.length - 1][0];
+	var max_y = puntos_curva[puntos_curva.length - 1][1];
+	mat4.ortho(pMatrix, 0.0, max_x, 0.0, max_y, -10, 10);
+	
 	gl_canvas.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 
 	var u_model_view_matrix = gl_canvas.getUniformLocation(glProgram_canvas, "uMVMatrix");
@@ -98,9 +101,8 @@ function handleMouseDown_curva(event) {
     mouseX = event.pageX;
     mouseY = event.pageY;
 
-    //DESCOMENTAR CUANDO AGREGUE LOS PUNTOS EN ORDEN
-    puntoX = (-canvas_curva.offsetLeft + mouseX) * /*puntos_curva[puntos_curva.length - 1][0]*/80 / canvas_curva.width;
-    puntoY = (canvas_curva.offsetTop + canvas_curva.height - mouseY) * /*puntos_curva[puntos_curva.length - 1][1]*/40 / canvas_curva.height;
+    puntoX = (-canvas_curva.offsetLeft + mouseX) * puntos_curva[puntos_curva.length - 1][0] / canvas_curva.width;
+    puntoY = (canvas_curva.offsetTop + canvas_curva.height - mouseY) * puntos_curva[puntos_curva.length - 1][1] / canvas_curva.height;
 
     puntos_curva.push([puntoX, puntoY, 0.0]);
     puntos_curva.sort(comparador);
