@@ -44,12 +44,10 @@ function Auto(){
     gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);
 
     this.carcasa.draw();
-    /*for (var i = 0; i < 4; i++){
-      var mvMatrix_rueda = mvMatrix_scene * mvMatrix_rueda[i];
-      gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_rueda);
 
-      this.ruedas[i].draw();
-    }*/
+    for (var i = 0; i < 4; i++){
+      this.ruedas[i].draw(mvMatrix_total);
+    }
     gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_scene);
   }
 
@@ -70,7 +68,7 @@ function Auto(){
   this.rotate = function(eje, angulo){
     this.carcasa.rotate(eje, angulo);
     for (var i = 0; i < 4; i++){
-      //this.ruedas[i].rotate(eje, angulo);
+      this.ruedas[i].rotate(eje, angulo);
     }
   }
 
@@ -120,6 +118,20 @@ function Auto(){
     this.traslacion = mat_traslacion;
     this.rotacion = mat4.create();
     mat4.multiply(this.rotacion, mat_rotacion_norm, mat_rotacion_tan);
+
+    var pos_act = vec3.fromValues(this.movimientos[this.ubic][0], this.movimientos[this.ubic][1], this.movimientos[this.ubic][2]);
+    if (this.ubic == 0){
+      var pos_ant = vec3.fromValues(this.movimientos[this.movimientos.length-1][0], this.movimientos[this.movimientos.length-1][1], this.movimientos[this.movimientos.length-1][2]);
+    }else{
+      var pos_ant = vec3.fromValues(this.movimientos[this.ubic-1][0], this.movimientos[this.ubic-1][1], this.movimientos[this.ubic-1][2]);
+    }
+
+    var distancia = vec3.distance(pos_act, pos_ant);
+
+    for (var i = 0; i < 4; i++){
+      var angulo = distancia/(2*Math.PI);
+      this.ruedas[i].rotate(angulo, [0,0,1]);
+    }
 
   }
 
