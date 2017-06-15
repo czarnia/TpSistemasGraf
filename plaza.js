@@ -4,7 +4,7 @@ function Plaza(){
 	this.alto = null;
 
 	this.create = function(lado, alto){
-		this.terreno.create([154,205,50], lado, alto);
+		this.terreno.create([154/255,205/255,50/255], lado, alto);
 		this.lado = lado;
 		this.alto = alto;
 	}
