@@ -37,7 +37,7 @@ function Escena(){
 		this.autos = [];
 
 		var auto1 = new Auto();
-		auto1.create([0.6,0,0.4], [0.6,0.6,0.7], 0.9, 1, 1.5, 0.1, 0.07);
+		auto1.create([0.6,0,0.4], [0.6,0.6,0.7], 0.9, 0.8, 1.7, 0.1, 0.07);
 		auto1.translate([0,5.5,3]);
 
 		var curva_auto1 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
