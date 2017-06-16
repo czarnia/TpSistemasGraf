@@ -87,7 +87,7 @@ function initShaders_canvas_curva(){
 	var max_x = puntos_curva[puntos_curva.length - 1][0];
 	var max_y = puntos_curva[puntos_curva.length - 1][1];
 	mat4.ortho(pMatrix, 0.0, max_x, 0.0, max_y, -10, 10);
-	
+
 	gl_canvas.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 
 	var u_model_view_matrix = gl_canvas.getUniformLocation(glProgram_canvas, "uMVMatrix");
@@ -139,6 +139,7 @@ click_regenerar = function(){
 	escena.ubicar_autopista(puntos_curva, 10, 10);
 	escena.create_calles();
 	escena.create_mapa();
+	escena.create_autos();
 
 	drawScene();
 }
@@ -154,7 +155,7 @@ draw_puntos = function(){
 	var vertexPositionAttribute = gl_canvas.getAttribLocation(glProgram_canvas, "aVertexPosition");
     gl_canvas.enableVertexAttribArray(vertexPositionAttribute);
 	gl_canvas.vertexAttribPointer(vertexPositionAttribute, 3, gl_canvas.FLOAT, false, 0, 0);
-		
+
 	gl_canvas.drawArrays(gl_canvas.POINTS, 0, webgl_position_buffer.numItems);
 }
 
