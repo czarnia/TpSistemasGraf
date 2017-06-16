@@ -30,6 +30,9 @@
 	<script type="text/javascript" src="cuadrado.js"></script>
 	<script type="text/javascript" src="manzana.js"></script>
 	<script type="text/javascript" src="canvas_curva.js"></script>
+	<script type="text/javascript" src="auto.js"></script>
+	<script type="text/javascript" src="rueda.js"></script>
+	<script type="text/javascript" src="carcasaAuto.js"></script>
 
 
 	</head>
@@ -309,6 +312,7 @@
 					escena.ubicar_autopista(puntos, 10, 10);
 					escena.create_calles();
 					escena.create_mapa();
+					escena.create_autos();
 					// update_camera(escena.autopista.comienzo, escena.autopista.punto_medio);
 
 					pilar = new PilarAutopista();
@@ -345,7 +349,7 @@
 		    }
 
 		    var cant_C = 0;
-		    
+
 
 	        function update_camera(comienzo_autopista, punto_medio_autopista){
 	        	var eye_point = vec3.create();
@@ -355,7 +359,7 @@
 			    vec3.subtract(at_point, eye_point, punto_medio_autopista);
 			    // vec3.normalize(eye_point, eye_point);
 		        // vec3.set(eye_point, 40, 75, -100);
-		        
+
 		        // vec3.set(at_point, 0, 0, 0);
 		        var up_point = vec3.create();
 		        vec3.set(up_point, 0, 1, 0);
@@ -372,7 +376,7 @@
 	        		case 83:{ //83 es "s"
 						mat4.translate(cameraMatrix, cameraMatrix, [1.0, 0.0, 0.0]);
 	        			break;
-	        		} 
+	        		}
 	        		case 65:{ // 65 es "a"
 	        			mat4.translate(cameraMatrix, cameraMatrix, [0.0, 0.0, 1.0]);
 	        			break;
@@ -457,7 +461,7 @@
 
 		    function handleCams(){
 	    		if(cant_C == 0){
-	    			mat4.identity(cameraMatrix);   			
+	    			mat4.identity(cameraMatrix);
     				document.onmousemove = handleMouseMove;
 	    			document.onkeydown = handleKeyDownOrb;
 	    			cant_C++;
@@ -490,7 +494,7 @@
 				mat4.multiply(mvMatrix, mvMatrix, escenaRotationMatrix);
 
 				mat4.multiply(mvMatrix, mvMatrix, cameraMatrix);
-				
+
 				//Traslado ancho y alto ciudad
 				mat4.translate(mvMatrix, mvMatrix, [-11.5, 0.0, -11.5]);
 				// mat4.rotate(mvMatrix, mvMatrix, t, [1.0, 0.0, 0.0]);
@@ -502,7 +506,7 @@
 				// camino.draw();
 				// ruta.draw();
 				escena.tick(t);
-				escena.draw();
+				escena.draw(mvMatrix);
 				// plaza.draw();
 				// pilar.draw();
 

@@ -4,17 +4,15 @@ function Auto(){
   this.movimientos = [];
   this.curva_mov = null;
   this.ubic = null;
-  this.velocidad = null;
   this.step = null;
   this.t = null;
   this.rotacion = null;
   this.traslacion = null;
   this.pos = null;
 
-  this.create = function(color_carcasa, color_rueda, ancho, alto, largo, r_rueda, ancho_rueda, velocidad){
+  this.create = function(color_carcasa, color_rueda, ancho, alto, largo, r_rueda, ancho_rueda){
     var posiciones_ruedas = [[-1/5*largo, -alto/2, -ancho/2], [1/4*largo, -alto/2, -ancho/2], [-1/5*largo, -alto/2, ancho/2], [1/4*largo, -alto/2, ancho/2]];
 
-    this.velocidad = velocidad;
     this.ubic = 0;
     this.t = 0;
     this.pos = [0,0,0];
@@ -141,7 +139,7 @@ function Auto(){
 
   this.agregar_movimiento = function(curva, step){
     for (var i = 0; i < step; i++){
-      var u = (curva.valores_u/step)*i;
+      var u = (curva.valores_u/step)*(step-i);
       var punto = curva.get_punto(u);
       this.movimientos.push(punto);
     }
@@ -150,11 +148,6 @@ function Auto(){
   }
 
   this.tick = function(t){
-    //this.t += t;
-    //if (!(this.t >= 1/this.velocidad)){
-      //return;
-    //}
-    //this.t = 0;
     this.ubic += 1;
     if (this.ubic >= this.movimientos.length){
       this.ubic = 0;

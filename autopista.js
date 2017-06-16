@@ -7,8 +7,11 @@ function Autopista(){
 	this.faroles = [];
 	this.punto_medio = null;
 	this.comienzo = null;
+	this.curva_camino = null;
 
 	this.create = function(curva_camino, dist_pilares, dist_faroles){
+		this.curva_camino = curva_camino;
+		
 		var aux = vec3.create();
 		var sube = -9.75;
 
@@ -43,7 +46,7 @@ function Autopista(){
 
 		while((i < curva_camino.discretizaciones.length)){
 			//AGREGO PILARES
-			if(curva_camino.distancias_discret[i] >= dist_p){	
+			if(curva_camino.distancias_discret[i] >= dist_p){
 				if(curva_camino.distancias_discret[i] > dist_p){
 					var u = (curva_camino.discretizaciones[i - 1] + curva_camino.discretizaciones[i]) / 2;
 					var punto = curva_camino.get_punto(u);
@@ -62,7 +65,7 @@ function Autopista(){
 				dist_p += dist_pilares;
 			}
 			//AGREGO FAROLES
-			if(curva_camino.distancias_discret[i] >= dist_f){	
+			if(curva_camino.distancias_discret[i] >= dist_f){
 				if(curva_camino.distancias_discret[i] > dist_f){
 					var u = (curva_camino.discretizaciones[i - 1] + curva_camino.discretizaciones[i]) / 2;
 					var punto = curva_camino.get_punto(u);
@@ -90,9 +93,9 @@ function Autopista(){
 				vec3.cross(eje, tan, tan_l);
 				farol.rotate(-angulo, eje);
 
-				// farol.translate([0.0, 0.0, sube + -1]);	
+				// farol.translate([0.0, 0.0, sube + -1]);
 				vec3.add(punto, punto, [0.0, 0.0, sube + -1]);
-				farol.translate(punto);				
+				farol.translate(punto);
 				this.faroles.push(farol);
 				dist_f += dist_faroles;
 				signo *= (-1); //Una luminaria para cada lado
