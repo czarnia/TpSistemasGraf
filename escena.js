@@ -36,16 +36,26 @@ function Escena(){
 	this.create_autos = function(){
 		this.autos = [];
 
-		var auto = new Auto();
-		auto.create([0.6,0,0.4], [0.6,0.6,0.7], 0.9, 1, 1.5, 0.1, 0.07);
-		auto.translate([0,5.9,2.5]);
+		var auto1 = new Auto();
+		auto1.create([0.6,0,0.4], [0.6,0.6,0.7], 0.9, 1, 1.5, 0.1, 0.07);
+		auto1.translate([0,5.5,3]);
 
-		var curva_auto = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
+		var curva_auto1 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
+		auto1.agregar_movimiento(curva_auto1, 40);
+		auto1.setupWebGLBuffers();
 
-		auto.agregar_movimiento(curva_auto, 90);
-		auto.setupWebGLBuffers();
 
-		this.autos.push(auto);
+		var auto2 = new Auto();
+		auto2.create([0,0.5,0.4], [0.6,0.6,0.7], 0.9, 1, 1.5, 0.1, 0.07);
+		auto2.translate([0,5.5,4]);
+
+		var curva_auto2 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
+		curva_auto2.dar_vuelta_curva();
+		auto2.agregar_movimiento(curva_auto2, 60);
+		auto2.setupWebGLBuffers();
+
+		this.autos.push(auto1);
+		this.autos.push(auto2);
 	}
 
 	this.create_mapa = function(){

@@ -384,13 +384,23 @@ function curvaBspline3(){
       mat4.rotate(m4, m4, angulo, vec3.fromValues(eje[0], eje[1], eje[2]));
 
       for (var i = 0; i < this.puntosDeControl.length; i++){
-        var vec = vec4.fromValues(this.puntosDeControl[i][0], this.puntosDeControl[i][1], this.puntosDeControl[i][2], 1.0);
+        var vec = vec4.fromValues(this.puntosDeControl[i][0]*esc[0], this.puntosDeControl[i][1]*esc[1], this.puntosDeControl[i][2]*esc[2], 1.0);
         vec4.transformMat4(vec,vec,m4);
 
-        p_nueva_curva.push([vec[0]*esc[0], vec[1]*esc[1], vec[2]*esc[2]]);
+        p_nueva_curva.push([vec[0], vec[1], vec[2]]);
       }
 
       nueva_curva.create(p_nueva_curva);
       return nueva_curva;
+    }
+
+    this.dar_vuelta_curva = function(){
+      var puntosDeControl_aux = [];
+
+      for (var i = 0; i < this.puntosDeControl.length; i++){
+        puntosDeControl_aux.push(this.puntosDeControl[this.puntosDeControl.length-1-i]);
+      }
+
+      this.puntosDeControl = puntosDeControl_aux;
     }
 }
