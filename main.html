@@ -30,6 +30,9 @@
 	<script type="text/javascript" src="cuadrado.js"></script>
 	<script type="text/javascript" src="manzana.js"></script>
 	<script type="text/javascript" src="canvas_curva.js"></script>
+	<script type="text/javascript" src="auto.js"></script>
+	<script type="text/javascript" src="rueda.js"></script>
+	<script type="text/javascript" src="carcasaAuto.js"></script>
 
 
 	</head>
@@ -309,6 +312,7 @@
 					escena.ubicar_autopista(puntos, 10, 10);
 					escena.create_calles();
 					escena.create_mapa();
+					escena.create_autos();
 					// update_camera(escena.autopista.comienzo, escena.autopista.punto_medio);
 
 					pilar = new PilarAutopista();
@@ -372,7 +376,7 @@
 			    vec3.subtract(at_point, eye_point, punto_medio_autopista);
 			    // vec3.normalize(eye_point, eye_point);
 		        // vec3.set(eye_point, 40, 75, -100);
-		        
+
 		        // vec3.set(at_point, 0, 0, 0);
 		        var up_point = vec3.create();
 		        vec3.set(up_point, 0, 1, 0);
@@ -400,7 +404,7 @@
 						free_camera.pos[2] += 1 */* Math.sin(free_camera.theta) **/ Math.sin(free_camera.phi);
 						free_camera.pos[0] += 1 * /*Math.sin(free_camera.theta) **/ Math.cos(free_camera.phi);
 	        			break;
-	        		} 
+	        		}
 	        		case 65:{ // 65 es "a"
 	        			// vec3.add(free_camera.eye_point, free_camera.eye_point, [0.0, 0.0, -1.0]);
 	        			// vec3.add(free_camera.at_point, free_camera.at_point, [0.0, 0.0, -1.0]);
@@ -593,8 +597,10 @@
 				//cuadrado.draw();
 				// camino.draw();
 				// ruta.draw();
-				// escena.tick(t);
-				escena.draw();
+
+				escena.tick(t);
+				escena.draw(mvMatrix);
+
 				// plaza.draw();
 				// pilar.draw();
 

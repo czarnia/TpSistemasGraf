@@ -9,6 +9,10 @@ function Escena(){
 	this.manzanas = null;
 	this.autopista = null;
 
+	this.esc_autopista = null;
+
+	this.autos = null;
+
 	this.create_manzanas = function(cant_manzanas, lado_manzana,
 							ancho_calle){
 		this.lado = cant_manzanas * lado_manzana + ancho_calle * (cant_manzanas - 1);
@@ -27,6 +31,31 @@ function Escena(){
 			calle.create_calle_escena(this.lado, [0.0, 0.0, this.lado]);
 			this.calles.push(calle);
 		}
+	}
+
+	this.create_autos = function(){
+		this.autos = [];
+
+		var auto1 = new Auto();
+		auto1.create([0.6,0,0.4], [0.6,0.6,0.7], 0.9, 0.8, 1.7, 0.1, 0.07);
+		auto1.translate([0,5.5,3]);
+
+		var curva_auto1 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
+		auto1.agregar_movimiento(curva_auto1, 40);
+		auto1.setupWebGLBuffers();
+
+
+		var auto2 = new Auto();
+		auto2.create([0,0.5,0.4], [0.6,0.6,0.7], 0.9, 1, 1.5, 0.1, 0.07);
+		auto2.translate([0,5.5,4]);
+
+		var curva_auto2 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
+		curva_auto2.dar_vuelta_curva();
+		auto2.agregar_movimiento(curva_auto2, 60);
+		auto2.setupWebGLBuffers();
+
+		this.autos.push(auto1);
+		this.autos.push(auto2);
 	}
 
 	this.create_mapa = function(){
@@ -89,9 +118,11 @@ function Escena(){
 		this.autopista.create(camino, dist_pilares, dist_pilares);
 		this.autopista.scale(this.lado/final, this.lado/final, this.lado/final);
 		this.autopista.rotate(Math.PI / 2, [1.0, 0.0, 0.0]);
+
+		this.esc_autopista = [this.lado/final, this.lado/final, this.lado/final];
 	}
 
-	this.draw = function(){
+	this.draw = function(mvScene){
 		// this.plano.draw();
 
 		for (var i = 0; i < this.calles.length; i++) {
@@ -106,14 +137,18 @@ function Escena(){
 			this.manzanas[i].draw();
 		}
 
+		for (var i = 0; i < this.autos.length; i++) {
+			this.autos[i].draw(mvScene);
+		}
+
 		this.autopista.draw();
 
 	}
 
 	this.tick = function(t){
-		for (var i = 0; i < this.manzanas.length; i++) {
-			this.manzanas[i].tick(t);
-			this.manzanas[i].setupWebGLBuffers();
+		for (var i = 0; i < this.autos.length; i++) {
+			this.autos[i].tick(t);
+			this.autos[i].setupWebGLBuffers();
 		}
 	}
 }

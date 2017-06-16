@@ -4,18 +4,18 @@ function Auto(){
   this.movimientos = [];
   this.curva_mov = null;
   this.ubic = null;
-  this.velocidad = null;
   this.step = null;
   this.t = null;
   this.rotacion = null;
   this.traslacion = null;
+  this.pos = null;
 
-  this.create = function(color_carcasa, color_rueda, ancho, alto, largo, r_rueda, ancho_rueda, velocidad){
+  this.create = function(color_carcasa, color_rueda, ancho, alto, largo, r_rueda, ancho_rueda){
     var posiciones_ruedas = [[-1/5*largo, -alto/2, -ancho/2], [1/4*largo, -alto/2, -ancho/2], [-1/5*largo, -alto/2, ancho/2], [1/4*largo, -alto/2, ancho/2]];
 
-    this.velocidad = velocidad;
     this.ubic = 0;
     this.t = 0;
+    this.pos = [0,0,0];
     this.carcasa.create(largo, alto, ancho, color_carcasa);
     for (var i = 0; i < 4; i++){
       var r = new Rueda();
@@ -37,6 +37,7 @@ function Auto(){
     var mvMatrix_auto = mat4.create();
     mat4.identity(mvMatrix_auto);
     mat4.multiply(mvMatrix_auto, this.traslacion, this.rotacion);
+    mat4.translate(mvMatrix_auto, mvMatrix_auto, this.pos);
     var mvMatrix_total = mat4.create();
     mat4.identity(mvMatrix_total);
     mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_auto);
@@ -59,10 +60,11 @@ function Auto(){
   }
 
   this.translate = function(v){
-    this.carcasa.translate(v);
-    for (var i = 0; i < 4; i++){
-      this.ruedas[i].translate(v);
-    }
+    this.pos = v;
+    //this.carcasa.translate(v);
+    //for (var i = 0; i < 4; i++){
+      //this.ruedas[i].translate(v);
+    //}
   }
 
   this.rotate = function(eje, angulo){
@@ -72,9 +74,9 @@ function Auto(){
     }
   }
 
-  this.mover = function(v){
-    var punto = this.movimientos[this.ubic];
-    var nivel = (this.curva_mov.valores_u/this.step)*this.ubic;
+  this.mover = function(){
+    var nivel = (this.curva_mov.valores_u/this.step)*(this.step-this.ubic);
+    var punto = this.curva_mov.get_punto(nivel);
 
     var tan = this.curva_mov.get_tan(nivel);
     var normal = this.curva_mov.get_normal(nivel);
@@ -82,7 +84,7 @@ function Auto(){
     //Traslado la curva camino al punto del nivel
     var mat_traslacion = mat4.create();
 
-    var normal_auto = [0,0,1];
+    var normal_auto = [1,0,0];
     mat4.identity(mat_traslacion);
     mat4.translate(mat_traslacion, mat_traslacion, punto);
 
@@ -93,9 +95,10 @@ function Auto(){
 
     var eje = vec3.create();
     vec3.cross(eje, tan, normal_auto);
+
     var mat_rotacion_tan = mat4.create();
     mat4.identity(mat_rotacion_tan);
-    mat4.rotate(mat_rotacion_tan, mat_rotacion_tan, angulo, eje);
+    mat4.rotate(mat_rotacion_tan, mat_rotacion_tan, -angulo, eje);
 
     //La forma debe tener la orientacion de la normal, entonces la roto acorde
     //this.rotate(eje, angulo);
@@ -137,7 +140,7 @@ function Auto(){
 
   this.agregar_movimiento = function(curva, step){
     for (var i = 0; i < step; i++){
-      var u = (curva.valores_u/step)*i;
+      var u = (curva.valores_u/step)*(step-i);
       var punto = curva.get_punto(u);
       this.movimientos.push(punto);
     }
@@ -146,15 +149,10 @@ function Auto(){
   }
 
   this.tick = function(t){
-    //this.t += t;
-    //if (!(this.t >= 1/this.velocidad)){
-      //return;
-    //}
-    //this.t = 0;
     this.ubic += 1;
     if (this.ubic >= this.movimientos.length){
       this.ubic = 0;
     }
-    this.mover(this.movimientos[this.ubic]);
+    this.mover();
   }
 }
