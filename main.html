@@ -542,6 +542,7 @@
 
 		    function handleCams(){
 		    	console.log("cant c: ", cant_C);
+		    	primero = 0;
 	    		if(cant_C == 0){
 	    			// mat4.identity(cameraMatrix); 
     				document.onmousemove = handleMouseMove;
@@ -566,6 +567,8 @@
 	    		}*/
 		    }
 
+		    var primero = 1;
+
 			function drawScene(){
 				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 				var u_proj_matrix = gl.getUniformLocation(glProgram, "uPMatrix");
@@ -578,7 +581,7 @@
 				mat4.identity(mvMatrix);
 				// mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
 
-				if(cant_C == 1){
+				if((cant_C == 1) || (primero == 1)){
 					mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
 					mat4.multiply(mvMatrix, mvMatrix, zoomMatrix);
 					mat4.multiply(mvMatrix, mvMatrix, escenaRotationMatrix);
