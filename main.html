@@ -55,6 +55,16 @@
 
 		<button class="btn" onclick="click_regenerar()">Regenerar</button>
 
+		<table>
+		<tr><td><label for="dist_p">Distancia entre pilares:</label>
+		  <input type="text" name="dist_p" id="dist_p" size="1"><br>
+		<tr><td><label for="dist_f">Distancia entre faroles:</label>
+		  <input type="text" name="dist_f" id="dist_f" size="1"><br>
+
+		</table>
+
+		<button class="btn" onclick="click_regenerar()">Regenerar</button>
+
 	</center>
 
 	<script id="shader-vs" type="x-shader/x-vertex">
@@ -309,7 +319,7 @@
 
 					//Cant manzanas, lado manzana, ancho calle
 					escena.create_manzanas(6.0, 5.0, 1.0);
-					escena.ubicar_autopista(puntos, 10, 10);
+					escena.ubicar_autopista(puntos, 20, 10);
 					escena.create_calles();
 					escena.create_mapa();
 					escena.create_autos();
@@ -352,37 +362,19 @@
 		    }
 
 		    var cant_C = 0;
-		    
-		    function myLookAt(cameraPos, target, up) {
-		    	var z = vec3.create();
-		    	vec3.subtract(z, cameraPos, target);		    	
-		    	vec3.normalize(z, z);
-		    	var x = vec3.create();
-		    	vec3.cross(x, up, z);
-		    	var y = vec3.create();
-		    	vec3.cross(y, z, x);
 
-		    	return[x[0], x[1], x[2], 0,
-		    		   y[0], y[1], y[2], 0,
-		    		   z[0], z[1], z[2], 0,
-		    		   cameraPos[0], cameraPos[1], cameraPos[2], 1];	
+		    function handleMouseDown(event) {
+		        mouseDown = true;
+		        lastMouseX = event.clientX;
+		        lastMouseY = event.clientY;
+		        lastMouseX2 = event.clientX;
+		        lastMouseY2 = event.clientY;
 		    }
 
-	        function update_camera(comienzo_autopista, punto_medio_autopista){
-	        	var eye_point = vec3.create();
-		        vec3.add(eye_point, comienzo_autopista, [0, 10, 0]);
 
-			    var at_point = vec3.create();
-			    vec3.subtract(at_point, eye_point, punto_medio_autopista);
-			    // vec3.normalize(eye_point, eye_point);
-		        // vec3.set(eye_point, 40, 75, -100);
-
-		        // vec3.set(at_point, 0, 0, 0);
-		        var up_point = vec3.create();
-		        vec3.set(up_point, 0, 1, 0);
-
-		        mat4.lookAt(cameraMatrix, comienzo_autopista, [1, 0, 0], up_point);
-	        }
+		    function handleMouseUp(event) {
+		        mouseDown = false;
+		    }
 
 	        function handleKeyDownFreeStreet(event){
 	        	console.log(event.keyCode);
@@ -480,18 +472,6 @@
 
 		        actualizar_CameraMatrix();
 	        }
-
-		    function handleMouseDown(event) {
-		        mouseDown = true;
-		        lastMouseX = event.clientX;
-		        lastMouseY = event.clientY;
-		    }
-
-
-		    function handleMouseUp(event) {
-		        mouseDown = false;
-		    }
-
 
 		    function handleMouseMove(event) {
 		        if (!mouseDown) {
