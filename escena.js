@@ -107,7 +107,7 @@ function Escena(){
 
 	}
 
-	this.ubicar_autopista = function(puntos, dist_pilares, dist_pilares){
+	this.ubicar_autopista = function(puntos, dist_pilares, dist_faroles){
 		var final = puntos[puntos.length - 1][0];
 
 		camino = new curvaBspline3();
@@ -115,7 +115,7 @@ function Escena(){
 		camino.setupWebGLBuffers();
 
 		this.autopista = new Autopista();
-		this.autopista.create(camino, dist_pilares, dist_pilares);
+		this.autopista.create(camino, dist_pilares, dist_faroles);
 		this.autopista.scale(this.lado/final, this.lado/final, this.lado/final);
 		this.autopista.rotate(Math.PI / 2, [1.0, 0.0, 0.0]);
 
