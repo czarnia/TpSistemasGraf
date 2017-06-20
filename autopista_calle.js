@@ -72,6 +72,10 @@ function Calle(){
 		this.create(this.path);
 	}
 
+	this.get_comienzo = function(){
+		return this.superficie.get_comienzo();
+	}
+
 	this.translate = function(mov){
 		this.superficie.translate(mov);
 	}

@@ -84,9 +84,15 @@ function supBarrido(){
 
 		}
 		//Ver si salio de scope o se mantiene
-		this.final = punto;
+		this.final = punto;		
 
 		this.grilla.setupWebGLBuffers();
+	}
+
+	this.get_comienzo = function(){
+		var aux = vec3.fromValues(this.grilla.position_buffer[0], this.grilla.position_buffer[1], 
+		this.grilla.position_buffer[2]);
+		return aux;
 	}
 
 	this.translate = function(mov){
