@@ -1,6 +1,6 @@
 function Luminaria(){
 	this.poste = new supBarrido();
-  //this.foco = new Cuadrado();
+  this.foco = new Cuadrado();
 	this.perfil = {
 		forma:null,
 		normal:null
@@ -40,10 +40,10 @@ function Luminaria(){
 	    var camino = this.camino(alto, largo);
 			var color = [1,0.843,0];
 	    this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1], color);
-	    //this.foco.create(_x, _y, _z, color); //8,3,6
+	    this.foco.create(_x, _y, _z, color); //8,3,6
 
-	    //var ubic_foco = camino.puntosDeControl[camino.puntosDeControl.length-1];
-	    //this.foco.translate(ubic_foco);
+	    var ubic_foco = camino.puntosDeControl[camino.puntosDeControl.length-1];
+	    this.foco.translate(ubic_foco);
 
 			this.rotacion = mat4.create();
 	    mat4.identity(this.rotacion);
@@ -56,7 +56,7 @@ function Luminaria(){
 	}
 
 	this.setupWebGLBuffers = function(){
-		//this.foco.setupWebGLBuffers();
+		this.foco.setupWebGLBuffers();
 	}
 
 	this.scale = function(_x, _y, _z){
@@ -94,7 +94,7 @@ function Luminaria(){
 		mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
 
 		this.poste.draw(mvMatrix_total);
-		//this.foco.draw(mvMatrix_luminaria);
+		this.foco.draw(mvMatrix_total);
 	}
 }
 
