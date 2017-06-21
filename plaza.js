@@ -9,15 +9,19 @@ function Plaza(){
 		this.alto = alto;
 	}
 
-	this.translate = function(mov){
-		this.terreno.translate(mov);
+	this.translate_acum = function(v){
+		this.terreno.translate_acum(v);
+	}
+
+	this.translate = function(v){
+		this.terreno.translate(v);
 	}
 
 	this.setupWebGLBuffers = function(){
 		this.terreno.setupWebGLBuffers();
 	}
 
-	this.draw = function(){
-		this.terreno.draw();
+	this.draw = function(mvMatrix_scene){
+		this.terreno.draw(mvMatrix_scene);
 	}
 }

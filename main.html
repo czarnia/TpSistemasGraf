@@ -298,13 +298,6 @@
 					puntos.push([80.0, 40.0, 0.0]);
 					puntos.push([80.0, 40.0, 0.0]);
 
-/*					camino = new curvaBspline3();
-					camino.create(puntos);
-					//camino.curva_prueba();
-					camino.setupWebGLBuffers();
-
-					ruta = new Autopista();
-					ruta.create(camino, 10, 10);*/
 					escena = new Escena();
 
 					//Cant manzanas, lado manzana, ancho calle
@@ -315,13 +308,6 @@
 					escena.create_autos();
 					// update_camera(escena.autopista.comienzo, escena.autopista.punto_medio);
 
-					pilar = new PilarAutopista();
-					pilar.create();
-					pilar.scale(0.1,0.1,0.1);
-
-/*					plaza = new Plaza();
-					plaza.create(4.0, 0.5);
-					plaza.setupWebGLBuffers();*/
 			}
 
 		    function degToRad(degrees) {
@@ -352,10 +338,10 @@
 		    }
 
 		    var cant_C = 0;
-		    
+
 		    function myLookAt(cameraPos, target, up) {
 		    	var z = vec3.create();
-		    	vec3.subtract(z, cameraPos, target);		    	
+		    	vec3.subtract(z, cameraPos, target);
 		    	vec3.normalize(z, z);
 		    	var x = vec3.create();
 		    	vec3.cross(x, up, z);
@@ -365,7 +351,7 @@
 		    	return[x[0], x[1], x[2], 0,
 		    		   y[0], y[1], y[2], 0,
 		    		   z[0], z[1], z[2], 0,
-		    		   cameraPos[0], cameraPos[1], cameraPos[2], 1];	
+		    		   cameraPos[0], cameraPos[1], cameraPos[2], 1];
 		    }
 
 	        function update_camera(comienzo_autopista, punto_medio_autopista){
@@ -392,7 +378,7 @@
 	        			// vec3.add(free_camera.at_point, free_camera.at_point, [1.0, 0.0, 0.0]);
 
 	        			// free_camera.pos[2] += 1 * Math.cos(free_camera.theta);
-	        			//Modifico ambas coordenadas pq se tiene que mover en el sentido en el 
+	        			//Modifico ambas coordenadas pq se tiene que mover en el sentido en el
 	        			//que mira
 	        			free_camera.pos[2] -= 1 * /*Math.sin(free_camera.theta) **/ Math.sin(free_camera.phi);
 	        			free_camera.pos[0] -= 1 * /*Math.sin(free_camera.theta) **/ Math.cos(free_camera.phi);
@@ -452,7 +438,7 @@
 		  //       vec3.rotateX(free_camera.at_point, free_camera.at_point, free_camera.eye_point, degToRad(deltaY / 10));
 
 				// console.log("at point des: ", free_camera.at_point);
-		        
+
 		  //       // mat4.rotate(newRotationMatrix, newRotationMatrix, degToRad(deltaY / 10), [1, 0, 0]);
 		  //       vec3.rotateY(free_camera.at_point, free_camera.at_point, free_camera.eye_point, degToRad(deltaX / 10));
 
@@ -534,7 +520,7 @@
 		    	// mat4.translate(cameraMatrix, cameraMatrix, free_camera.pos);
 		    	mat4.rotate(cameraMatrix, cameraMatrix, free_camera.theta, [1.0, 0.0, 0.0]);
 		    	mat4.rotate(cameraMatrix, cameraMatrix, free_camera.phi, [0.0, 1.0, 0.0]);
-		    	
+
 		    	mat4.translate(cameraMatrix, cameraMatrix, free_camera.pos);
 		    	// vec3.negate(aux, free_camera.pos);
 		    	// mat4.translate(cameraMatrix, cameraMatrix, aux);
@@ -543,7 +529,7 @@
 		    function handleCams(){
 		    	console.log("cant c: ", cant_C);
 	    		if(cant_C == 0){
-	    			// mat4.identity(cameraMatrix); 
+	    			// mat4.identity(cameraMatrix);
     				document.onmousemove = handleMouseMove;
 	    			document.onkeydown = handleKeyDownOrb;
 	    			cant_C++;
@@ -554,7 +540,7 @@
 	    			// mat4.lookAt(cameraMatrix, free_camera.eye_point, center, free_camera.up_point);
 	    			// cameraMatrix = myLookAt(free_camera.eye_point, free_camera.at_point, free_camera.up_point);
 					actualizar_CameraMatrix();
-	    			
+
 	    			document.onmousemove = handleMouseMoveFreeStreet;
 	    			document.onkeydown = handleKeyDownFreeStreet;
 	    			cant_C = 0;
@@ -585,24 +571,17 @@
 				}else{
 					mat4.multiply(mvMatrix, mvMatrix, cameraMatrix);
 					// mat4.invert(mvMatrix, cameraMatrix);
-				}			
-				
+				}
+
 				//Traslado ancho y alto ciudad
 				// mat4.translate(mvMatrix, mvMatrix, [-11.5, 0.0, -11.5]);
 				// mat4.rotate(mvMatrix, mvMatrix, t, [1.0, 0.0, 0.0]);
-				// t = t + 0.1;
+				t = t + 0.1;
 
 				gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
 
-				//cuadrado.draw();
-				// camino.draw();
-				// ruta.draw();
-
 				escena.tick(t);
 				escena.draw(mvMatrix);
-
-				// plaza.draw();
-				// pilar.draw();
 
 			}
 

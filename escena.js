@@ -1,17 +1,17 @@
 function Escena(){
-	this.lado = null;
-	this.cant_manzanas = null;
-	this.ancho_calle = null;
-	this.lado_manzana = null;
-	this.calles = null;
+	this.lado = [];
+	this.cant_manzanas = [];
+	this.ancho_calle = [];
+	this.lado_manzana = [];
+	this.calles = [];
 	// this.plano = new Plano();
-	this.plazas = null;
-	this.manzanas = null;
-	this.autopista = null;
+	this.plazas = [];
+	this.manzanas = [];
+	this.autopista = [];
 
-	this.esc_autopista = null;
+	this.esc_autopista = [];
 
-	this.autos = null;
+	this.autos = [];
 
 	this.create_manzanas = function(cant_manzanas, lado_manzana,
 							ancho_calle){
@@ -38,20 +38,20 @@ function Escena(){
 
 		var auto1 = new Auto();
 		auto1.create([0.6,0,0.4], [0.6,0.6,0.7], 0.9, 0.8, 1.7, 0.1, 0.07);
-		auto1.translate([0,5.5,3]);
+		auto1.translate([0,5.5,-3]);
 
 		var curva_auto1 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
-		auto1.agregar_movimiento(curva_auto1, 40);
+		auto1.agregar_movimiento(curva_auto1, 200);
 		auto1.setupWebGLBuffers();
 
 
 		var auto2 = new Auto();
 		auto2.create([0,0.5,0.4], [0.6,0.6,0.7], 0.9, 1, 1.5, 0.1, 0.07);
-		auto2.translate([0,5.5,4]);
+		auto2.translate([0,5.5,3]);
 
 		var curva_auto2 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
 		curva_auto2.dar_vuelta_curva();
-		auto2.agregar_movimiento(curva_auto2, 60);
+		auto2.agregar_movimiento(curva_auto2, 150);
 		auto2.setupWebGLBuffers();
 
 		this.autos.push(auto1);
@@ -83,23 +83,23 @@ function Escena(){
 					plaza.setupWebGLBuffers();
 					this.plazas.push(plaza);
 				}else{
-					var manzana = new Manzana();
-					manzana.create(this.lado_manzana, 0.5, 200.0, j * 100);
+					/*var manzana = new Manzana();
+					manzana.create(this.lado_manzana, 0.5, 150.0, this.manzanas.length * 300);
 					manzana.translate([this.lado_manzana/2 - (this.lado_manzana/10) + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
 									this.lado_manzana/2 - (this.lado_manzana/10) + i * (this.lado_manzana + this.ancho_calle)]);
 					manzana.setupWebGLBuffers();
-					this.manzanas.push(manzana);
+					this.manzanas.push(manzana);*/
 					//Crear manzana
 				}
 				if(i == 0 && (j < this.cant_manzanas - 1)){
-					this.calles[j].superficie.grilla.rotate(Math.PI/2, [0.0, 1.0, 0.0]);
-					this.calles[j].superficie.grilla.translate([0.0, 0.0, (j + 1) * this.lado_manzana + j * this.ancho_calle]);
+					this.calles[j].rotate([0.0, 1.0, 0.0], Math.PI/2);
+					this.calles[j].translate([0.0, 0.0, (j + 1) * this.lado_manzana + j * this.ancho_calle]);
 					this.calles[j].superficie.grilla.setupWebGLBuffers();
 				}
 			}
 			if(i < this.cant_manzanas - 1){
-				this.calles[(this.cant_manzanas-1) + i].superficie.grilla.translate([(i + 1) * this.lado_manzana + i * this.ancho_calle, 0.0, 0.0]);
+				this.calles[(this.cant_manzanas-1) + i].translate([(i + 1) * this.lado_manzana + i * this.ancho_calle, 0.0, 0.0]);
 				this.calles[(this.cant_manzanas-1) + i].superficie.grilla.setupWebGLBuffers();
 			}
 		}
@@ -117,7 +117,7 @@ function Escena(){
 		this.autopista = new Autopista();
 		this.autopista.create(camino, dist_pilares, dist_pilares);
 		this.autopista.scale(this.lado/final, this.lado/final, this.lado/final);
-		this.autopista.rotate(Math.PI / 2, [1.0, 0.0, 0.0]);
+		this.autopista.rotate([1.0, 0.0, 0.0], Math.PI / 2);
 
 		this.esc_autopista = [this.lado/final, this.lado/final, this.lado/final];
 	}
@@ -126,22 +126,22 @@ function Escena(){
 		// this.plano.draw();
 
 		for (var i = 0; i < this.calles.length; i++) {
-			this.calles[i].draw();
+			this.calles[i].draw(mvScene);
 		}
 
 		for (var i = 0; i < this.plazas.length; i++) {
-			this.plazas[i].draw();
+			this.plazas[i].draw(mvScene);
 		}
 
 		for (var i = 0; i < this.manzanas.length; i++) {
-			this.manzanas[i].draw();
+			this.manzanas[i].draw(mvScene);
 		}
 
 		for (var i = 0; i < this.autos.length; i++) {
 			this.autos[i].draw(mvScene);
 		}
 
-		this.autopista.draw();
+		this.autopista.draw(mvScene);
 
 	}
 
@@ -149,6 +149,11 @@ function Escena(){
 		for (var i = 0; i < this.autos.length; i++) {
 			this.autos[i].tick(t);
 			this.autos[i].setupWebGLBuffers();
+		}
+
+    for (var i = 0; i < this.manzanas.length; i++) {
+			this.manzanas[i].tick(t);
+			this.manzanas[i].setupWebGLBuffers();
 		}
 	}
 }

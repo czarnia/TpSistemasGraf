@@ -2,6 +2,11 @@ function PilarAutopista(){
 	this.superficie = new supRevolucion();
 	this.perfil = [];
 
+	this.traslacion = null;
+	this.rotacion = null;
+
+	this.escalado = null;
+
 	this.create = function(){
 		this.crear_perfil();
 		var puntos_perfil = [];
@@ -15,6 +20,15 @@ function PilarAutopista(){
 		}
 
 		this.superficie.create([0,1,0], puntos_perfil, Math.PI*2, 60.0, [0.66, 0.66, 0.66]);
+
+		this.rotacion = mat4.create();
+    mat4.identity(this.rotacion);
+
+    this.traslacion = mat4.create();
+    mat4.identity(this.traslacion);
+
+		this.escalado = mat4.create();
+    mat4.identity(this.escalado);
 	}
 
 	this.crear_perfil = function(){
@@ -50,19 +64,40 @@ function PilarAutopista(){
 		this.perfil.push(base);
 	}
 
-	this.translate = function(vec){
-		this.superficie.translate(vec);
+	this.translate_acum = function(v){
+		mat4.translate(this.traslacion, this.traslacion, v);
 	}
 
-	this.rotate = function(grados, eje){
-		this.superficie.rotate(grados, eje);
+	this.translate = function(v){
+		mat4.identity(this.traslacion);
+		mat4.translate(this.traslacion, this.traslacion, v);
 	}
 
-	this.draw = function(){
-		this.superficie.draw();
+	this.rotate_acum = function(eje, grados){
+		mat4.rotate(this.rotacion, this.rotacion, grados, vec3.fromValues(eje[0], eje[1], eje[2]));
+	}
+
+	this.rotate = function(eje, grados){
+		mat4.identity(this.rotacion);
+		mat4.rotate(this.rotacion, this.rotacion, grados, vec3.fromValues(eje[0], eje[1], eje[2]));
+	}
+
+	this.draw = function(mvMatrix_scene){
+		var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
+
+    var mvMatrix_pilar = mat4.create();
+    mat4.identity(mvMatrix_pilar);
+    mat4.multiply(mvMatrix_pilar, this.traslacion, this.rotacion);
+
+    var mvMatrix_total = mat4.create();
+    mat4.identity(mvMatrix_total);
+    mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_pilar);
+		mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
+
+		this.superficie.draw(mvMatrix_total);
 	}
 
 	this.scale = function(_x, _y, _z){
-		this.superficie.scale(_x, _y, _z);
+		mat4.scale(this.escalado, this.escalado, vec3.fromValues(_x,_y,_z));
 	}
 }

@@ -137,8 +137,8 @@ click_regenerar = function(){
 
 	escena.create_manzanas(6.0, 5.0, 1.0);
 	escena.ubicar_autopista(puntos_curva, 10, 10);
-	escena.create_calles();
-	escena.create_mapa();
+	//escena.create_calles();
+	//escena.create_mapa();
 	escena.create_autos();
 
 	drawScene();

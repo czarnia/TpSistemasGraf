@@ -10,18 +10,27 @@ function CarcasaAuto(){
 	this.alto = null; //y
   this.ancho = null; //z
 
+  this.traslacion_tapa1 = null; //las rotaciones y traslaciones de la superficie son las mismas que las del auto.
+  this.traslacion_tapa2 = null;
+
   this.create = function(largo, alto, ancho, color){
     this.largo = largo;
   	this.alto = alto;
     this.ancho = ancho;
     var camino = this.camino();
-    var color_tapa = [color[0]+0.2, color[1]+0.2, color[2]+0.5];
+    var color_tapa = [color[0]+02, color[1]+0.2, color[2]+0.5];
     this.crear_perfil(100);
     this.superficie.create(camino, 40, this.perfil.forma, this.perfil.normal, color);
     this.tapa1.create(this.perfil.forma, color_tapa);
     this.tapa2.create(this.perfil.forma, color_tapa);
-    this.tapa1.translate([0,0,-ancho/2]);
-    this.tapa2.translate([0,0,ancho/2]);
+
+    this.traslacion_tapa1 = mat4.create();
+    mat4.identity(this.traslacion_tapa1);
+    mat4.translate(this.traslacion_tapa1, this.traslacion_tapa1, [0,0,-ancho/2]);
+
+    this.traslacion_tapa2 = mat4.create();
+    mat4.identity(this.traslacion_tapa2);
+    mat4.translate(this.traslacion_tapa2, this.traslacion_tapa2, [0,0,ancho/2]);
   }
 
   this.camino = function(){
@@ -112,22 +121,40 @@ function CarcasaAuto(){
     this.superficie.setupWebGLBuffers();
   }
 
-  this.draw = function(){
-    this.superficie.draw();
-    this.tapa1.draw();
-    this.tapa2.draw();
+  this.draw = function(mvMatrix_scene){
+    var mvMatrix_tapa1 = mat4.create();
+    var mvMatrix_tapa2 = mat4.create();
+
+    mat4.multiply(mvMatrix_tapa1, mvMatrix_scene, this.traslacion_tapa1);
+    mat4.multiply(mvMatrix_tapa2, mvMatrix_scene, this.traslacion_tapa2);
+
+    this.superficie.draw(mvMatrix_scene);
+    this.tapa1.draw(mvMatrix_tapa1);
+    this.tapa2.draw(mvMatrix_tapa2);
   }
 
   this.translate = function(v){
-    this.superficie.translate(v);
-    this.tapa1.translate(v);
-    this.tapa2.translate(v);
+    /*this.superficie.translate(v);
+    this.tapa1.translate_acum(v);
+    this.tapa2.translate_acum(v);*/
   }
 
   this.rotate = function(eje, angulo){
-    this.superficie.rotate(angulo,eje);
+    /*this.superficie.rotate(angulo,eje);
     this.tapa1.rotate(angulo,eje);
-    this.tapa2.rotate(angulo,eje);
+    this.tapa2.rotate(angulo,eje);*/
+  }
+
+  this.translate_acum = function(v){
+    /*this.superficie.translate_acum(v);
+    this.tapa1.translate_acum(v);
+    this.tapa2.translate_acum(v);*/
+  }
+
+  this.rotate_acum = function(eje, angulo){
+    /*this.superficie.rotate_acum(angulo,eje);
+    this.tapa1.rotate_acum(angulo,eje);
+    this.tapa2.rotate_acum(angulo,eje);*/
   }
 
 }

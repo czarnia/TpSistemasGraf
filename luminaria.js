@@ -1,10 +1,15 @@
 function Luminaria(){
 	this.poste = new supBarrido();
-  this.foco = new Cuadrado();
+  //this.foco = new Cuadrado();
 	this.perfil = {
 		forma:null,
 		normal:null
 	}
+	this.rotacion = null;
+	this.traslacion = null;
+	this.escalado = null;
+
+	this.traslacion_foco = null;
 
   this.camino = function(alto, largo){
 		var camino = new curvaBspline3();
@@ -33,39 +38,63 @@ function Luminaria(){
 	this.create = function(radio, alto, largo, _x, _y, _z){
 	    var puntos_forma = devolver_puntos_circulo(radio, 30);
 	    var camino = this.camino(alto, largo);
-		var color = [1,0.843,0];
+			var color = [1,0.843,0];
 	    this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1], color);
-	    this.foco.create(_x, _y, _z, color); //8,3,6
+	    //this.foco.create(_x, _y, _z, color); //8,3,6
 
-	    var ubic_foco = camino.puntosDeControl[camino.puntosDeControl.length-1];
-	    this.foco.translate(ubic_foco);
+	    //var ubic_foco = camino.puntosDeControl[camino.puntosDeControl.length-1];
+	    //this.foco.translate(ubic_foco);
+
+			this.rotacion = mat4.create();
+	    mat4.identity(this.rotacion);
+
+	    this.traslacion = mat4.create();
+	    mat4.identity(this.traslacion);
+
+			this.escalado = mat4.create();
+	    mat4.identity(this.escalado);
 	}
 
 	this.setupWebGLBuffers = function(){
-		this.foco.setupWebGLBuffers();
-	}
-
-	this.translate = function(mov){
-		this.poste.translate(mov);
-		this.foco.translate(mov);
-		this.setupWebGLBuffers();
+		//this.foco.setupWebGLBuffers();
 	}
 
 	this.scale = function(_x, _y, _z){
-		this.poste.scale(_x, _y, _z);
-		this.foco.scale(_x, _y, _z);
-		this.setupWebGLBuffers();
+		mat4.scale(this.escalado, this.escalado, vec3.fromValues(_x,_y,_z));
 	}
 
-	this.rotate = function(p, plano){
-		this.poste.rotate(p, plano);
-		this.foco.rotate(p, plano);
-		this.setupWebGLBuffers();
+	this.translate_acum = function(v){
+		mat4.translate(this.traslacion, this.traslacion, v);
 	}
 
-	this.draw = function(){
-		this.poste.draw();
-		this.foco.draw();
+	this.translate = function(v){
+		mat4.identity(this.traslacion);
+		mat4.translate(this.traslacion, this.traslacion, v);
+	}
+
+	this.rotate_acum = function(eje, grados){
+		mat4.rotate(this.rotacion, this.rotacion, grados, vec3.fromValues(eje[0], eje[1], eje[2]));
+	}
+
+	this.rotate = function(eje, grados){
+		mat4.identity(this.rotacion);
+		mat4.rotate(this.rotacion, this.rotacion, grados, vec3.fromValues(eje[0], eje[1], eje[2]));
+	}
+
+	this.draw = function(mvMatrix_scene){
+		var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
+
+    var mvMatrix_luminaria = mat4.create();
+    mat4.identity(mvMatrix_luminaria);
+    mat4.multiply(mvMatrix_luminaria, this.traslacion, this.rotacion);
+
+    var mvMatrix_total = mat4.create();
+    mat4.identity(mvMatrix_total);
+    mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_luminaria);
+		mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
+
+		this.poste.draw(mvMatrix_total);
+		//this.foco.draw(mvMatrix_luminaria);
 	}
 }
 
