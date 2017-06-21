@@ -90,6 +90,12 @@ function supBarrido(){
 		this.grilla.setupWebGLBuffers();
 	}
 
+	this.get_comienzo = function(){
+		var aux = vec3.fromValues(this.grilla.position_buffer[0], this.grilla.position_buffer[1],
+		this.grilla.position_buffer[2]);
+		return aux;
+	}
+
 	this.scale = function(_x, _y, _z){
 		this.grilla.scale(_x, _y, _z);
 		//this.setupWebGLBuffers();

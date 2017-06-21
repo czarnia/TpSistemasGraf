@@ -120,6 +120,11 @@ function Autopista(){
 		}
 	}
 
+	this.get_comienzo = function(){
+		return this.calle_ida.get_comienzo();
+	}
+
+
 	this.coincide = function(xcomienzo, ancho, zcomienzo, largo){
 		for (var i = 0; i < this.borde_ida.superficie.grilla.position_buffer.length; i += 3) {
 			var coincide = true;

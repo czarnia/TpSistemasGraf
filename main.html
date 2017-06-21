@@ -55,6 +55,16 @@
 
 		<button class="btn" onclick="click_regenerar()">Regenerar</button>
 
+		<table>
+		<tr><td><label for="dist_p">Distancia entre pilares:</label>
+		  <input type="text" name="dist_p" id="dist_p" size="1"><br>
+		<tr><td><label for="dist_f">Distancia entre faroles:</label>
+		  <input type="text" name="dist_f" id="dist_f" size="1"><br>
+
+		</table>
+
+		<button class="btn" onclick="click_regenerar()">Regenerar</button>
+
 	</center>
 
 	<script id="shader-vs" type="x-shader/x-vertex">
@@ -302,12 +312,17 @@
 
 					//Cant manzanas, lado manzana, ancho calle
 					escena.create_manzanas(6.0, 5.0, 1.0);
-					escena.ubicar_autopista(puntos, 10, 10);
+					escena.ubicar_autopista(puntos, 20, 10);
 					escena.create_calles();
 					escena.create_mapa();
 					escena.create_autos();
-					// update_camera(escena.autopista.comienzo, escena.autopista.punto_medio);
 
+					comienzo_autopista = escena.autopista.get_comienzo();
+					console.log("Comienzo autopista: ", comienzo_autopista);
+					vec3.multiply(comienzo_autopista, comienzo_autopista, [1, -1, 1]);
+					vec3.add(comienzo_autopista, comienzo_autopista, [0, -6, 0]);
+					free_camera_au.pos = comienzo_autopista;
+					console.log("Pos camara: ", free_camera_au.pos);
 			}
 
 		    function degToRad(degrees) {
@@ -325,100 +340,69 @@
 		    mat4.identity(escenaRotationMatrix);
 		    var zoomMatrix = mat4.create();
 		    mat4.identity(zoomMatrix);
-		    var cameraMatrix = mat4.create();
-		    mat4.identity(cameraMatrix);
-		    // var freeCameraMatrix = mat4.create();
-		    var free_camera = {
-		    	// eye_point:[0, 10, 0],
-		    	// at_point:[1, 50, 10],
-		    	// up_point:[0, 1, 0]
-		    	pos: [10, 0, 0],
-		    	theta: 0.5,
-		    	phi: 0.5
+
+		    var cameraMatrixAu = mat4.create();
+		    mat4.identity(cameraMatrixAu);
+		    var cameraMatrixSt = mat4.create();
+		    mat4.identity(cameraMatrixSt);
+
+		    var free_camera_au = {
+		    	pos: [0.0, 0.0, 0.0],
+		    	theta: Math.PI/2,
+		    	phi: Math.PI/2
+		    }
+		    var free_camera_st = {
+		    	pos: [0.0, -10.0, -20.0],
+		    	theta: Math.PI/2,
+		    	phi: Math.PI/2
 		    }
 
 		    var cant_C = 0;
 
-		    function myLookAt(cameraPos, target, up) {
-		    	var z = vec3.create();
-		    	vec3.subtract(z, cameraPos, target);
-		    	vec3.normalize(z, z);
-		    	var x = vec3.create();
-		    	vec3.cross(x, up, z);
-		    	var y = vec3.create();
-		    	vec3.cross(y, z, x);
-
-		    	return[x[0], x[1], x[2], 0,
-		    		   y[0], y[1], y[2], 0,
-		    		   z[0], z[1], z[2], 0,
-		    		   cameraPos[0], cameraPos[1], cameraPos[2], 1];
+		    function handleMouseDown(event) {
+		        mouseDown = true;
+		        lastMouseX = event.clientX;
+		        lastMouseY = event.clientY;
+		        lastMouseX2 = event.clientX;
+		        lastMouseY2 = event.clientY;
 		    }
 
-	        function update_camera(comienzo_autopista, punto_medio_autopista){
-	        	var eye_point = vec3.create();
-		        vec3.add(eye_point, comienzo_autopista, [0, 10, 0]);
 
-			    var at_point = vec3.create();
-			    vec3.subtract(at_point, eye_point, punto_medio_autopista);
-			    // vec3.normalize(eye_point, eye_point);
-		        // vec3.set(eye_point, 40, 75, -100);
-
-		        // vec3.set(at_point, 0, 0, 0);
-		        var up_point = vec3.create();
-		        vec3.set(up_point, 0, 1, 0);
-
-		        mat4.lookAt(cameraMatrix, comienzo_autopista, [1, 0, 0], up_point);
-	        }
+		    function handleMouseUp(event) {
+		        mouseDown = false;
+		    }
 
 	        function handleKeyDownFreeStreet(event){
-	        	console.log(event.keyCode);
+	        	//Uso coordenadas esfericas
 	        	switch(event.keyCode){
 	        		case 87:{ // 87 es la "w"
-	        			// vec3.add(free_camera.eye_point, free_camera.eye_point, [1.0, 0.0, 0.0]);
-	        			// vec3.add(free_camera.at_point, free_camera.at_point, [1.0, 0.0, 0.0]);
 
-	        			// free_camera.pos[2] += 1 * Math.cos(free_camera.theta);
 	        			//Modifico ambas coordenadas pq se tiene que mover en el sentido en el
 	        			//que mira
-	        			free_camera.pos[2] -= 1 * /*Math.sin(free_camera.theta) **/ Math.sin(free_camera.phi);
-	        			free_camera.pos[0] -= 1 * /*Math.sin(free_camera.theta) **/ Math.cos(free_camera.phi);
+	        			handleKeyDownFreeStreet.camera.pos[2] += 1 * Math.sin(handleKeyDownFreeStreet.camera.theta) * Math.sin(handleKeyDownFreeStreet.camera.phi + Math.PI/2);
+	        			handleKeyDownFreeStreet.camera.pos[0] += 1 * Math.sin(handleKeyDownFreeStreet.camera.theta) * Math.cos(handleKeyDownFreeStreet.camera.phi + Math.PI/2);
 	        			break;
 	        		}
 	        		case 83:{ //83 es "s"
-						// vec3.add(free_camera.eye_point, free_camera.eye_point, [-1.0, 0.0, 0.0]);
-						// vec3.add(free_camera.at_point, free_camera.at_point, [-1.0, 0.0, 0.0]);
-						free_camera.pos[2] += 1 */* Math.sin(free_camera.theta) **/ Math.sin(free_camera.phi);
-						free_camera.pos[0] += 1 * /*Math.sin(free_camera.theta) **/ Math.cos(free_camera.phi);
+						handleKeyDownFreeStreet.camera.pos[2] -= 1 * Math.sin(handleKeyDownFreeStreet.camera.theta) * Math.sin(handleKeyDownFreeStreet.camera.phi + Math.PI/2);
+						handleKeyDownFreeStreet.camera.pos[0] -= 1 * Math.sin(handleKeyDownFreeStreet.camera.theta) * Math.cos(handleKeyDownFreeStreet.camera.phi + Math.PI/2);
 	        			break;
 	        		}
 	        		case 65:{ // 65 es "a"
-	        			// vec3.add(free_camera.eye_point, free_camera.eye_point, [0.0, 0.0, -1.0]);
-	        			// vec3.add(free_camera.at_point, free_camera.at_point, [0.0, 0.0, -1.0]);
-
-	        			// free_camera.pos[2] += 1 * Math.cos(free_camera.theta);
-	        			//Le sumo 90 pq tiene que moverse perpendicular a donde mira
-	        			free_camera.pos[2] += 1 * /*Math.sin(free_camera.theta) **/ Math.sin(free_camera.phi + Math.PI/2);
-	        			free_camera.pos[0] += 1 * /*Math.sin(free_camera.theta) **/ Math.cos(free_camera.phi + Math.PI/2);
+	        			handleKeyDownFreeStreet.camera.pos[2] += 1 * Math.sin(handleKeyDownFreeStreet.camera.theta) * Math.sin(handleKeyDownFreeStreet.camera.phi);
+	        			handleKeyDownFreeStreet.camera.pos[0] += 1 * Math.sin(handleKeyDownFreeStreet.camera.theta) * Math.cos(handleKeyDownFreeStreet.camera.phi);
 	        			break;
 	        		}
 	        		case 68:{ // 68 es "d"
-	        			// vec3.add(free_camera.eye_point, free_camera.eye_point, [0.0, 0.0, 1.0]);
-	        			// vec3.add(free_camera.at_point, free_camera.at_point, [0.0, 0.0, 1.0]);
-
-	        			// free_camera.pos[2] -= 1 * Math.cos(free_camera.theta);
-	        			free_camera.pos[2] -= 1 * /*Math.sin(free_camera.theta) **/ Math.sin(free_camera.phi + Math.PI/2);
-	        			free_camera.pos[0] -= 1 * /*Math.sin(free_camera.theta) **/ Math.cos(free_camera.phi + Math.PI/2);
+	        			handleKeyDownFreeStreet.camera.pos[2] -= 1 * Math.sin(handleKeyDownFreeStreet.camera.theta) * Math.sin(handleKeyDownFreeStreet.camera.phi);
+	        			handleKeyDownFreeStreet.camera.pos[0] -= 1 * Math.sin(handleKeyDownFreeStreet.camera.theta) * Math.cos(handleKeyDownFreeStreet.camera.phi);
 	        			break;
 	        		}
 	        		case 67:
 	        			handleCams();
 		    			break;
 	        	}
-	        	// mat4.lookAt(cameraMatrix, free_camera.eye_point, free_camera.at_point, free_camera.up_point);
-	        	// mat4.translate(cameraMatrix, cameraMatrix, free_camera.eye_point);
-	        	// cameraMatrix =  myLookAt(free_camera.eye_point, free_camera.at_point, free_camera.up_point);
-
-	        	actualizar_CameraMatrix();
+	        	actualizar_CameraMatrix(handleKeyDownFreeStreet.camera, handleKeyDownFreeStreet.mat);
 	        }
 
 	        function handleMouseMoveFreeStreet(event){
@@ -428,56 +412,23 @@
 		        var newX = event.clientX;
 		        var newY = event.clientY;
 
-		        var deltaX = lastMouseX2 - newX;
-		        var deltaY = lastMouseY2 - newY;
-		        // var newRotationMatrix = mat4.create();
-		  //       mat4.identity(newRotationMatrix);
-		  //       // mat4.rotate(newRotationMatrix, newRotationMatrix, degToRad(deltaX / 10), [0, 1, 0]);
-		  //       console.log("at point antes: ", free_camera.at_point);
+		        var deltaX = newX - lastMouseX2;
+		        var deltaY = newY - lastMouseY2;
 
-		  //       vec3.rotateX(free_camera.at_point, free_camera.at_point, free_camera.eye_point, degToRad(deltaY / 10));
+				handleMouseMoveFreeStreet.camera.phi += deltaX * 0.01;
+				handleMouseMoveFreeStreet.camera.theta += deltaY * 0.01;
 
-				// console.log("at point des: ", free_camera.at_point);
+				if(handleMouseMoveFreeStreet.camera.theta > Math.PI)
+					handleMouseMoveFreeStreet.camera.theta = Math.PI;
 
-		  //       // mat4.rotate(newRotationMatrix, newRotationMatrix, degToRad(deltaY / 10), [1, 0, 0]);
-		  //       vec3.rotateY(free_camera.at_point, free_camera.at_point, free_camera.eye_point, degToRad(deltaX / 10));
-
-		  //       cameraMatrix = myLookAt(free_camera.eye_point, free_camera.at_point, free_camera.up_point);
-
-		        // mat4.lookAt(cameraMatrix, free_camera.eye_point, free_camera.at_point, free_camera.up_point);
-		        // var aux = vec3.create();
-		        // vec3.negate(aux, free_camera.eye_point);
-		        // mat4.rotate(newRotationMatrix, newRotationMatrix, degToRad(deltaX / 10), [0, 1, 0]);
-		        // mat4.rotate(newRotationMatrix, newRotationMatrix, degToRad(deltaY / 10), [1, 0, 0]);
-		        // mat4.translate(newRotationMatrix, newRotationMatrix, free_camera.eye_point);
-
-				// mat4.multiply(cameraMatrix, newRotationMatrix, cameraMatrix);
-				free_camera.phi += deltaX * 0.01;
-				free_camera.theta += deltaY * 0.01;
-
-				if(free_camera.theta > Math.PI)
-					free_camera.theta = Math.PI;
-
-				if(free_camera.theta < 0)
-					free_camera.theta = 0;
+				if(handleMouseMoveFreeStreet.camera.theta < 0)
+					handleMouseMoveFreeStreet.camera.theta = 0;
 
 		        lastMouseX2 = newX;
 		        lastMouseY2 = newY;
 
-		        actualizar_CameraMatrix();
+		        actualizar_CameraMatrix(handleMouseMoveFreeStreet.camera, handleMouseMoveFreeStreet.mat);
 	        }
-
-		    function handleMouseDown(event) {
-		        mouseDown = true;
-		        lastMouseX = event.clientX;
-		        lastMouseY = event.clientY;
-		    }
-
-
-		    function handleMouseUp(event) {
-		        mouseDown = false;
-		    }
-
 
 		    function handleMouseMove(event) {
 		        if (!mouseDown) {
@@ -514,43 +465,49 @@
 		    	}
 		    }
 
-		    function actualizar_CameraMatrix(){
-		    	var aux = vec3.create();
+		    function actualizar_CameraMatrix(free_camera, cameraMatrix){
 		    	mat4.identity(cameraMatrix);
-		    	// mat4.translate(cameraMatrix, cameraMatrix, free_camera.pos);
-		    	mat4.rotate(cameraMatrix, cameraMatrix, free_camera.theta, [1.0, 0.0, 0.0]);
+		    	mat4.rotate(cameraMatrix, cameraMatrix, free_camera.theta - Math.PI/2, [1.0, 0.0, 0.0]);
 		    	mat4.rotate(cameraMatrix, cameraMatrix, free_camera.phi, [0.0, 1.0, 0.0]);
 
 		    	mat4.translate(cameraMatrix, cameraMatrix, free_camera.pos);
-		    	// vec3.negate(aux, free_camera.pos);
-		    	// mat4.translate(cameraMatrix, cameraMatrix, aux);
 		    }
 
 		    function handleCams(){
-		    	console.log("cant c: ", cant_C);
+		    	primero = 0;
 	    		if(cant_C == 0){
-	    			// mat4.identity(cameraMatrix);
-    				document.onmousemove = handleMouseMove;
-	    			document.onkeydown = handleKeyDownOrb;
-	    			cant_C++;
-	    		}else if(cant_C == 1){
-	    			console.log("Camara libre");
-	    			// var center = vec3.create();
-	    			// vec3.add(center, free_camera.eye_point, free_camera.at_point);
-	    			// mat4.lookAt(cameraMatrix, free_camera.eye_point, center, free_camera.up_point);
-	    			// cameraMatrix = myLookAt(free_camera.eye_point, free_camera.at_point, free_camera.up_point);
-					actualizar_CameraMatrix();
+
+	    			actualizar_CameraMatrix(free_camera_st, cameraMatrixSt);
+
+	    			handleMouseMoveFreeStreet.camera = free_camera_st;
+	    			handleKeyDownFreeStreet.camera = free_camera_st;
+	    			handleMouseMoveFreeStreet.mat = cameraMatrixSt;
+	    			handleKeyDownFreeStreet.mat = cameraMatrixSt;
 
 	    			document.onmousemove = handleMouseMoveFreeStreet;
 	    			document.onkeydown = handleKeyDownFreeStreet;
-	    			cant_C = 0;
-	    		}/*else if(cant_C == 2){
-	    			// mat4.identity(cameraMatrix);
+
+	    			cant_C++;
+
+	    		}else if(cant_C == 1){
+
+	    			actualizar_CameraMatrix(free_camera_au, cameraMatrixAu);
+
+	    			handleMouseMoveFreeStreet.camera = free_camera_au;
+	    			handleKeyDownFreeStreet.camera = free_camera_au;
+	    			handleMouseMoveFreeStreet.mat = cameraMatrixAu;
+	    			handleKeyDownFreeStreet.mat = cameraMatrixAu;
+	    			document.onmousemove = handleMouseMoveFreeStreet;
+	    			document.onkeydown = handleKeyDownFreeStreet;
+	    			cant_C++;
+	    		}else if(cant_C == 2){
 	    			document.onmousemove = handleMouseMove;
 	    			document.onkeydown = handleKeyDownOrb;
 	    			cant_C = 0;
-	    		}*/
+	    		}
 		    }
+
+		    var primero = 1;
 
 			function drawScene(){
 				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -562,17 +519,26 @@
 				var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 				// Preparamos una matriz de modelo+vista.
 				mat4.identity(mvMatrix);
-				mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
+				// mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
 
-				if(cant_C == 1){
+				if((cant_C == 0) || (primero == 1)){
+					mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
 					mat4.multiply(mvMatrix, mvMatrix, zoomMatrix);
 					mat4.multiply(mvMatrix, mvMatrix, escenaRotationMatrix);
 					mat4.translate(mvMatrix, mvMatrix, [-11.5, 0.0, -11.5]);
+				}else if(cant_C == 1){
+					mat4.multiply(mvMatrix, mvMatrix, cameraMatrixSt);
 				}else{
+<<<<<<< HEAD
 					mat4.multiply(mvMatrix, mvMatrix, cameraMatrix);
 					// mat4.invert(mvMatrix, cameraMatrix);
 				}
 
+=======
+					mat4.multiply(mvMatrix, mvMatrix, cameraMatrixAu);
+				}
+
+>>>>>>> cc4243942986ed8180f81a9924352ec565c4308b
 				//Traslado ancho y alto ciudad
 				// mat4.translate(mvMatrix, mvMatrix, [-11.5, 0.0, -11.5]);
 				// mat4.rotate(mvMatrix, mvMatrix, t, [1.0, 0.0, 0.0]);

@@ -93,6 +93,11 @@ function Calle(){
 		mat4.translate(this.traslacion, this.traslacion, v);
 	}
 
+	this.get_comienzo = function(){
+		return this.superficie.get_comienzo();
+	}
+
+
 	this.rotate_acum = function(eje, grados){
 		mat4.rotate(this.rotacion, this.rotacion, grados, vec3.fromValues(eje[0], eje[1], eje[2]));
 	}

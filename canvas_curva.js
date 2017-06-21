@@ -110,7 +110,6 @@ function handleMouseDown_curva(event) {
     position_buffer.push(puntoX);
     position_buffer.push(puntoY);
     position_buffer.push(0.0);
-    // draw_puntos();
     dibujar_curva();
 }
 //VER SI SE PUEDE HACER Q SE MUEVA Y TMB
@@ -133,12 +132,22 @@ dibujar_curva = function(){
 }
 
 click_regenerar = function(){
+	var dist_p = document.getElementById("dist_p").value;
+	var num_p = Number(dist_p);
+	if(dist_p == "")
+		num_p = 20;
+
+	var dist_f = document.getElementById("dist_f").value;
+	var num_f = Number(dist_f);
+	if(dist_f == "")
+		num_f = 10;
+
 	dibujar_curva();
 
 	escena.create_manzanas(6.0, 5.0, 1.0);
-	escena.ubicar_autopista(puntos_curva, 10, 10);
-	//escena.create_calles();
-	//escena.create_mapa();
+	escena.ubicar_autopista(puntos_curva, num_p, num_f);
+	escena.create_calles();
+	escena.create_mapa();
 	escena.create_autos();
 
 	drawScene();
@@ -157,20 +166,4 @@ draw_puntos = function(){
 	gl_canvas.vertexAttribPointer(vertexPositionAttribute, 3, gl_canvas.FLOAT, false, 0, 0);
 
 	gl_canvas.drawArrays(gl_canvas.POINTS, 0, webgl_position_buffer.numItems);
-}
-
-draw_canvas = function(){
-/*	var pMatrix = mat4.create();
-	var mvMatrix = mat4.create();
-
-	var u_proj_matrix = gl_canvas.getUniformLocation(glProgram_canvas, "uPMatrix");
-	// Preparamos una matriz de perspectiva.
-	mat4.perspective(pMatrix, 45, 640.0/480.0, 0.1, 200.0);
-	gl_canvas.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
-
-	var u_model_view_matrix = gl_canvas.getUniformLocation(glProgram_canvas, "uMVMatrix");
-	// Preparamos una matriz de modelo+vista.
-	mat4.identity(mvMatrix);
-	mat4.translate(mvMatrix, mvMatrix, [-10.0, -10.5, -50.0]);
-	gl_canvas.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);*/
 }
