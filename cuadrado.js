@@ -84,7 +84,18 @@ function Cuadrado(){
 
   this.scale = function(_x, _y, _z){
 		mat4.scale(this.escalado, this.escalado, vec3.fromValues(_x,_y,_z));
+    this.x = this.x*_x;
+    this.y = this.y*_y;
+    this.z = this.z*_z;
 	}
+
+  this.scale_abs = function(_x, _y, _z){
+    var x_esc = _x/this.x;
+    var y_esc = _y/this.y;
+    var z_esc = _z/this.z;
+
+    this.scale(x_esc, y_esc, z_esc);
+  }
 
   this.draw = function(mvMatrix_scene){
     var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");

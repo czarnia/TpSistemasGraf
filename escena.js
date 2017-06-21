@@ -83,13 +83,13 @@ function Escena(){
 					plaza.setupWebGLBuffers();
 					this.plazas.push(plaza);
 				}else{
-					/*var manzana = new Manzana();
+					var manzana = new Manzana();
 					manzana.create(this.lado_manzana, 0.5, 150.0, this.manzanas.length * 300);
 					manzana.translate([this.lado_manzana/2 - (this.lado_manzana/10) + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
 									this.lado_manzana/2 - (this.lado_manzana/10) + i * (this.lado_manzana + this.ancho_calle)]);
 					manzana.setupWebGLBuffers();
-					this.manzanas.push(manzana);*/
+					this.manzanas.push(manzana);
 					//Crear manzana
 				}
 				if(i == 0 && (j < this.cant_manzanas - 1)){

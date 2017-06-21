@@ -26,6 +26,12 @@ function Manzana(){
   }
 
   this.create = function(lado, alto, t, tick_ini){
+    this.rotacion = mat4.create();
+    mat4.identity(this.rotacion);
+
+    this.traslacion = mat4.create();
+    mat4.identity(this.traslacion);
+
     this.terreno.create([0.631,0.631,0.718], lado, alto);
     this.lado = lado;
     this.alto = alto;
