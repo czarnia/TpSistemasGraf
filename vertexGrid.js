@@ -132,10 +132,10 @@ function VertexGrid () {
     // indica dibujar tri�ngulos utilizando los 6 �ndices cargados en el Index_Buffer.
     this.drawVertexGrid = function(mvMatrix_total){
       if(this.texture_buffer != null){
-          var u_model_view_matrix = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
-
-          gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);
           gl.useProgram(shaderProgramTexturedObject);
+          var u_model_view_matrix = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
+          gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);         
+          
           var vertexTextureAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aTextureCoord");
           gl.enableVertexAttribArray(vertexTextureAttribute);
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
