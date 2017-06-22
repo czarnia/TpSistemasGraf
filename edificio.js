@@ -23,7 +23,8 @@ function Edificio(){
 
     this.superficie = new Cuadrado();
     this.superficie.create(this.x, this.y, this.z, color);
-    this.superficie.translate(pos);
+    this.superficie.translate([pos[0], 0.0000000000000000000000001, pos[2]]);
+    this.superficie.scale_abs(this.x, 0.0000000000000000000000001, this.z);
   }
 
   this.setupWebGLBuffers = function (){
