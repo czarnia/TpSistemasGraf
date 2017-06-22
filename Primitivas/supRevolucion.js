@@ -5,6 +5,7 @@ function supRevolucion(){
   this.grilla = new VertexGrid();
 
   this.create = function(eje, perfil, angulo, step, color){
+
     var muestreo = angulo/step;
 		this.grilla.create(step, perfil.length);
 
@@ -40,23 +41,10 @@ function supRevolucion(){
     this.grilla.setupWebGLBuffers();
   }
 
-  this.translate = function(mov){
-    this.grilla.translate(mov);
-    this.grilla.setupWebGLBuffers();
-  }
-
-  this.rotate = function(grados, eje){
-    this.grilla.rotate(grados, eje);
-    this.grilla.setupWebGLBuffers();
-  }
-
-  this.scale = function(_x, _y, _z){
-    this.grilla.scale(_x,_y,_z);
-    this.grilla.setupWebGLBuffers();
-  }
-
-  this.draw = function(){
-    this.grilla.drawVertexGrid();
+  this.draw = function(mvMatrix_total){
+    var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
+    gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);
+    this.grilla.drawVertexGrid(mvMatrix_total);
   }
 
   this.setupWebGLBuffers = function(){

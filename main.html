@@ -366,7 +366,7 @@
 
 			var comienzo_autopista = [];
 
-			function setupBuffers(){					
+			function setupBuffers(){
 /*					cuadrado = new Edificio();
 					cuadrado.create(2,2,1.5);
 					cuadrado.setupWebGLBuffers();*/
@@ -403,6 +403,7 @@
 					escena.create_autos();
 
 					comienzo_autopista = escena.autopista.get_comienzo();					
+
 					vec3.multiply(comienzo_autopista, comienzo_autopista, [1, -1, 1]);
 					vec3.add(comienzo_autopista, comienzo_autopista, [0, -6, 0]);
 					free_camera_au.pos = comienzo_autopista;					
@@ -423,11 +424,12 @@
 		    mat4.identity(escenaRotationMatrix);
 		    var zoomMatrix = mat4.create();
 		    mat4.identity(zoomMatrix);
+
 		    var cameraMatrixAu = mat4.create();
 		    mat4.identity(cameraMatrixAu);
 		    var cameraMatrixSt = mat4.create();
 		    mat4.identity(cameraMatrixSt);
-		    
+
 		    var free_camera_au = {
 		    	pos: [0.0, 0.0, 0.0],
 		    	theta: Math.PI/2,
@@ -436,7 +438,7 @@
 		    var free_camera_st = {
 		    	pos: [0.0, -10.0, -20.0],
 		    	theta: Math.PI/2,
-		    	phi: Math.PI/2		    	
+		    	phi: Math.PI/2
 		    }
 
 		    var cant_C = 0;
@@ -458,7 +460,8 @@
 	        	//Uso coordenadas esfericas
 	        	switch(event.keyCode){
 	        		case 87:{ // 87 es la "w"
-	        			//Modifico ambas coordenadas pq se tiene que mover en el sentido en el 
+
+	        			//Modifico ambas coordenadas pq se tiene que mover en el sentido en el
 	        			//que mira
 	        			handleKeyDownFreeStreet.camera.pos[2] += 1 * Math.sin(handleKeyDownFreeStreet.camera.theta) * Math.sin(handleKeyDownFreeStreet.camera.phi + Math.PI/2);
 	        			handleKeyDownFreeStreet.camera.pos[0] += 1 * Math.sin(handleKeyDownFreeStreet.camera.theta) * Math.cos(handleKeyDownFreeStreet.camera.phi + Math.PI/2);
@@ -550,32 +553,34 @@
 		    	mat4.identity(cameraMatrix);
 		    	mat4.rotate(cameraMatrix, cameraMatrix, free_camera.theta - Math.PI/2, [1.0, 0.0, 0.0]);
 		    	mat4.rotate(cameraMatrix, cameraMatrix, free_camera.phi, [0.0, 1.0, 0.0]);
-		    	
+
 		    	mat4.translate(cameraMatrix, cameraMatrix, free_camera.pos);
 		    }
 
 		    function handleCams(){
 		    	primero = 0;
 	    		if(cant_C == 0){
+
 	    			actualizar_CameraMatrix(free_camera_st, cameraMatrixSt);
 
 	    			handleMouseMoveFreeStreet.camera = free_camera_st;
 	    			handleKeyDownFreeStreet.camera = free_camera_st;
 	    			handleMouseMoveFreeStreet.mat = cameraMatrixSt;
 	    			handleKeyDownFreeStreet.mat = cameraMatrixSt;
-	    			
+
 	    			document.onmousemove = handleMouseMoveFreeStreet;
 	    			document.onkeydown = handleKeyDownFreeStreet;
+
 	    			cant_C++;
-    				
+
 	    		}else if(cant_C == 1){
+
 	    			actualizar_CameraMatrix(free_camera_au, cameraMatrixAu);
 
 	    			handleMouseMoveFreeStreet.camera = free_camera_au;
 	    			handleKeyDownFreeStreet.camera = free_camera_au;
 	    			handleMouseMoveFreeStreet.mat = cameraMatrixAu;
 	    			handleKeyDownFreeStreet.mat = cameraMatrixAu;
-	    			
 	    			document.onmousemove = handleMouseMoveFreeStreet;
 	    			document.onkeydown = handleKeyDownFreeStreet;
 	    			cant_C++;
@@ -615,7 +620,8 @@
 					mat4.multiply(mvMatrix, mvMatrix, cameraMatrixSt);
 				}else{
 					mat4.multiply(mvMatrix, mvMatrix, cameraMatrixAu);
-				}				
+
+				}	
 				
 				// mat4.rotate(mvMatrix, mvMatrix, t, [1.0, 0.0, 0.0]);
 				t = t + 0.1;
@@ -631,13 +637,9 @@
 				//cuadrado.draw();
 				// camino.draw();
 				// ruta.draw();
-
 				escena.tick(t);
 				escena.draw(mvMatrix);
 				// calle.draw();
-
-				// plaza.draw();
-				// pilar.draw();
 
 			}
 

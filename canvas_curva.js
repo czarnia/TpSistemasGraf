@@ -167,4 +167,3 @@ draw_puntos = function(){
 
 	gl_canvas.drawArrays(gl_canvas.POINTS, 0, webgl_position_buffer.numItems);
 }
-

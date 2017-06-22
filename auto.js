@@ -8,14 +8,15 @@ function Auto(){
   this.t = null;
   this.rotacion = null;
   this.traslacion = null;
-  this.pos = null;
+
+  this.pos_inicio_mov = null;
 
   this.create = function(color_carcasa, color_rueda, ancho, alto, largo, r_rueda, ancho_rueda){
     var posiciones_ruedas = [[-1/5*largo, -alto/2, -ancho/2], [1/4*largo, -alto/2, -ancho/2], [-1/5*largo, -alto/2, ancho/2], [1/4*largo, -alto/2, ancho/2]];
 
     this.ubic = 0;
     this.t = 0;
-    this.pos = [0,0,0];
+
     this.carcasa.create(largo, alto, ancho, color_carcasa);
     for (var i = 0; i < 4; i++){
       var r = new Rueda();
@@ -37,19 +38,16 @@ function Auto(){
     var mvMatrix_auto = mat4.create();
     mat4.identity(mvMatrix_auto);
     mat4.multiply(mvMatrix_auto, this.traslacion, this.rotacion);
-    mat4.translate(mvMatrix_auto, mvMatrix_auto, this.pos);
+
     var mvMatrix_total = mat4.create();
     mat4.identity(mvMatrix_total);
     mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_auto);
 
-    gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);
-
-    this.carcasa.draw();
+    this.carcasa.draw(mvMatrix_total);
 
     for (var i = 0; i < 4; i++){
       this.ruedas[i].draw(mvMatrix_total);
     }
-    gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_scene);
   }
 
   this.setupWebGLBuffers = function(){
@@ -59,20 +57,23 @@ function Auto(){
     }
   }
 
-  this.translate = function(v){
-    this.pos = v;
-    //this.carcasa.translate(v);
-    //for (var i = 0; i < 4; i++){
-      //this.ruedas[i].translate(v);
-    //}
-  }
+  this.translate_acum = function(v){
+		mat4.translate(this.traslacion, this.traslacion, v);
+	}
 
-  this.rotate = function(eje, angulo){
-    this.carcasa.rotate(eje, angulo);
-    for (var i = 0; i < 4; i++){
-      this.ruedas[i].rotate(eje, angulo);
-    }
-  }
+	this.translate = function(v){
+		mat4.identity(this.traslacion);
+		mat4.translate(this.traslacion, this.traslacion, v);
+	}
+
+	this.rotate_acum = function(eje, grados){
+		mat4.rotate(this.rotacion, this.rotacion, grados, vec3.fromValues(eje[0], eje[1], eje[2]));
+	}
+
+	this.rotate = function(eje, grados){
+		mat4.identity(this.rotacion);
+		mat4.rotate(this.rotacion, this.rotacion, grados, vec3.fromValues(eje[0], eje[1], eje[2]));
+	}
 
   this.mover = function(){
     var nivel = (this.curva_mov.valores_u/this.step)*(this.step-this.ubic);
@@ -82,11 +83,15 @@ function Auto(){
     var normal = this.curva_mov.get_normal(nivel);
     //La binormal es el producto vectorial entre la normal y la tangente
     //Traslado la curva camino al punto del nivel
+
     var mat_traslacion = mat4.create();
 
     var normal_auto = [1,0,0];
+
     mat4.identity(mat_traslacion);
     mat4.translate(mat_traslacion, mat_traslacion, punto);
+
+    //this.translate_acum(punto);
 
     //******PARA QUE COINCIDA CON LA TANGENTE*******
     vec3.normalize(tan, tan);
@@ -101,7 +106,7 @@ function Auto(){
     mat4.rotate(mat_rotacion_tan, mat_rotacion_tan, -angulo, eje);
 
     //La forma debe tener la orientacion de la normal, entonces la roto acorde
-    //this.rotate(eje, angulo);
+    this.rotate(eje, -angulo);
 
     //******PARA QUE COINCIDA CON LA NORMAL*******
     normal_mod = vec3.create();
@@ -118,7 +123,11 @@ function Auto(){
     mat4.identity(mat_rotacion_norm);
     mat4.rotate(mat_rotacion_norm, mat_rotacion_norm, angulo_norm, eje_norm);
 
-    this.traslacion = mat_traslacion;
+    this.rotate_acum(eje_norm, angulo_norm);
+
+    this.translate(punto);
+    mat4.multiply(this.traslacion, this.pos_inicio_mov, this.traslacion);
+
     this.rotacion = mat4.create();
     mat4.multiply(this.rotacion, mat_rotacion_norm, mat_rotacion_tan);
 
@@ -132,13 +141,15 @@ function Auto(){
     var distancia = vec3.distance(pos_act, pos_ant);
 
     for (var i = 0; i < 4; i++){
-      var angulo = distancia/(2*Math.PI);
-      this.ruedas[i].rotate(angulo, [0,0,1]);
+      var angulo = distancia/(Math.PI);
+      this.ruedas[i].rotate_acum([0,0,1], angulo);
     }
 
   }
 
   this.agregar_movimiento = function(curva, step){
+    this.pos_inicio_mov = mat4.create()
+    mat4.copy(this.pos_inicio_mov, this.traslacion);
     for (var i = 0; i < step; i++){
       var u = (curva.valores_u/step)*(step-i);
       var punto = curva.get_punto(u);

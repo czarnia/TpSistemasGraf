@@ -9,6 +9,7 @@ function supBarrido(){
 	this.texture_buffer = null;
 
 	this.create = function(camino, niveles, puntos_forma, normales_forma, color){
+
 		var cols = puntos_forma.length; //Las columnas tendran los puntos de la forma
 										//Los niveles son la cantidad de repeticiones de la forma
 		this.grilla.create(niveles, cols);
@@ -63,7 +64,7 @@ function supBarrido(){
 			var eje_norm = vec3.create();
 			//Para que gire para el otro lado
 			vec3.cross(eje_norm, normal_mod, normal); //VERSION BIEN
-		
+
 			var mat_rotacion_norm = mat4.create();
 			mat4.identity(mat_rotacion_norm);
 			mat4.rotate(mat_rotacion_norm, mat_rotacion_norm, angulo_norm, eje_norm);
@@ -98,31 +99,24 @@ function supBarrido(){
 	}
 
 	this.get_comienzo = function(){
-		var aux = vec3.fromValues(this.grilla.position_buffer[0], this.grilla.position_buffer[1], 
+		var aux = vec3.fromValues(this.grilla.position_buffer[0], this.grilla.position_buffer[1],
 		this.grilla.position_buffer[2]);
 		return aux;
 	}
 
-	this.translate = function(mov){
-		this.grilla.translate(mov);
-		this.setupWebGLBuffers();
-	}
-
-	this.rotate = function(p, plano){
-		this.grilla.rotate(p, plano);
-		this.setupWebGLBuffers();
-	}
-
 	this.scale = function(_x, _y, _z){
 		this.grilla.scale(_x, _y, _z);
-		this.setupWebGLBuffers();
+		//this.setupWebGLBuffers();
 	}
 
 	this.setupWebGLBuffers = function(){
 		this.grilla.setupWebGLBuffers();
 	}
 
-	this.draw = function(){
-		this.grilla.drawVertexGrid();
+	this.draw = function(mvMatrix_total){
+		var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
+		gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);
+
+		this.grilla.drawVertexGrid(mvMatrix_total);
 	}
 }

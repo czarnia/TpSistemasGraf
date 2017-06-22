@@ -4,7 +4,9 @@ function Edificio(){
   this.x = null;
   this.y = null;
   this.y_act = null;
-  this.lados = null;
+
+  this.superficie = null;
+
   this.pos = null;
   this.t = null;
   this.t_pasado = 0;
@@ -13,75 +15,20 @@ function Edificio(){
     this.x = _x;
     this.y = _y;
     this.z = _z;
+
     this.t = t_crec;
     this.pos = pos;
-    this.color = color;
 
     this.y_act = 0;
 
-    this.crear_caras(this.x, this.y_act, this.z, color);
-  }
-
-  this.crear_caras = function(_x, _y, _z, color){
-    // Cara 0 (yz)
-    this.lados = [];
-
-    var grid = new Plano();
-    grid.create(_x, _z, color);
-    grid.createIndexBuffer();
-    grid.rotate(Math.PI/2, [1,0,0]);
-    grid.translate([0,_y/2,0]);
-    this.lados.push(grid);
-
-    // Cara 1 (yz)
-    grid = new Plano();
-    grid.create(_x, _z, color);
-    grid.createIndexBuffer();
-    grid.rotate(Math.PI/2, [1,0,0]);
-    grid.translate([0,-_y/2,0]);
-    this.lados.push(grid);
-
-
-    // Cara 2 (xz)
-    grid = new Plano();
-    grid.create(_z, _y, color);
-    grid.createIndexBuffer();
-    grid.rotate(Math.PI/2, [0,1,0]);
-    grid.translate([_x*0.5,0,0]);
-    this.lados.push(grid);
-
-    // Cara 3 (xz)
-    grid = new Plano();
-    grid.create(_z, _y, color);
-    grid.createIndexBuffer();
-    grid.rotate(Math.PI/2, [0,1,0]);
-    grid.translate([-_x*0.5,0,0]);
-    this.lados.push(grid);
-
-    grid = new Plano();
-    grid.create(_x, _y, color);
-    grid.createIndexBuffer();
-    grid.translate([0,0,_z*0.5]);
-    this.lados.push(grid);
-
-    grid = new Plano();
-    grid.create(_x, _y, color);
-    grid.createIndexBuffer();
-    grid.translate([0,0,-_z*0.5]);
-    this.lados.push(grid);
-
-
-    for (var i = 0; i < 6; i++){
-      var grid = this.lados[i];
-      grid.translate(this.pos);
-    };
+    this.superficie = new Cuadrado();
+    this.superficie.create(this.x, this.y, this.z, color);
+    this.superficie.translate([pos[0], 0.0000000000000000000000001, pos[2]]);
+    this.superficie.scale_abs(this.x, 0.0000000000000000000000001, this.z);
   }
 
   this.setupWebGLBuffers = function (){
-    for (var i = 0; i < 6; i++){
-      var grid = this.lados[i];
-      grid.setupWebGLBuffers();
-    };
+    this.superficie.setupWebGLBuffers();
   }
 
   this.tick = function(t){
@@ -96,28 +43,32 @@ function Edificio(){
       this.y_act = this.y;
     }
     this.pos[1] += aumento_y/2;
-    this.crear_caras(this.x, this.y_act, this.z, this.color);
+    this.superficie.translate_acum([0,aumento_y/2,0]);
+    this.superficie.scale_abs(this.x, this.y_act, this.z);
   }
 
-  this.draw = function(){
-    for (i = 0; i < 6; i++) {
-      this.lados[i].draw();
-    };
-  }
+  this.translate_acum = function(v){
+		this.superficie.translate_acum(v);
+	}
 
-  this.translate = function(v){
-    for (i = 0; i < 6; i++) {
-      this.lados[i].translate(v);
-    };
-    this.pos[0] = this.pos[0]+v[0];
-    this.pos[1] = this.pos[1]+v[1];
-    this.pos[2] = this.pos[2]+v[2];
-  }
+	this.translate = function(v){
+		this.superficie.translate(v);
+	}
 
-  this.rotate = function(v, plano){
-    for (i = 0; i < 6; i++) {
-      this.lados[i].rotate(v, plano);
-    };
+	this.rotate_acum = function(eje, grados){
+    this.superficie.rotate_acum(eje,grados);
+	}
+
+	this.rotate = function(eje, grados){
+		this.superficie.rotate(eje,grados);
+	}
+
+  this.scale_abs = function(_x, _y, _z){
+		this.superficie.scale_abs(_x, _y, _z);
+	}
+
+  this.draw = function(mvMatrix_scene){
+    this.superficie.draw(mvMatrix_scene);
   }
 
 }

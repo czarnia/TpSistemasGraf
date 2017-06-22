@@ -6,9 +6,12 @@ function Manzana(){
   this.tick_ini = null;
   this.t = null;
 
+  this.rotacion = null;
+  this.translate = null;
+
   this.crear_largos = function(largo_disponible, cantidad_largos){
-    var largo_min = largo_disponible/6;
-    var largo_max = largo_disponible/4;
+    var largo_min = largo_disponible/5;
+    var largo_max = largo_disponible/3;
     var largo_total = 0;
     var largos = [];
 
@@ -23,6 +26,12 @@ function Manzana(){
   }
 
   this.create = function(lado, alto, t, tick_ini){
+    this.rotacion = mat4.create();
+    mat4.identity(this.rotacion);
+
+    this.traslacion = mat4.create();
+    mat4.identity(this.traslacion);
+
     this.terreno.create([0.631,0.631,0.718], lado, alto);
     this.lado = lado;
     this.alto = alto;
@@ -31,18 +40,18 @@ function Manzana(){
 
     var profundidad = lado/5;
     var lado_edif = 4*(lado/5);
-    var alto_min = lado*4;
-    var alto_max = lado*2;
+    var alto_min = lado*0.7;
+    var alto_max = lado*2.5;
     var color = [0.6, 0.3, 0];
 
-    var lados_x = this.crear_largos(lado_edif, 5);
-    var lados_z = this.crear_largos(lado_edif-profundidad*2, 3);
+    var lados_x = this.crear_largos(lado_edif, 4);
+    var lados_z = this.crear_largos(lado_edif-profundidad*2, 2);
 
     //Lados x
     var pos_z = lado_edif/2-profundidad;
     for (var i = 0; i < 2; i++){
       var pos_x = -lado_edif/2;
-      for (var j = 0; j < 5; j++){
+      for (var j = 0; j < 4; j++){
          var alto = alto_min + Math.random() * (alto_max-alto_min);
          var edif = new Edificio();
          color[0] = color[1]*j*0.2;
@@ -58,7 +67,7 @@ function Manzana(){
     pos_x = lado_edif/2-profundidad;
     for (var i = 0; i < 2; i++){
       var pos_z = -lado_edif/2+profundidad;
-      for (var j = 0; j < 3; j++){
+      for (var j = 0; j < 2; j++){
         var alto = alto_min + Math.random() * (alto_max-alto_min);
         var edif = new Edificio();
         color[1] = color[1]*j*0.3;
@@ -76,30 +85,51 @@ function Manzana(){
     if (this.t <= this.tick_ini){
       return;
     }
-    for (var i = 0; i < 16; i++){
+    for (var i = 0; i < this.edificios.length; i++){
       this.edificios[i].tick(t);
     }
   }
 
-  this.draw = function(){
-    this.terreno.draw();
-    for (var i = 0; i < 16; i++){
-      this.edificios[i].draw();
+  this.draw = function(mvMatrix_scene){
+    var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
+
+    var mvMatrix_manzana = mat4.create();
+    mat4.identity(mvMatrix_manzana);
+    mat4.multiply(mvMatrix_manzana, this.traslacion, this.rotacion);
+
+    var mvMatrix_total = mat4.create();
+    mat4.identity(mvMatrix_total);
+    mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_manzana);
+
+    this.terreno.draw(mvMatrix_total);
+    for (var i = 0; i < this.edificios.length; i++){
+      this.edificios[i].draw(mvMatrix_total);
     }
   }
 
   this.setupWebGLBuffers = function(){
     this.terreno.setupWebGLBuffers();
-    for (var i = 0; i < 16; i++){
+    for (var i = 0; i < this.edificios.length; i++){
       this.edificios[i].setupWebGLBuffers();
     }
   }
 
-  this.translate = function(v){
-    this.terreno.translate(v);
-    for (var i = 0; i < 16; i++){
-      this.edificios[i].translate(v);
-    }
-  }
+  this.translate_acum = function(v){
+		mat4.translate(this.traslacion, this.traslacion, v);
+	}
+
+	this.translate = function(v){
+		mat4.identity(this.traslacion);
+		mat4.translate(this.traslacion, this.traslacion, v);
+	}
+
+	this.rotate_acum = function(eje, grados){
+		mat4.rotate(this.rotacion, this.rotacion, grados, vec3.fromValues(eje[0], eje[1], eje[2]));
+	}
+
+	this.rotate = function(eje, grados){
+		mat4.identity(this.rotacion);
+		mat4.rotate(this.rotacion, this.rotacion, grados, vec3.fromValues(eje[0], eje[1], eje[2]));
+	}
 
 }
