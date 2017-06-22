@@ -84,7 +84,7 @@ function Escena(){
 					this.plazas.push(plaza);
 				}else{
 					var manzana = new Manzana();
-					manzana.create(this.lado_manzana, 0.5, 200.0, this.manzanas.length * 300);
+					manzana.create(this.lado_manzana, 0.5, 350.0, this.manzanas.length * 500);
 					manzana.translate([this.lado_manzana/2 - (this.lado_manzana/10) + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
 									this.lado_manzana/2 - (this.lado_manzana/10) + i * (this.lado_manzana + this.ancho_calle)]);
