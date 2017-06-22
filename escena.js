@@ -39,7 +39,7 @@ function Escena(){
 
 		var auto1 = new Auto();
 		auto1.create([0.6,0,0.4], [0.6,0.6,0.7], 0.9, 0.8, 1.7, 0.1, 0.07);
-		auto1.translate([0,5.5,-3]);
+		auto1.translate([0,5.5,4]);
 
 		var curva_auto1 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
 		auto1.agregar_movimiento(curva_auto1, 200);
@@ -152,9 +152,9 @@ function Escena(){
 			this.autos[i].setupWebGLBuffers();
 		}
 
-    for (var i = 0; i < this.manzanas.length; i++) {
+    /*for (var i = 0; i < this.manzanas.length; i++) {
 			this.manzanas[i].tick(t);
 			this.manzanas[i].setupWebGLBuffers();
-		}
+		}*/
 	}
 }
