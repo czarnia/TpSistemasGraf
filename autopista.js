@@ -29,7 +29,7 @@ function Autopista(){
 		var aux = vec3.create();
 		var sube = -9.75;
 
-		this.calle_ida.create_perfil(6, 0.5);
+		this.calle_ida.create_perfil(7, 0.5);
 		this.calle_ida.mover_perfil([-6, 0.75, 0]);
 		this.calle_ida.create(curva_camino);
 		this.calle_ida.translate([0.0, 0.0, sube + -0.5]);
@@ -39,7 +39,7 @@ function Autopista(){
 		this.borde_ida.create(curva_camino);
 		this.borde_ida.translate([0.0, 0.0, sube]);
 
-		this.calle_vuelta.create_perfil(6, 0.5);
+		this.calle_vuelta.create_perfil(7, 0.5);
 		this.calle_vuelta.mover_perfil([6, 0.75, 0]);
 		this.calle_vuelta.create(curva_camino);
 		this.calle_vuelta.translate([0.0, 0.0, sube + -0.5]);
@@ -133,7 +133,7 @@ function Autopista(){
 			//Una de las rutas
 			// if (this.borde_ida.superficie.grilla.position_buffer[i] < xcomienzo)
 				// coincide = false;
-			if (pos_buffer_ida[i] >= (xcomienzo + ancho)){
+			if ((pos_buffer_ida[i] >= (xcomienzo + ancho)) || (pos_buffer_ida[i] <= (xcomienzo - ancho))){
 				coincide = false;
 			}
 			if (pos_buffer_ida[i + 2] <= zcomienzo){
@@ -150,7 +150,7 @@ function Autopista(){
 			//La otra ruta
 			// if (this.borde_vuelta.superficie.grilla.position_buffer[i] < xcomienzo)
 				// coincide = false;
-			if (pos_buffer_vuelta[i] >= (xcomienzo + ancho)){
+			if ((pos_buffer_vuelta[i] >= (xcomienzo + ancho)) || (pos_buffer_vuelta[i] <= (xcomienzo - ancho))){
 				coincide = false;
 			}
 			if (pos_buffer_vuelta[i + 2] <= zcomienzo){
