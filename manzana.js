@@ -40,8 +40,8 @@ function Manzana(){
 
     var profundidad = lado/5;
     var lado_edif = 4*(lado/5);
-    var alto_min = lado*4;
-    var alto_max = lado*2;
+    var alto_min = lado*0.7;
+    var alto_max = lado*2.5;
     var color = [0.6, 0.3, 0];
 
     var lados_x = this.crear_largos(lado_edif, 4);

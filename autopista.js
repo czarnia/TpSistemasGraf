@@ -126,15 +126,18 @@ function Autopista(){
 
 
 	this.coincide = function(xcomienzo, ancho, zcomienzo, largo){
-		for (var i = 0; i < this.borde_ida.superficie.grilla.position_buffer.length; i += 3) {
+		var pos_buffer = this.devolver_rotado_transladado_escalado(this.borde_ida.superficie.grilla.position_buffer);
+		for (var i = 0; i < pos_buffer.length; i += 3) {
 			var coincide = true;
 			//Una de las rutas
 			// if (this.borde_ida.superficie.grilla.position_buffer[i] < xcomienzo)
 				// coincide = false;
-			if (this.borde_ida.superficie.grilla.position_buffer[i] > (xcomienzo + ancho))
+			if (pos_buffer[i] > (xcomienzo + ancho)){
 				coincide = false;
-			if (this.borde_ida.superficie.grilla.position_buffer[i + 2] < zcomienzo)
+			}
+			if (pos_buffer[i + 2] < zcomienzo){
 				coincide = false;
+			}
 			// if (this.borde_ida.superficie.grilla.position_buffer[i + 2] > (zcomienzo + largo))
 				// coincide = false;
 
@@ -146,10 +149,12 @@ function Autopista(){
 			//La otra ruta
 			// if (this.borde_vuelta.superficie.grilla.position_buffer[i] < xcomienzo)
 				// coincide = false;
-			if (this.borde_vuelta.superficie.grilla.position_buffer[i] > (xcomienzo + ancho))
+			if (pos_buffer[i] > (xcomienzo + ancho)){
 				coincide = false;
-			if (this.borde_vuelta.superficie.grilla.position_buffer[i + 2] < zcomienzo)
+			}
+			if (pos_buffer[i + 2] < zcomienzo){
 				coincide = false;
+			}
 			// if (this.borde_vuelta.superficie.grilla.position_buffer[i + 2] > (zcomienzo + largo))
 				// coincide = false;
 
@@ -158,6 +163,30 @@ function Autopista(){
 			}
 		}
 	}
+
+	this.devolver_rotado_transladado_escalado = function(pos_buffer){
+		var mvMatrix_autopista = mat4.create();
+		mat4.identity(mvMatrix_autopista);
+		mat4.multiply(mvMatrix_autopista, this.traslacion, this.rotacion);
+		mat4.multiply(mvMatrix_autopista, mvMatrix_autopista, this.escalado);
+
+		var pos_buffer_real = [];
+		var pos_aux = [];
+
+		for (var i = 0; i < pos_buffer.length; i++){
+			pos_aux[i%3] = pos_buffer[i];
+			if ((i+1)%3 == 0){
+				var vec_aux = vec3.fromValues(pos_aux[0], pos_aux[1], pos_aux[2]);
+				vec3.transformMat4(vec_aux, vec_aux, mvMatrix_autopista);
+				pos_buffer_real.push(vec_aux[0]);
+				pos_buffer_real.push(vec_aux[1]);
+				pos_buffer_real.push(vec_aux[2]);
+			}
+		}
+
+		return pos_buffer_real;
+	}
+
 
 	this.translate_acum = function(v){
 		mat4.translate(this.traslacion, this.traslacion, v);
