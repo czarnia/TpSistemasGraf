@@ -4,17 +4,24 @@ function supBarrido(){
 	this.grilla = new VertexGrid();
 	this.final = null;
 	this.puntos_curva = [];
+	this.texture = null;
+	this.con_textura = false;
+	this.texture_buffer = null;
 
 	this.create = function(camino, niveles, puntos_forma, normales_forma, color){
 
 		var cols = puntos_forma.length; //Las columnas tendran los puntos de la forma
 										//Los niveles son la cantidad de repeticiones de la forma
 		this.grilla.create(niveles, cols);
+		if(this.con_textura){
+			this.grilla.texture = this.texture;
+			this.grilla.texture_buffer = [];
+		}
 
 		this.curvaCamino = camino;
 
 		this.grilla.position_buffer = [];
-		this.grilla.color_buffer = [];
+		this.grilla.color_buffer = [];		
 
 		this.grilla.createIndexBuffer();
 
@@ -77,15 +84,16 @@ function supBarrido(){
 				this.grilla.position_buffer.push(punto_figura[1]);
 				this.grilla.position_buffer.push(punto_figura[2]);
 
-				//Le meto un color solo para probar
-				this.grilla.color_buffer.push(color[0]);
-				this.grilla.color_buffer.push(color[1]);
-				this.grilla.color_buffer.push(color[2]);
+				if(!this.con_textura){
+					this.grilla.color_buffer.push(color[0]);
+					this.grilla.color_buffer.push(color[1]);
+					this.grilla.color_buffer.push(color[2]);
+				}				
 			}
-
 		}
-		//Ver si salio de scope o se mantiene
 		this.final = punto;
+		if(this.con_textura)
+			this.grilla.texture_buffer = this.texture_buffer;	
 
 		this.grilla.setupWebGLBuffers();
 	}

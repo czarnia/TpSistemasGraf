@@ -27,6 +27,7 @@ function Escena(){
 		//Asumo valores enteros
 		for (var i = 0; i < 2 * (this.lado - this.cant_manzanas * this.lado_manzana) / this.ancho_calle; i++) {
 			var calle = new Calle();
+			calle.initTexture("tramo-dobleamarilla.jpg");
 			calle.create_perfil(this.ancho_calle, 0.5);
 			calle.create_calle_escena(this.lado, [0.0, 0.0, this.lado]);
 			this.calles.push(calle);
