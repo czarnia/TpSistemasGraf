@@ -152,9 +152,9 @@ function Escena(){
 			this.autos[i].setupWebGLBuffers();
 		}
 
-    /*for (var i = 0; i < this.manzanas.length; i++) {
+    for (var i = 0; i < this.manzanas.length; i++) {
 			this.manzanas[i].tick(t);
 			this.manzanas[i].setupWebGLBuffers();
-		}*/
+		}
 	}
 }
