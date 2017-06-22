@@ -107,6 +107,36 @@
 	}
 	</script>
 
+	<!-- Vertex shader para texturas -->
+	<script id="shader-texture-vs" type="x-shader/x-vertex">
+			attribute vec3 aVertexPosition;
+			attribute vec2 aTextureCoord;
+
+			uniform mat4 uMVMatrix;
+			uniform mat4 uPMatrix;
+
+			varying vec2 vTextureCoord;
+
+			void main(void) {
+					// gl_Position es una variable "built-in" de GLSL que es usada para
+					// almacenar la posici�n resultante del fragmento.
+					gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+					vTextureCoord = aTextureCoord;
+			}
+	</script>
+
+	<!--Fragment shader Texturas	-->
+	<script id="shader-texture-fs" type="x-shader/x-fragment">
+	precision mediump float;
+	varying vec2 vTextureCoord;
+
+	uniform sampler2D uSampler;
+
+	void main(void) {
+		gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+	}
+	</script>
+
 	<!-- Vertex shader para el canvas de la curva -->
 	<script id="shader-canvas-curva" type="x-shader/x-vertex">
 		// Los atributos son caracter�sticas propias de cada vertice.
@@ -154,7 +184,7 @@
 
 			var mvMatrix = mat4.create();
 			var pMatrix = mat4.create();
-
+			var mvMatrix2 = mat4.create();
 
 			 // SHADERS FUNCTION
 			function getShader(gl, id) {
@@ -271,7 +301,33 @@
 						return null;
 					}
 
-					// Le decimos a WebGL que de aqu� en adelante use el programa generado.
+					// Depende del tipo de objeto, el programa que uso
+					gl.useProgram(glProgram);
+
+					//SHADERS DE TEXTURAS
+					var fragmentShaderTexturedObj = getShader(gl, "shader-texture-fs");
+			        var vertexShaderTexturedObj = getShader(gl, "shader-texture-vs");
+
+			        shaderProgramTexturedObject = gl.createProgram();
+			        gl.attachShader(shaderProgramTexturedObject, vertexShaderTexturedObj);
+			        gl.attachShader(shaderProgramTexturedObject, fragmentShaderTexturedObj);
+			        gl.linkProgram(shaderProgramTexturedObject);
+
+			        if (!gl.getProgramParameter(shaderProgramTexturedObject, gl.LINK_STATUS)) {
+			            alert("Could not initialise shaders");
+			        }
+
+			        gl.useProgram(shaderProgramTexturedObject);
+
+			        shaderProgramTexturedObject.vertexPositionAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aVertexPosition");
+			        gl.enableVertexAttribArray(shaderProgramTexturedObject.vertexPositionAttribute);
+
+			        shaderProgramTexturedObject.textureCoordAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aTextureCoord");
+			        gl.enableVertexAttribArray(shaderProgramTexturedObject.textureCoordAttribute);
+
+			        shaderProgramTexturedObject.pMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPMatrix");
+			        shaderProgramTexturedObject.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
+			        shaderProgramTexturedObject.samplerUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uSampler");
 					gl.useProgram(glProgram);
 			}
 
@@ -286,6 +342,26 @@
 							alert("Error compiling shader: " + gl.getShaderInfoLog(shader));
 					}
 					return shader;
+			}
+
+			this.handleLoadedTexture = function(){
+				gl.bindTexture(gl.TEXTURE_2D, escena.autopista.calle_ida.texture);
+		        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+		        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, escena.autopista.calle_ida.texture.image);
+		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		        // gl.generateMipmap(gl.TEXTURE_2D);
+		        gl.bindTexture(gl.TEXTURE_2D, null);
+
+		        gl.bindTexture(gl.TEXTURE_2D, escena.autopista.calle_vuelta.texture);
+		        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+		        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, escena.autopista.calle_vuelta.texture.image);
+		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+		        gl.generateMipmap(gl.TEXTURE_2D);
+		        gl.bindTexture(gl.TEXTURE_2D, null);
 			}
 
 			var comienzo_autopista = [];
@@ -308,6 +384,15 @@
 					puntos.push([80.0, 40.0, 0.0]);
 					puntos.push([80.0, 40.0, 0.0]);
 
+/*					camino = new curvaBspline3();
+					camino.create(puntos);
+					camino.setupWebGLBuffers();
+
+					calle = new Calle();
+					calle.initTexture("tramo-dobleamarilla.jpg");
+					calle.create_perfil(6, 0.5);
+					calle.create(camino);*/				
+
 					escena = new Escena();
 
 					//Cant manzanas, lado manzana, ancho calle
@@ -316,12 +401,11 @@
 					escena.create_calles();
 					escena.create_mapa();
 					escena.create_autos();
-					comienzo_autopista = escena.autopista.get_comienzo();
-					console.log("Comienzo autopista: ", comienzo_autopista);
+
+					comienzo_autopista = escena.autopista.get_comienzo();					
 					vec3.multiply(comienzo_autopista, comienzo_autopista, [1, -1, 1]);
 					vec3.add(comienzo_autopista, comienzo_autopista, [0, -6, 0]);
-					free_camera_au.pos = comienzo_autopista;
-					console.log("Pos camara: ", free_camera_au.pos);
+					free_camera_au.pos = comienzo_autopista;					
 			}
 
 		    function degToRad(degrees) {
@@ -511,28 +595,38 @@
 				mat4.perspective(pMatrix, 45, 640.0/480.0, 0.1, 200.0);
 				gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 
+				// PARA SHADER TEXTURAS
+				gl.useProgram(shaderProgramTexturedObject);
+				gl.uniformMatrix4fv(shaderProgramTexturedObject.pMatrixUniform, false, pMatrix);
+				gl.useProgram(glProgram);
+				//------------------------
+
 				var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 				// Preparamos una matriz de modelo+vista.
 				mat4.identity(mvMatrix);
-				// mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
 
 				if((cant_C == 0) || (primero == 1)){
 					mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
 					mat4.multiply(mvMatrix, mvMatrix, zoomMatrix);
 					mat4.multiply(mvMatrix, mvMatrix, escenaRotationMatrix);
+					//Traslado ancho y alto ciudad
 					mat4.translate(mvMatrix, mvMatrix, [-11.5, 0.0, -11.5]);
 				}else if(cant_C == 1){
 					mat4.multiply(mvMatrix, mvMatrix, cameraMatrixSt);
 				}else{
 					mat4.multiply(mvMatrix, mvMatrix, cameraMatrixAu);
-				}
+				}				
 				
-				//Traslado ancho y alto ciudad
-				// mat4.translate(mvMatrix, mvMatrix, [-11.5, 0.0, -11.5]);
 				// mat4.rotate(mvMatrix, mvMatrix, t, [1.0, 0.0, 0.0]);
 				t = t + 0.1;
 
 				gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
+
+				//PARA SHADER TEXTURAS
+				gl.useProgram(shaderProgramTexturedObject);
+				gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix);
+				gl.useProgram(glProgram);
+				//--------------------------------
 
 				//cuadrado.draw();
 				// camino.draw();
@@ -540,6 +634,7 @@
 
 				escena.tick(t);
 				escena.draw(mvMatrix);
+				// calle.draw();
 
 				// plaza.draw();
 				// pilar.draw();
