@@ -133,10 +133,10 @@ function Autopista(){
 			//Una de las rutas
 			// if (this.borde_ida.superficie.grilla.position_buffer[i] < xcomienzo)
 				// coincide = false;
-			if ((pos_buffer_ida[i] >= (xcomienzo + ancho)) || (pos_buffer_ida[i] <= (xcomienzo - ancho))){
+			if ((pos_buffer_ida[i] >= (xcomienzo + ancho)) || (pos_buffer_ida[i] <= xcomienzo)){
 				coincide = false;
 			}
-			if (pos_buffer_ida[i + 2] <= zcomienzo){
+			if ((pos_buffer_ida[i + 2] >= (zcomienzo + largo)) || (pos_buffer_ida[i + 2] <= zcomienzo)){
 				coincide = false;
 			}
 			// if (this.borde_ida.superficie.grilla.position_buffer[i + 2] > (zcomienzo + largo))
@@ -150,10 +150,10 @@ function Autopista(){
 			//La otra ruta
 			// if (this.borde_vuelta.superficie.grilla.position_buffer[i] < xcomienzo)
 				// coincide = false;
-			if ((pos_buffer_vuelta[i] >= (xcomienzo + ancho)) || (pos_buffer_vuelta[i] <= (xcomienzo - ancho))){
+			if ((pos_buffer_vuelta[i] >= (xcomienzo + ancho)) || (pos_buffer_vuelta[i] <= xcomienzo)){
 				coincide = false;
 			}
-			if (pos_buffer_vuelta[i + 2] <= zcomienzo){
+			if ((pos_buffer_vuelta[i + 2] >= (zcomienzo + largo)) || (pos_buffer_vuelta[i + 2] <= zcomienzo)){
 				coincide = false;
 			}
 			// if (this.borde_vuelta.superficie.grilla.position_buffer[i + 2] > (zcomienzo + largo))
