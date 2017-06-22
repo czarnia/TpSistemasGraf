@@ -124,7 +124,21 @@ function Autopista(){
 	}
 
 	this.get_comienzo = function(){
-		return this.calle_ida.get_comienzo();
+		var mvMatrix_autopista = mat4.create();
+		mat4.identity(mvMatrix_autopista);
+		mat4.multiply(mvMatrix_autopista, this.traslacion, this.rotacion);
+		mat4.multiply(mvMatrix_autopista, mvMatrix_autopista, this.escalado);
+
+		var comienzo_ida = this.calle_ida.get_comienzo();
+		var comienzo_vuelta = this.calle_ida.get_comienzo();
+
+		var vec_comienzo_ida = vec3.fromValues(comienzo_ida[0], comienzo_ida[1], comienzo_ida[2]);
+		var vec_comienzo_vuelta = vec3.fromValues(comienzo_ida[0], comienzo_ida[1], comienzo_ida[2]);
+
+		vec3.transformMat4(vec_comienzo_ida, vec_comienzo_ida, mvMatrix_autopista);
+		vec3.transformMat4(vec_comienzo_vuelta, vec_comienzo_vuelta, mvMatrix_autopista);
+
+		return [(vec_comienzo_ida[0]+vec_comienzo_vuelta[0])/2, (vec_comienzo_ida[1]+vec_comienzo_vuelta[1])/2, (vec_comienzo_ida[2]+vec_comienzo_vuelta[2])/2];
 	}
 
 

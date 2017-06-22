@@ -257,9 +257,9 @@
 							setupBuffers();
 
 							canvas.onmousedown = handleMouseDown;
-        					document.onmouseup = handleMouseUp;
-        					document.onmousemove = handleMouseMove;
-        					document.onkeydown = handleKeyDownOrb;
+        			document.onmouseup = handleMouseUp;
+        			document.onmousemove = handleMouseMove;
+        			document.onkeydown = handleKeyDownOrb;
 
 							setInterval(drawScene, 10);
 					}else{
@@ -306,28 +306,28 @@
 
 					//SHADERS DE TEXTURAS
 					var fragmentShaderTexturedObj = getShader(gl, "shader-texture-fs");
-			        var vertexShaderTexturedObj = getShader(gl, "shader-texture-vs");
+			    var vertexShaderTexturedObj = getShader(gl, "shader-texture-vs");
 
-			        shaderProgramTexturedObject = gl.createProgram();
-			        gl.attachShader(shaderProgramTexturedObject, vertexShaderTexturedObj);
-			        gl.attachShader(shaderProgramTexturedObject, fragmentShaderTexturedObj);
-			        gl.linkProgram(shaderProgramTexturedObject);
+			    shaderProgramTexturedObject = gl.createProgram();
+			    gl.attachShader(shaderProgramTexturedObject, vertexShaderTexturedObj);
+			    gl.attachShader(shaderProgramTexturedObject, fragmentShaderTexturedObj);
+			    gl.linkProgram(shaderProgramTexturedObject);
 
-			        if (!gl.getProgramParameter(shaderProgramTexturedObject, gl.LINK_STATUS)) {
-			            alert("Could not initialise shaders");
-			        }
+			    if (!gl.getProgramParameter(shaderProgramTexturedObject, gl.LINK_STATUS)) {
+			        alert("Could not initialise shaders");
+			    }
 
-			        gl.useProgram(shaderProgramTexturedObject);
+			    gl.useProgram(shaderProgramTexturedObject);
 
-			        shaderProgramTexturedObject.vertexPositionAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aVertexPosition");
-			        gl.enableVertexAttribArray(shaderProgramTexturedObject.vertexPositionAttribute);
+			    shaderProgramTexturedObject.vertexPositionAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aVertexPosition");
+			    gl.enableVertexAttribArray(shaderProgramTexturedObject.vertexPositionAttribute);
 
-			        shaderProgramTexturedObject.textureCoordAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aTextureCoord");
-			        gl.enableVertexAttribArray(shaderProgramTexturedObject.textureCoordAttribute);
+			    shaderProgramTexturedObject.textureCoordAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aTextureCoord");
+			    gl.enableVertexAttribArray(shaderProgramTexturedObject.textureCoordAttribute);
 
-			        shaderProgramTexturedObject.pMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPMatrix");
-			        shaderProgramTexturedObject.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
-			        shaderProgramTexturedObject.samplerUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uSampler");
+			    shaderProgramTexturedObject.pMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPMatrix");
+			    shaderProgramTexturedObject.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
+			    shaderProgramTexturedObject.samplerUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uSampler");
 					gl.useProgram(glProgram);
 			}
 
@@ -391,7 +391,7 @@
 					calle = new Calle();
 					calle.initTexture("tramo-dobleamarilla.jpg");
 					calle.create_perfil(6, 0.5);
-					calle.create(camino);*/				
+					calle.create(camino);*/
 
 					escena = new Escena();
 
@@ -402,11 +402,11 @@
 					escena.create_mapa();
 					escena.create_autos();
 
-					comienzo_autopista = escena.autopista.get_comienzo();					
+					comienzo_autopista = escena.autopista.get_comienzo();
 
 					vec3.multiply(comienzo_autopista, comienzo_autopista, [1, -1, 1]);
 					vec3.add(comienzo_autopista, comienzo_autopista, [0, -6, 0]);
-					free_camera_au.pos = comienzo_autopista;					
+					free_camera_au.pos = comienzo_autopista;
 			}
 
 		    function degToRad(degrees) {
@@ -621,8 +621,8 @@
 				}else{
 					mat4.multiply(mvMatrix, mvMatrix, cameraMatrixAu);
 
-				}	
-				
+				}
+
 				// mat4.rotate(mvMatrix, mvMatrix, t, [1.0, 0.0, 0.0]);
 				t = t + 0.1;
 

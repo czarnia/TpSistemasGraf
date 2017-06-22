@@ -39,7 +39,7 @@ function Escena(){
 
 		var auto1 = new Auto();
 		auto1.create([0.6,0,0.4], [0.6,0.6,0.7], 0.9, 0.8, 1.7, 0.1, 0.07);
-		auto1.translate([0,5.5,4]);
+		auto1.translate([0,5.5,3]);
 
 		var curva_auto1 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
 		auto1.agregar_movimiento(curva_auto1, 200);
@@ -48,7 +48,7 @@ function Escena(){
 
 		var auto2 = new Auto();
 		auto2.create([0,0.5,0.4], [0.6,0.6,0.7], 0.9, 1, 1.5, 0.1, 0.07);
-		auto2.translate([0,5.5,3]);
+		auto2.translate([0,5.5,2]);
 
 		var curva_auto2 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
 		curva_auto2.dar_vuelta_curva();
