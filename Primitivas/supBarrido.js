@@ -85,7 +85,6 @@ function supBarrido(){
 			}
 		}
 		this.final = punto;
-		this.grilla.setupWebGLBuffers();
 	}
 
 	this.get_comienzo = function(){
@@ -96,7 +95,6 @@ function supBarrido(){
 
 	this.scale = function(_x, _y, _z){
 		this.grilla.scale(_x, _y, _z);
-		//this.setupWebGLBuffers();
 	}
 
 	this.setupWebGLBuffers = function(){

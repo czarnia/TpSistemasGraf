@@ -57,6 +57,7 @@ function Luminaria(){
 
 	this.setupWebGLBuffers = function(){
 		this.foco.setupWebGLBuffers();
+		this.poste.setupWebGLBuffers();
 	}
 
 	this.scale = function(_x, _y, _z){

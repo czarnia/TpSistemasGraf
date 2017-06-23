@@ -548,6 +548,8 @@
 					escena.create_mapa();
 					escena.create_autos();
 
+					escena.setupWebGLBuffers();
+
 					comienzo_autopista = escena.autopista.get_comienzo();
 
 					vec3.multiply(comienzo_autopista, comienzo_autopista, [1, -1, 1]);

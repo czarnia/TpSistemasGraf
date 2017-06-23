@@ -44,7 +44,6 @@ function Escena(){
 
 		var curva_auto1 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
 		auto1.agregar_movimiento(curva_auto1, 200);
-		auto1.setupWebGLBuffers();
 
 
 		var auto2 = new Auto();
@@ -54,7 +53,6 @@ function Escena(){
 		var curva_auto2 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
 		curva_auto2.dar_vuelta_curva();
 		auto2.agregar_movimiento(curva_auto2, 150);
-		auto2.setupWebGLBuffers();
 
 		this.autos.push(auto1);
 		this.autos.push(auto2);
@@ -83,7 +81,6 @@ function Escena(){
 										  0.0,
 									this.lado_manzana/2 - (this.lado_manzana/10) + i * (this.lado_manzana + this.ancho_calle)]);
 
-					plaza.setupWebGLBuffers();
 					this.plazas.push(plaza);
 				}else{
 					var manzana = new Manzana();
@@ -91,19 +88,17 @@ function Escena(){
 					manzana.translate([this.lado_manzana/2 - (this.lado_manzana/10) + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
 									this.lado_manzana/2 - (this.lado_manzana/10) + i * (this.lado_manzana + this.ancho_calle)]);
-					manzana.setupWebGLBuffers();
+
 					this.manzanas.push(manzana);
 					//Crear manzana
 				}
 				if(i == 0 && (j < this.cant_manzanas - 1)){
 					this.calles[j].rotate([0.0, 1.0, 0.0], Math.PI/2);
 					this.calles[j].translate([0.0, 0.0, (j + 1) * this.lado_manzana + j * this.ancho_calle]);
-					this.calles[j].superficie.grilla.setupWebGLBuffers();
 				}
 			}
 			if(i < this.cant_manzanas - 1){
 				this.calles[(this.cant_manzanas-1) + i].translate([(i + 1) * this.lado_manzana + i * this.ancho_calle, 0.0, 0.0]);
-				this.calles[(this.cant_manzanas-1) + i].superficie.grilla.setupWebGLBuffers();
 			}
 		}
 
@@ -122,7 +117,6 @@ function Escena(){
 		this.autopista.scale(this.lado/final, this.lado/final, this.lado/final);
 		this.autopista.rotate([1.0, 0.0, 0.0], Math.PI / 2);
 		this.autopista.initTexture("Texturas/autopista.jpg");
-		this.autopista.setupWebGLBuffers();
 
 		this.esc_autopista = [this.lado/final, this.lado/final, this.lado/final];
 	}
@@ -158,5 +152,25 @@ function Escena(){
     for (var i = 0; i < this.manzanas.length; i++) {
 			this.manzanas[i].tick(t);
 		}
+	}
+
+	this.setupWebGLBuffers = function(){
+		for (var i = 0; i < this.calles.length; i++) {
+			this.calles[i].setupWebGLBuffers();
+		}
+
+		for (var i = 0; i < this.plazas.length; i++) {
+			this.plazas[i].setupWebGLBuffers();
+		}
+
+		for (var i = 0; i < this.manzanas.length; i++) {
+			this.manzanas[i].setupWebGLBuffers();
+		}
+
+		for (var i = 0; i < this.autos.length; i++) {
+			this.autos[i].setupWebGLBuffers();
+		}
+
+		this.autopista.setupWebGLBuffers();
 	}
 }
