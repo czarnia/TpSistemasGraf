@@ -24,4 +24,8 @@ function Plaza(){
 	this.draw = function(mvMatrix_scene){
 		this.terreno.draw(mvMatrix_scene);
 	}
+
+	this.initTexture = function(texture_file){
+		this.terreno.initTexture(texture_file);
+	}
 }

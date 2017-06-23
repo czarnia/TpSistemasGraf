@@ -152,6 +152,15 @@ function Vereda(){
 				mat4.translate(this.traslacion_tapa2, this.traslacion_tapa2, [0,alto,0]);
 	}
 
+	this.create_text_buffer = function(){
+		var buffer_tapas = [];
+		var buffer_superficie = [];
+
+		this.superficie.asign_text_buffer(buffer_superficie);
+		this.tapa1.asign_text_buffer(buffer_tapas);
+		this.tapa2.asign_text_buffer(buffer_tapas);
+	}
+
 	this.draw = function(mvMatrix_scene){
 			var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 
@@ -176,5 +185,11 @@ function Vereda(){
 
       this.tapa1.draw(mvMatrix_tapa1);
       this.tapa2.draw(mvMatrix_tapa2);
+	}
+
+	this.initTexture = function(texture_file){
+		this.tapa1.initTexture(texture_file);
+		this.tapa2.initTexture(texture_file);
+		this.superficie.initTexture(texture_file);
 	}
 }

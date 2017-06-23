@@ -27,9 +27,9 @@ function Escena(){
 		//Asumo valores enteros
 		for (var i = 0; i < 2 * (this.lado - this.cant_manzanas * this.lado_manzana) / this.ancho_calle; i++) {
 			var calle = new Calle();
-			calle.initTexture("Texturas/tramo-dobleamarilla.jpg");
 			calle.create_perfil(this.ancho_calle, 0.5);
 			calle.create_calle_escena(this.lado, [0.0, 0.0, this.lado]);
+			calle.initTexture("Texturas/tramo-dobleamarilla.jpg");
 			this.calles.push(calle);
 		}
 	}
@@ -75,6 +75,7 @@ function Escena(){
 					 i * (this.lado_manzana + this.ancho_calle), this.lado_manzana) == true){
 					//Crear plaza
 					var plaza = new Plaza();
+					//plaza.initTexture("Texturas/pasto.jpg");
 					plaza.create(this.lado_manzana, 0.5);
 					//PREGUNTAR ANA CUANTO TRASLADAR
 					plaza.translate([this.lado_manzana/2 - (this.lado_manzana/10) + j*(this.lado_manzana + this.ancho_calle),

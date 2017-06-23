@@ -325,9 +325,11 @@ function curvaBspline3(){
         this.discretizaciones = [];
         this.distancias_discret = [];
         var aux = vec3.create();
-        var ant = vec3.fromValues(0.0, 0.0, 0.0);
+        var ant = this.get_punto(0);
         var dist = 0;
-        for (var i = 0; i < step; i += 1) {
+        this.distancias_discret.push(dist);
+
+        for (var i = 1; i < step; i += 1) {
             var u = (camino.valores_u/step)*i;
             aux = this.get_punto(u);
             this.discretizaciones.push(u);

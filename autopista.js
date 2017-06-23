@@ -30,22 +30,23 @@ function Autopista(){
 		var sube = -9.75;
 
 
-		this.calle_ida.initTexture("Texturas/autopista.jpg");
+
 		this.calle_ida.create_perfil(7, 0.5);
 		this.calle_ida.mover_perfil([-6, 0.75, 0]);
 		this.calle_ida.create(curva_camino, true);
 		this.calle_ida.translate([0.0, 0.0, sube + -0.5]);
+		this.calle_ida.initTexture("Texturas/autopista.jpg");
 
 		this.borde_ida.create_perfil();
 		this.borde_ida.mover_perfil(-6);
 		this.borde_ida.create(curva_camino);
 		this.borde_ida.translate([0.0, 0.0, sube]);
 
-		this.calle_vuelta.initTexture("Texturas/autopista.jpg");
 		this.calle_vuelta.create_perfil(7, 0.5);
 		this.calle_vuelta.mover_perfil([6, 0.75, 0]);
 		this.calle_vuelta.create(curva_camino, true);
 		this.calle_vuelta.translate([0.0, 0.0, sube + -0.5]);
+		this.calle_vuelta.initTexture("Texturas/autopista.jpg");
 
 		this.borde_vuelta.create_perfil();
 		this.borde_vuelta.mover_perfil(6);
