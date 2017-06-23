@@ -364,6 +364,18 @@
  					 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 		        gl.generateMipmap(gl.TEXTURE_2D);
 		        gl.bindTexture(gl.TEXTURE_2D, null);
+
+						for (var i = 0; i < escena.calles.length; i++){
+							gl.bindTexture(gl.TEXTURE_2D, escena.calles[i].texture);
+		        	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+		        	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, escena.calles[i].texture.image);
+		        	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+							gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+ 					 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+ 					 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+		        	//gl.generateMipmap(gl.TEXTURE_2D);
+		        	gl.bindTexture(gl.TEXTURE_2D, null);
+					}
 			}
 
 			var comienzo_autopista = [];
