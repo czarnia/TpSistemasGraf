@@ -97,7 +97,7 @@ function Autopista(){
 				var farol = new Luminaria();
 				farol.create(0.65, 20.0, 10.0, 5.0, 2.0, 1.5);
 				farol.setupWebGLBuffers();
-				farol.scale(0.5, 0.5, 0.5);
+				farol.scale(0.2, 0.2, 0.2);
 
 				vec3.normalize(tan, tan);
 				vec3.normalize(tan_l, tan_l);

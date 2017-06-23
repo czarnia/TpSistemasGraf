@@ -146,39 +146,6 @@ function Calle(){
 	//Crea el texture buffer para la calle entre los edificios
 	this.create_text_buffer_st = function(){
 		this.texture_buffer = [];
-	/*	var dist_total = this.path.distancias_discret[this.path.distancias_discret.length - 1];
-		var dist_medio = dist_total / 2;
-		var v = 0;
-		for(var i = 0; i < this.path.discretizaciones.length; i++){
-			for (var j = 0; j < this.perfil.forma.length; j++) {
-				switch(j){
-					case 0:
-						var u = 0;
-						break;
-					case 1:
-						var u = 0.125;
-						break;
-					case 2:
-						var u = 0.125 * 7;
-						break;
-					case 3:
-						var u = 0.125 * 8;
-						break;
-					case 4:
-						var u = 0;
-						break;
-				}
-				if(this.path.discretizaciones[i] < dist_medio){
-					v += (1 / dist_medio);
-				}else if(this.path.discretizaciones[i] == dist_medio){
-					v = 0;
-				}else{
-					v += (1 / dist_medio);
-				}
-				this.texture_buffer.push(u);
-				this.texture_buffer.push(v);
-			}
-		}*/
 		for(var i = 0; i < this.niveles; i++){
 			for (var j = 0; j < this.perfil.forma.length; j++) {
 				switch(j){
