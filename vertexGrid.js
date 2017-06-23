@@ -135,7 +135,7 @@ function VertexGrid () {
           gl.useProgram(shaderProgramTexturedObject);
           var u_model_view_matrix = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
           gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);         
-          
+
           var vertexTextureAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aTextureCoord");
           gl.enableVertexAttribArray(vertexTextureAttribute);
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
@@ -170,6 +170,6 @@ function VertexGrid () {
       gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
 
 
-        gl.useProgram(glProgram);
+      gl.useProgram(glProgram);
     }
 }

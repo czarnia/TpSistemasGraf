@@ -27,7 +27,7 @@ function Escena(){
 		//Asumo valores enteros
 		for (var i = 0; i < 2 * (this.lado - this.cant_manzanas * this.lado_manzana) / this.ancho_calle; i++) {
 			var calle = new Calle();
-			calle.initTexture("tramo-dobleamarilla.jpg");
+			calle.initTexture("Texturas/tramo-dobleamarilla.jpg");
 			calle.create_perfil(this.ancho_calle, 0.5);
 			calle.create_calle_escena(this.lado, [0.0, 0.0, this.lado]);
 			this.calles.push(calle);
@@ -149,12 +149,12 @@ function Escena(){
 	this.tick = function(t){
 		for (var i = 0; i < this.autos.length; i++) {
 			this.autos[i].tick(t);
-			this.autos[i].setupWebGLBuffers();
+			// this.autos[i].setupWebGLBuffers();
 		}
 
     for (var i = 0; i < this.manzanas.length; i++) {
 			this.manzanas[i].tick(t);
-			this.manzanas[i].setupWebGLBuffers();
+			// this.manzanas[i].setupWebGLBuffers();
 		}
 	}
 }

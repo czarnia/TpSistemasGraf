@@ -29,6 +29,7 @@ function Autopista(){
 		var aux = vec3.create();
 		var sube = -9.75;
 
+		curva_camino.discretizar();
 
 		this.calle_ida.initTexture("Texturas/uv_grid2.jpg");
 		this.calle_ida.create_perfil(7, 0.5);
@@ -50,9 +51,7 @@ function Autopista(){
 		this.borde_vuelta.create_perfil();
 		this.borde_vuelta.mover_perfil(6);
 		this.borde_vuelta.create(curva_camino);
-		this.borde_vuelta.translate([0.0, 0.0, sube]);
-
-		curva_camino.discretizar();
+		this.borde_vuelta.translate([0.0, 0.0, sube]);		
 
 		var medio = curva_camino.discretizaciones[curva_camino.discretizaciones.length / 2];
 		this.punto_medio = curva_camino.get_punto(medio);
@@ -99,8 +98,6 @@ function Autopista(){
 				farol.create(0.65, 20.0, 10.0, 5.0, 2.0, 1.5);
 				farol.setupWebGLBuffers();
 				farol.scale(0.5, 0.5, 0.5);
-
-
 
 				vec3.normalize(tan, tan);
 				vec3.normalize(tan_l, tan_l);
