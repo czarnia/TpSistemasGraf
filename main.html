@@ -42,7 +42,7 @@
 
 		<h1>CityGrid</h1>
 		<h2>Sistemas Gr&aacute;ficos - 66.71</h2>
-		<h3>Alumnos</h3>
+		<h3>Alumnas: Ana Czarnitzki y Sofia Morseletto</h3>
 		<h4>Primer Cuatrimestre 2017</h4>
 
 		<canvas id="my-canvas" width="900" height="500">
@@ -134,6 +134,53 @@
 
 	void main(void) {
 		gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+	}
+	</script>
+
+	<!-- Vertex shader para texturas EDIFICIOS -->
+	<script id="shader-texture-edif-vs" type="x-shader/x-vertex">
+			attribute vec3 aVertexPosition;
+			attribute vec2 aTextureCoord;
+
+			uniform mat4 uMVMatrix;
+			uniform mat4 uPMatrix;
+			uniform float uAltura;
+
+			varying vec2 vTextureCoord;
+
+			void main(void) {
+					// vec3 aux = aVertexPosition;
+					// aux.y *= uAltura; //probar en y sino
+					gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+					vTextureCoord = aTextureCoord;
+					vTextureCoord.y *= uAltura;
+			}
+
+	</script>
+
+	<!--Fragment shader Texturas EDIFICIOS-->
+	<script id="shader-texture-edif-fs" type="x-shader/x-fragment">
+	precision mediump float;
+	varying vec2 vTextureCoord;
+	// varying vec2 vTextureCoord2;
+
+	uniform float uAlturaPB;
+	uniform float uAlturaPisos;
+	uniform sampler2D uSamplerPB;
+	uniform sampler2D uSamplerPisos;
+
+	void main(void) {
+		vec2 uv = vTextureCoord;
+		//Agregar if de acuerdo a la textura que uso
+		if(vTextureCoord.y <= uAlturaPB){
+			uv.y /= uAlturaPB;
+			// uv.x /= 0.25 / uAlturaPB;
+			gl_FragColor = texture2D(uSamplerPB, uv);
+		}else{
+			uv.y -= uAlturaPB;
+			uv.y /= uAlturaPisos;
+			gl_FragColor = texture2D(uSamplerPisos, uv);
+		}
 	}
 	</script>
 
@@ -254,6 +301,7 @@
 					{
 							setupWebGL();
 							initShaders();
+							loadTextures();
 							setupBuffers();
 
 							canvas.onmousedown = handleMouseDown;
@@ -325,10 +373,41 @@
 			    shaderProgramTexturedObject.textureCoordAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aTextureCoord");
 			    gl.enableVertexAttribArray(shaderProgramTexturedObject.textureCoordAttribute);
 
-			    shaderProgramTexturedObject.pMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPMatrix");
-			    shaderProgramTexturedObject.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
-			    shaderProgramTexturedObject.samplerUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uSampler");
-					gl.useProgram(glProgram);
+
+		        shaderProgramTexturedObject.pMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPMatrix");
+		        shaderProgramTexturedObject.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
+		        shaderProgramTexturedObject.samplerUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uSampler");
+
+		        //SHADERS DE TEXTURAS EDIFICIOS
+				var fragmentShaderEdificio = getShader(gl, "shader-texture-edif-fs");
+		        var vertexShaderEdificio = getShader(gl, "shader-texture-edif-vs");
+
+		        shaderProgramEdificio= gl.createProgram();
+		        gl.attachShader(shaderProgramEdificio, vertexShaderEdificio);
+		        gl.attachShader(shaderProgramEdificio, fragmentShaderEdificio);
+		        gl.linkProgram(shaderProgramEdificio);
+
+		        if (!gl.getProgramParameter(shaderProgramEdificio, gl.LINK_STATUS)) {
+		            alert("Could not initialise shaders");
+		        }
+
+		        gl.useProgram(shaderProgramEdificio);
+
+		        shaderProgramEdificio.vertexPositionAttribute = gl.getAttribLocation(shaderProgramEdificio, "aVertexPosition");
+		        gl.enableVertexAttribArray(shaderProgramEdificio.vertexPositionAttribute);
+
+		        shaderProgramEdificio.textureCoordAttribute1 = gl.getAttribLocation(shaderProgramEdificio, "aTextureCoord");
+		        gl.enableVertexAttribArray(shaderProgramEdificio.textureCoordAttribute1);
+
+		        shaderProgramEdificio.pMatrixUniform = gl.getUniformLocation(shaderProgramEdificio, "uPMatrix");
+		        shaderProgramEdificio.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramEdificio, "uMVMatrix");
+		        shaderProgramEdificio.samplerPB = gl.getUniformLocation(shaderProgramEdificio, "uSamplerPB");
+		        shaderProgramEdificio.samplerPisos = gl.getUniformLocation(shaderProgramEdificio, "uSamplerPisos");
+		        shaderProgramEdificio.Altura = gl.getUniformLocation(shaderProgramEdificio, "uAltura");
+		        shaderProgramEdificio.AlturaPB = gl.getUniformLocation(shaderProgramEdificio, "uAlturaPB");
+		        shaderProgramEdificio.AlturaPisos = gl.getUniformLocation(shaderProgramEdificio, "uAlturaPisos");
+
+				gl.useProgram(glProgram);
 			}
 
 			function makeShader(src, type)
@@ -344,8 +423,52 @@
 					return shader;
 			}
 
-			this.handleLoadedTexture = function(){
-				gl.bindTexture(gl.TEXTURE_2D, escena.autopista.calle_ida.texture);
+			var v_texturas_pisos = [];
+			var v_texturas_PB = [];
+
+			function loadTextures(){
+				v_texturas_pisos.push("Texturas/ed1_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed2_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed3_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed4_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed5_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed6_fachada.jpg");
+				v_texturas_pisos.push("Texturas/ed7_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed8_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed9_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed10_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed11_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed12_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed13_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed14_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed15_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed16_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed17_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed18_pisos.jpg");
+				v_texturas_pisos.push("Texturas/ed19_pisos.jpg");
+				v_texturas_PB.push("Texturas/ed1_pb.jpg");
+				v_texturas_PB.push("Texturas/ed2_pb.jpg");
+				v_texturas_PB.push("Texturas/ed3_pb.jpg");
+				v_texturas_PB.push("Texturas/ed4_pb.jpg");
+				v_texturas_PB.push("Texturas/ed5_pb.jpg");
+				v_texturas_PB.push("Texturas/ed6_pb.jpg");
+				v_texturas_PB.push("Texturas/ed7_pb.jpg");
+				v_texturas_PB.push("Texturas/ed8_pb.jpg");
+				v_texturas_PB.push("Texturas/ed9_pb.jpg");
+				v_texturas_PB.push("Texturas/ed10_pb.jpg");
+				v_texturas_PB.push("Texturas/ed11_pb.jpg");
+				v_texturas_PB.push("Texturas/ed12_pb.jpg");
+				v_texturas_PB.push("Texturas/ed13_pb.jpg");
+				v_texturas_PB.push("Texturas/ed14_pb.jpg");
+				v_texturas_PB.push("Texturas/ed15_pb.jpg");
+				v_texturas_PB.push("Texturas/ed16_pb.jpg");
+				v_texturas_PB.push("Texturas/ed17_pb.jpg");
+				v_texturas_PB.push("Texturas/ed18_pb.jpg");
+				v_texturas_PB.push("Texturas/ed19_pb.jpg");
+			}
+
+			this.handleLoadedTexture = function(texture, con_mipmap){
+				/*gl.bindTexture(gl.TEXTURE_2D, escena.autopista.calle_ida.texture);
 		        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 		        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, escena.autopista.calle_ida.texture.image);
 		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -363,19 +486,22 @@
  					 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
  					 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 		        gl.generateMipmap(gl.TEXTURE_2D);
-		        gl.bindTexture(gl.TEXTURE_2D, null);
+		        gl.bindTexture(gl.TEXTURE_2D, null);*/
 
-						for (var i = 0; i < escena.calles.length; i++){
-							gl.bindTexture(gl.TEXTURE_2D, escena.calles[i].texture);
-		        	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-		        	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, escena.calles[i].texture.image);
-		        	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-							gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
- 					 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
- 					 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-		        	//gl.generateMipmap(gl.TEXTURE_2D);
-		        	gl.bindTexture(gl.TEXTURE_2D, null);
-					}
+		        gl.bindTexture(gl.TEXTURE_2D, texture);
+		        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+		        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
+		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		        if(con_mipmap){
+			        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+			        gl.generateMipmap(gl.TEXTURE_2D);
+			    }else{
+			    	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+			        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+			        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+			    }
+
+		        gl.bindTexture(gl.TEXTURE_2D, null);
 			}
 
 			var comienzo_autopista = [];
@@ -406,6 +532,12 @@
 					calle.initTexture("tramo-dobleamarilla.jpg");
 					calle.create_perfil(6, 0.5);
 					calle.create(camino);*/
+
+/*					edif = new Edificio();
+					edif.create(10, 20, 10, [0, 0, 0], [0, 0, 0], 350.0);
+					edif.initTexture("ed12_pb.jpg");
+					edif.initTexture("ed1_pisos.jpg");
+					edif.setupWebGLBuffers();*/
 
 					escena = new Escena();
 
@@ -619,6 +751,12 @@
 				gl.uniformMatrix4fv(shaderProgramTexturedObject.pMatrixUniform, false, pMatrix);
 				gl.useProgram(glProgram);
 				//------------------------
+				// PARA SHADER EDIFICIO
+				gl.useProgram(shaderProgramEdificio);
+				gl.uniformMatrix4fv(shaderProgramEdificio.pMatrixUniform, false, pMatrix);
+				gl.useProgram(glProgram);
+				//------------------------
+
 
 				var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 				// Preparamos una matriz de modelo+vista.
@@ -645,12 +783,18 @@
 				//PARA SHADER TEXTURAS
 				gl.useProgram(shaderProgramTexturedObject);
 				gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix);
-				gl.useProgram(glProgram);
 				//--------------------------------
+				//PARA SHADER EDIFICIO
+				gl.useProgram(shaderProgramEdificio);
+				gl.uniformMatrix4fv(shaderProgramEdificio.ModelViewMatrixUniform, false, mvMatrix);
+				gl.useProgram(glProgram);
+				//---------------
 
 				//cuadrado.draw();
 				// camino.draw();
 				// ruta.draw();
+/*				edif.tick(t);
+				edif.draw(mvMatrix);*/
 				escena.tick(t);
 				escena.draw(mvMatrix);
 				// calle.draw();

@@ -100,4 +100,8 @@ function PilarAutopista(){
 	this.scale = function(_x, _y, _z){
 		mat4.scale(this.escalado, this.escalado, vec3.fromValues(_x,_y,_z));
 	}
+
+	this.setupWebGLBuffers = function(){
+		this.superficie.setupWebGLBuffers();
+	}
 }

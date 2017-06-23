@@ -27,6 +27,7 @@ function Escena(){
 		//Asumo valores enteros
 		for (var i = 0; i < 2 * (this.lado - this.cant_manzanas * this.lado_manzana) / this.ancho_calle; i++) {
 			var calle = new Calle();
+
 			calle.create_perfil(this.ancho_calle, 0.5);
 			calle.create_calle_escena(this.lado, [0.0, 0.0, this.lado]);
 			calle.initTexture("Texturas/tramo-dobleamarilla.jpg");
@@ -120,6 +121,8 @@ function Escena(){
 		this.autopista.create(camino, dist_pilares, dist_faroles);
 		this.autopista.scale(this.lado/final, this.lado/final, this.lado/final);
 		this.autopista.rotate([1.0, 0.0, 0.0], Math.PI / 2);
+		this.autopista.initTexture("Texturas/autopista.jpg");
+		this.autopista.setupWebGLBuffers();
 
 		this.esc_autopista = [this.lado/final, this.lado/final, this.lado/final];
 	}

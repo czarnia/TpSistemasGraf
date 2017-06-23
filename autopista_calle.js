@@ -83,14 +83,15 @@ function Calle(){
 		puntos.push(final);
 		puntos.push(final);
 
+		//MEJORAR, TRATAR DE NO CREAR CURVA CADA VEZ O NO DISCRETIZAR CADA VEZ
 		this.path.create(puntos);
 		this.path.setupWebGLBuffers();
 		this.create(this.path, false);
 	}
 
 	this.initTexture = function(texture_file){
-		this.superficie.initTexture(texture_file);
 		var texture_buffer = this.create_text_buffer_au();
+		this.superficie.initTexture(texture_file);
 		this.superficie.asign_text_buffer(texture_buffer);
 	}
 
@@ -134,7 +135,7 @@ function Calle(){
 
 	//Crea el texture buffer para la calle entre los edificios
 	this.create_text_buffer_st = function(){
-		this.create_text_buffer_au();
+		return this.create_text_buffer_au();
 	}
 
 	this.translate_acum = function(v){
@@ -177,5 +178,9 @@ function Calle(){
 		mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
 
 		this.superficie.draw(mvMatrix_total);
+	}
+
+	this.setupWebGLBuffers = function(){
+		this.superficie.setupWebGLBuffers();
 	}
 }

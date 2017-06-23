@@ -82,7 +82,7 @@ function SupFan(){
     this.texture.image = new Image();
 
     this.texture.image.onload = function () {
-      handleLoadedTexture();
+      handleLoadedTexture(aux_texture, false);
     }
 
     this.texture.image.src = texture_file;
