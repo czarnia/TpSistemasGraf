@@ -56,7 +56,8 @@ function Manzana(){
          var edif = new Edificio();
          color[0] = color[1]*j*0.2;
          color[2] = j*0.5;         
-         edif.create(lados_x[j], alto, profundidad, [pos_x+(lados_x[j]/2), this.terreno.alto, pos_z+(profundidad/2)], color, t);
+         // edif.create(lados_x[j], alto, profundidad, [pos_x+(lados_x[j]/2), this.terreno.alto, pos_z+(profundidad/2)], color, t);
+         edif.create(lados_x[j], alto, profundidad, [pos_x+(lados_x[j]/2), this.terreno.alto, pos_z+(profundidad/2)], color, t*(this.edificios.length+1)*(1/12));
          var random = Math.random() * 100;
          var text = Math.floor(random %  v_texturas_pisos.length);
          edif.initTexture(v_texturas_PB[text]);

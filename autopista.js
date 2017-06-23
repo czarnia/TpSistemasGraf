@@ -31,7 +31,7 @@ function Autopista(){
 
 		curva_camino.discretizar();
 
-		this.calle_ida.initTexture("Texturas/uv_grid2.jpg");
+		this.calle_ida.initTexture("Texturas/autopista.jpg");
 		this.calle_ida.create_perfil(7, 0.5);
 		this.calle_ida.mover_perfil([-6, 0.75, 0]);
 		this.calle_ida.create(curva_camino, true);
@@ -42,10 +42,10 @@ function Autopista(){
 		this.borde_ida.create(curva_camino);
 		this.borde_ida.translate([0.0, 0.0, sube]);
 
-		this.calle_vuelta.initTexture("Texturas/uv_grid2.jpg");
+		this.calle_vuelta.initTexture("Texturas/autopista.jpg");
 		this.calle_vuelta.create_perfil(7, 0.5);
 		this.calle_vuelta.mover_perfil([6, 0.75, 0]);
-		this.calle_vuelta.create(curva_camino, false);
+		this.calle_vuelta.create(curva_camino, true);
 		this.calle_vuelta.translate([0.0, 0.0, sube + -0.5]);
 
 		this.borde_vuelta.create_perfil();
@@ -121,7 +121,21 @@ function Autopista(){
 	}
 
 	this.get_comienzo = function(){
-		return this.calle_ida.get_comienzo();
+		var mvMatrix_autopista = mat4.create();
+		mat4.identity(mvMatrix_autopista);
+		mat4.multiply(mvMatrix_autopista, this.traslacion, this.rotacion);
+		mat4.multiply(mvMatrix_autopista, mvMatrix_autopista, this.escalado);
+
+		var comienzo_ida = this.calle_ida.get_comienzo();
+		var comienzo_vuelta = this.calle_ida.get_comienzo();
+
+		var vec_comienzo_ida = vec3.fromValues(comienzo_ida[0], comienzo_ida[1], comienzo_ida[2]);
+		var vec_comienzo_vuelta = vec3.fromValues(comienzo_ida[0], comienzo_ida[1], comienzo_ida[2]);
+
+		vec3.transformMat4(vec_comienzo_ida, vec_comienzo_ida, mvMatrix_autopista);
+		vec3.transformMat4(vec_comienzo_vuelta, vec_comienzo_vuelta, mvMatrix_autopista);
+
+		return [(vec_comienzo_ida[0]+vec_comienzo_vuelta[0])/2, (vec_comienzo_ida[1]+vec_comienzo_vuelta[1])/2, (vec_comienzo_ida[2]+vec_comienzo_vuelta[2])/2];
 	}
 
 
@@ -133,10 +147,10 @@ function Autopista(){
 			//Una de las rutas
 			// if (this.borde_ida.superficie.grilla.position_buffer[i] < xcomienzo)
 				// coincide = false;
-			if ((pos_buffer_ida[i] >= (xcomienzo + ancho)) || (pos_buffer_ida[i] <= (xcomienzo - ancho))){
+			if ((pos_buffer_ida[i] >= (xcomienzo + ancho)) || (pos_buffer_ida[i] <= xcomienzo)){
 				coincide = false;
 			}
-			if (pos_buffer_ida[i + 2] <= zcomienzo){
+			if ((pos_buffer_ida[i + 2] >= (zcomienzo + largo)) || (pos_buffer_ida[i + 2] <= zcomienzo)){
 				coincide = false;
 			}
 			// if (this.borde_ida.superficie.grilla.position_buffer[i + 2] > (zcomienzo + largo))
@@ -150,10 +164,10 @@ function Autopista(){
 			//La otra ruta
 			// if (this.borde_vuelta.superficie.grilla.position_buffer[i] < xcomienzo)
 				// coincide = false;
-			if ((pos_buffer_vuelta[i] >= (xcomienzo + ancho)) || (pos_buffer_vuelta[i] <= (xcomienzo - ancho))){
+			if ((pos_buffer_vuelta[i] >= (xcomienzo + ancho)) || (pos_buffer_vuelta[i] <= xcomienzo)){
 				coincide = false;
 			}
-			if (pos_buffer_vuelta[i + 2] <= zcomienzo){
+			if ((pos_buffer_vuelta[i + 2] >= (zcomienzo + largo)) || (pos_buffer_vuelta[i + 2] <= zcomienzo)){
 				coincide = false;
 			}
 			// if (this.borde_vuelta.superficie.grilla.position_buffer[i + 2] > (zcomienzo + largo))

@@ -111,8 +111,14 @@ function Calle(){
 	//Crea el texture buffer para la calle de la autopista
 	this.create_text_buffer_au = function(){
 		this.texture_buffer = [];
+		this.path.discretizar_step(this.niveles);
+
+		var long_curva = this.path.distancias_discret[this.path.distancias_discret.length-1];
+
+		this.texture_buffer = [];
 		for(var i = 0; i < this.niveles; i++){
 			for (var j = 0; j < this.perfil.forma.length; j++) {
+				var v = 10*(this.path.distancias_discret[i]/long_curva);
 				switch(j){
 					case 0:
 						var u = 0;
@@ -129,15 +135,6 @@ function Calle(){
 					case 4:
 						var u = 0;
 						break;
-				}
-				if( i < 25){
-					var v = 0.04 * i ;
-				}else if(i < 50){
-					var v = 0.04 * (i - 25) ;
-				}else if(i < 75){
-					var v = 0.04 * (i - 50) ;
-				}else{
-					var v = 0.04 * (i - 75) ;
 				}
 				this.texture_buffer.push(u);
 				this.texture_buffer.push(v);
@@ -246,13 +243,13 @@ function Calle(){
 	this.draw = function(mvMatrix_scene){
 		var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 
-	    var mvMatrix_calle = mat4.create();
-	    mat4.identity(mvMatrix_calle);
-	    mat4.multiply(mvMatrix_calle, this.traslacion, this.rotacion);
+	  var mvMatrix_calle = mat4.create();
+	  mat4.identity(mvMatrix_calle);
+	  mat4.multiply(mvMatrix_calle, this.traslacion, this.rotacion);
 
-	    var mvMatrix_total = mat4.create();
-	    mat4.identity(mvMatrix_total);
-	    mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_calle);
+	  var mvMatrix_total = mat4.create();
+	  mat4.identity(mvMatrix_total);
+	  mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_calle);
 		mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
 
 		this.superficie.draw(mvMatrix_total);

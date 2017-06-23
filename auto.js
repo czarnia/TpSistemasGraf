@@ -9,7 +9,8 @@ function Auto(){
   this.rotacion = null;
   this.traslacion = null;
 
-  this.pos_inicio_mov = null;
+  this.carril = null;
+  this.altura = null;
 
   this.create = function(color_carcasa, color_rueda, ancho, alto, largo, r_rueda, ancho_rueda){
     var posiciones_ruedas = [[-1/5*largo, -alto/2, -ancho/2], [1/4*largo, -alto/2, -ancho/2], [-1/5*largo, -alto/2, ancho/2], [1/4*largo, -alto/2, ancho/2]];
@@ -104,9 +105,8 @@ function Auto(){
     var mat_rotacion_tan = mat4.create();
     mat4.identity(mat_rotacion_tan);
     mat4.rotate(mat_rotacion_tan, mat_rotacion_tan, -angulo, eje);
-
     //La forma debe tener la orientacion de la normal, entonces la roto acorde
-    this.rotate(eje, -angulo);
+    //this.rotate(eje, -angulo);
 
     //******PARA QUE COINCIDA CON LA NORMAL*******
     normal_mod = vec3.create();
@@ -123,13 +123,16 @@ function Auto(){
     mat4.identity(mat_rotacion_norm);
     mat4.rotate(mat_rotacion_norm, mat_rotacion_norm, angulo_norm, eje_norm);
 
-    this.rotate_acum(eje_norm, angulo_norm);
+    //this.rotate_acum(eje_norm, angulo_norm);
 
-    this.translate(punto);
-    mat4.multiply(this.traslacion, this.pos_inicio_mov, this.traslacion);
+    var destino = [punto[0], punto[1]+this.altura, punto[2]];
+
+    this.translate(destino);
 
     this.rotacion = mat4.create();
     mat4.multiply(this.rotacion, mat_rotacion_norm, mat_rotacion_tan);
+    mat4.translate(this.rotacion, this.rotacion, vec3.fromValues(0,0,this.carril));
+
 
     var pos_act = vec3.fromValues(this.movimientos[this.ubic][0], this.movimientos[this.ubic][1], this.movimientos[this.ubic][2]);
     if (this.ubic == 0){
@@ -148,8 +151,9 @@ function Auto(){
   }
 
   this.agregar_movimiento = function(curva, step){
-    this.pos_inicio_mov = mat4.create()
-    mat4.copy(this.pos_inicio_mov, this.traslacion);
+    this.carril = this.traslacion[14];
+    this.altura = this.traslacion[13];
+
     for (var i = 0; i < step; i++){
       var u = (curva.valores_u/step)*(step-i);
       var punto = curva.get_punto(u);

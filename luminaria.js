@@ -26,10 +26,10 @@ function Luminaria(){
 		puntos_control.push([0,alto,0]);
 
 		//Quiero que interpole el punto final
-		puntos_control.push([-largo,alto,0]);
-		puntos_control.push([-largo,alto,0]);
-		puntos_control.push([-largo,alto,0]);
-		puntos_control.push([-largo,alto,0]);
+		puntos_control.push([0,alto,-largo]);
+		puntos_control.push([0,alto,-largo]);
+		puntos_control.push([0,alto,-largo]);
+		puntos_control.push([0,alto,-largo]);
 
 		camino.create(puntos_control);
 		return camino;
@@ -40,7 +40,7 @@ function Luminaria(){
 	    var camino = this.camino(alto, largo);
 			var color = [1,0.843,0];
 	    this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1], color);
-	    this.foco.create(_x, _y, _z, color); //8,3,6
+	    this.foco.create(_z, _y, _x, color); //8,3,6
 
 	    var ubic_foco = camino.puntosDeControl[camino.puntosDeControl.length-1];
 	    this.foco.translate(ubic_foco);
@@ -88,6 +88,8 @@ function Luminaria(){
     mat4.identity(mvMatrix_luminaria);
     mat4.multiply(mvMatrix_luminaria, this.traslacion, this.rotacion);
 
+		mat4.rotate(mvMatrix_luminaria, mvMatrix_luminaria, Math.PI/2, vec3.fromValues(0, 1, 0));
+
     var mvMatrix_total = mat4.create();
     mat4.identity(mvMatrix_total);
     mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_luminaria);
@@ -105,21 +107,19 @@ function devolver_puntos_circulo(radio, step){
 
 	var valores = [];
 
-	normales.push([0,1,0]); //normal al plano dónde está la figura
+	normales.push([1,0,0]); //normal al plano dónde está la figura
 	normales.push([0,0,1]);
 
 	for (var i = 0; i < step; i++){
 		var angulo_nivel = i * Math.PI*2 / (step-1);
 		var mat_rotacion = mat4.create();
 		mat4.identity(mat_rotacion);
-		mat4.rotate(mat_rotacion, mat_rotacion, angulo_nivel, [0,1,0]); //obtengo el círculo en xz
-		var punto = vec3.fromValues(radio,0,0);
+		mat4.rotate(mat_rotacion, mat_rotacion, angulo_nivel, [1,0,0]); //obtengo el círculo en zy
+		var punto = vec3.fromValues(0,0,radio);
 
 		vec3.transformMat4(punto, punto, mat_rotacion);
 		puntos.push(punto);
 
-		var normal = vec3.fromValues(punto[0],punto[1],punto[2]); //la circunferencia esta en el 0,0,0
-		//normales.push(normal);
 	};
 	valores.push(puntos);
 	valores.push(normales);

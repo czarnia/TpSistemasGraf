@@ -305,9 +305,9 @@
 							setupBuffers();
 
 							canvas.onmousedown = handleMouseDown;
-        					document.onmouseup = handleMouseUp;
-        					document.onmousemove = handleMouseMove;
-        					document.onkeydown = handleKeyDownOrb;
+        			document.onmouseup = handleMouseUp;
+        			document.onmousemove = handleMouseMove;
+        			document.onkeydown = handleKeyDownOrb;
 
 							setInterval(drawScene, 10);
 					}else{
@@ -354,58 +354,60 @@
 
 					//SHADERS DE TEXTURAS
 					var fragmentShaderTexturedObj = getShader(gl, "shader-texture-fs");
-			        var vertexShaderTexturedObj = getShader(gl, "shader-texture-vs");
+			    var vertexShaderTexturedObj = getShader(gl, "shader-texture-vs");
 
-			        shaderProgramTexturedObject = gl.createProgram();
-			        gl.attachShader(shaderProgramTexturedObject, vertexShaderTexturedObj);
-			        gl.attachShader(shaderProgramTexturedObject, fragmentShaderTexturedObj);
-			        gl.linkProgram(shaderProgramTexturedObject);
+			    shaderProgramTexturedObject = gl.createProgram();
+			    gl.attachShader(shaderProgramTexturedObject, vertexShaderTexturedObj);
+			    gl.attachShader(shaderProgramTexturedObject, fragmentShaderTexturedObj);
+			    gl.linkProgram(shaderProgramTexturedObject);
 
-			        if (!gl.getProgramParameter(shaderProgramTexturedObject, gl.LINK_STATUS)) {
-			            alert("Could not initialise shaders");
-			        }
+			    if (!gl.getProgramParameter(shaderProgramTexturedObject, gl.LINK_STATUS)) {
+			        alert("Could not initialise shaders");
+			    }
 
-			        gl.useProgram(shaderProgramTexturedObject);
+			    gl.useProgram(shaderProgramTexturedObject);
 
-			        shaderProgramTexturedObject.vertexPositionAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aVertexPosition");
-			        gl.enableVertexAttribArray(shaderProgramTexturedObject.vertexPositionAttribute);
+			    shaderProgramTexturedObject.vertexPositionAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aVertexPosition");
+			    gl.enableVertexAttribArray(shaderProgramTexturedObject.vertexPositionAttribute);
 
-			        shaderProgramTexturedObject.textureCoordAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aTextureCoord");
-			        gl.enableVertexAttribArray(shaderProgramTexturedObject.textureCoordAttribute);
+			    shaderProgramTexturedObject.textureCoordAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aTextureCoord");
+			    gl.enableVertexAttribArray(shaderProgramTexturedObject.textureCoordAttribute);
 
-			        shaderProgramTexturedObject.pMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPMatrix");
-			        shaderProgramTexturedObject.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
-			        shaderProgramTexturedObject.samplerUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uSampler");
 
-			        //SHADERS DE TEXTURAS EDIFICIOS
-					var fragmentShaderEdificio = getShader(gl, "shader-texture-edif-fs");
-			        var vertexShaderEdificio = getShader(gl, "shader-texture-edif-vs");
+		        shaderProgramTexturedObject.pMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPMatrix");
+		        shaderProgramTexturedObject.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
+		        shaderProgramTexturedObject.samplerUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uSampler");
 
-			        shaderProgramEdificio= gl.createProgram();
-			        gl.attachShader(shaderProgramEdificio, vertexShaderEdificio);
-			        gl.attachShader(shaderProgramEdificio, fragmentShaderEdificio);
-			        gl.linkProgram(shaderProgramEdificio);
+		        //SHADERS DE TEXTURAS EDIFICIOS
+				var fragmentShaderEdificio = getShader(gl, "shader-texture-edif-fs");
+		        var vertexShaderEdificio = getShader(gl, "shader-texture-edif-vs");
 
-			        if (!gl.getProgramParameter(shaderProgramEdificio, gl.LINK_STATUS)) {
-			            alert("Could not initialise shaders");
-			        }
+		        shaderProgramEdificio= gl.createProgram();
+		        gl.attachShader(shaderProgramEdificio, vertexShaderEdificio);
+		        gl.attachShader(shaderProgramEdificio, fragmentShaderEdificio);
+		        gl.linkProgram(shaderProgramEdificio);
 
-			        gl.useProgram(shaderProgramEdificio);
+		        if (!gl.getProgramParameter(shaderProgramEdificio, gl.LINK_STATUS)) {
+		            alert("Could not initialise shaders");
+		        }
 
-			        shaderProgramEdificio.vertexPositionAttribute = gl.getAttribLocation(shaderProgramEdificio, "aVertexPosition");
-			        gl.enableVertexAttribArray(shaderProgramEdificio.vertexPositionAttribute);
+		        gl.useProgram(shaderProgramEdificio);
 
-			        shaderProgramEdificio.textureCoordAttribute1 = gl.getAttribLocation(shaderProgramEdificio, "aTextureCoord");
-			        gl.enableVertexAttribArray(shaderProgramEdificio.textureCoordAttribute1);
+		        shaderProgramEdificio.vertexPositionAttribute = gl.getAttribLocation(shaderProgramEdificio, "aVertexPosition");
+		        gl.enableVertexAttribArray(shaderProgramEdificio.vertexPositionAttribute);
 
-			        shaderProgramEdificio.pMatrixUniform = gl.getUniformLocation(shaderProgramEdificio, "uPMatrix");
-			        shaderProgramEdificio.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramEdificio, "uMVMatrix");
-			        shaderProgramEdificio.samplerPB = gl.getUniformLocation(shaderProgramEdificio, "uSamplerPB");
-			        shaderProgramEdificio.samplerPisos = gl.getUniformLocation(shaderProgramEdificio, "uSamplerPisos");
-			        shaderProgramEdificio.Altura = gl.getUniformLocation(shaderProgramEdificio, "uAltura");
-			        shaderProgramEdificio.AlturaPB = gl.getUniformLocation(shaderProgramEdificio, "uAlturaPB");
-			        shaderProgramEdificio.AlturaPisos = gl.getUniformLocation(shaderProgramEdificio, "uAlturaPisos");
-					gl.useProgram(glProgram);
+		        shaderProgramEdificio.textureCoordAttribute1 = gl.getAttribLocation(shaderProgramEdificio, "aTextureCoord");
+		        gl.enableVertexAttribArray(shaderProgramEdificio.textureCoordAttribute1);
+
+		        shaderProgramEdificio.pMatrixUniform = gl.getUniformLocation(shaderProgramEdificio, "uPMatrix");
+		        shaderProgramEdificio.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramEdificio, "uMVMatrix");
+		        shaderProgramEdificio.samplerPB = gl.getUniformLocation(shaderProgramEdificio, "uSamplerPB");
+		        shaderProgramEdificio.samplerPisos = gl.getUniformLocation(shaderProgramEdificio, "uSamplerPisos");
+		        shaderProgramEdificio.Altura = gl.getUniformLocation(shaderProgramEdificio, "uAltura");
+		        shaderProgramEdificio.AlturaPB = gl.getUniformLocation(shaderProgramEdificio, "uAlturaPB");
+		        shaderProgramEdificio.AlturaPisos = gl.getUniformLocation(shaderProgramEdificio, "uAlturaPisos");
+
+				gl.useProgram(glProgram);
 			}
 
 			function makeShader(src, type)
@@ -471,16 +473,18 @@
 		        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, escena.autopista.calle_ida.texture.image);
 		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-		        // gl.generateMipmap(gl.TEXTURE_2D);
+		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+		        gl.generateMipmap(gl.TEXTURE_2D);
 		        gl.bindTexture(gl.TEXTURE_2D, null);
 
 		        gl.bindTexture(gl.TEXTURE_2D, escena.autopista.calle_vuelta.texture);
 		        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 		        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, escena.autopista.calle_vuelta.texture.image);
 		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+						gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+ 					 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+ 					 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 		        gl.generateMipmap(gl.TEXTURE_2D);
 		        gl.bindTexture(gl.TEXTURE_2D, null);*/
 
@@ -564,11 +568,11 @@
 					escena.create_mapa();
 					escena.create_autos();
 
-					comienzo_autopista = escena.autopista.get_comienzo();					
+					comienzo_autopista = escena.autopista.get_comienzo();
 
 					vec3.multiply(comienzo_autopista, comienzo_autopista, [1, -1, 1]);
 					vec3.add(comienzo_autopista, comienzo_autopista, [0, -6, 0]);
-					free_camera_au.pos = comienzo_autopista;					
+					free_camera_au.pos = comienzo_autopista;
 			}
 
 		    function degToRad(degrees) {
@@ -598,7 +602,7 @@
 		    	phi: Math.PI/2
 		    }
 		    var free_camera_st = {
-		    	pos: [0.0, -10.0, -20.0],
+		    	pos: [0.0, -1.0, -20.0],
 		    	theta: Math.PI/2,
 		    	phi: Math.PI/2
 		    }
@@ -789,8 +793,8 @@
 				}else{
 					mat4.multiply(mvMatrix, mvMatrix, cameraMatrixAu);
 
-				}	
-				
+				}
+
 				// mat4.rotate(mvMatrix, mvMatrix, t, [1.0, 0.0, 0.0]);
 				t = t + 0.1;
 
