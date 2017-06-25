@@ -4,6 +4,7 @@ function Vereda(){
 		forma:[],
 		normal:[]
 	}
+	this.camino_perfil = null;
   this.tapa1 = new SupFan();
   this.tapa2 = new SupFan();
 	this.lado = null;
@@ -95,6 +96,8 @@ function Vereda(){
 
 		camino.create(puntos_control);
 
+		this.camino_perfil = camino;
+
     for (var i = 0; i < step; i++){
       var u = (camino.valores_u/step)*i;
       var punto = camino.get_punto(u);
@@ -152,6 +155,36 @@ function Vereda(){
 				mat4.translate(this.traslacion_tapa2, this.traslacion_tapa2, [0,alto,0]);
 	}
 
+	this.create_text_buffer = function(){
+		var buffer_tapas = [];
+		var buffer_superficie = [];
+
+		var step = 100;
+
+		buffer_tapas.push(this.lado);
+		buffer_tapas.push(this.lado);
+
+		for (var i = 0; i < step; i++){
+			var u = (this.camino_perfil.valores_u/step)*i;
+			var punto = this.camino_perfil.get_punto(u);
+			buffer_tapas.push(2*(punto[0]+this.lado/2));
+			buffer_tapas.push(2*(punto[2]+this.lado/2));
+		}
+
+		for (var i = 0; i < 40; i++){
+			for (var j = 0; j < step; j++){
+				var u = (this.camino_perfil.valores_u/step)*j;
+				var punto = this.camino_perfil.get_punto(u);
+				buffer_superficie.push(punto[0]+punto[2]+2*this.lado);
+				buffer_superficie.push(i*0.1);
+			}
+		}
+
+		this.superficie.asign_text_buffer(buffer_superficie);
+		this.tapa1.asign_text_buffer(buffer_tapas);
+		this.tapa2.asign_text_buffer(buffer_tapas);
+	}
+
 	this.draw = function(mvMatrix_scene){
 			var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 
@@ -173,8 +206,14 @@ function Vereda(){
 			mat4.multiply(mvMatrix_tapa1, mvMatrix_total, this.traslacion_tapa1);
 			mat4.multiply(mvMatrix_tapa2, mvMatrix_total, this.traslacion_tapa2);
 
-
       this.tapa1.draw(mvMatrix_tapa1);
       this.tapa2.draw(mvMatrix_tapa2);
+	}
+
+	this.initTexture = function(texture_file){
+		this.tapa1.initTexture(texture_file);
+		this.tapa2.initTexture(texture_file);
+		this.superficie.initTexture(texture_file);
+		this.create_text_buffer();
 	}
 }

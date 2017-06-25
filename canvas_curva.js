@@ -149,6 +149,7 @@ click_regenerar = function(){
 	escena.create_calles();
 	escena.create_mapa();
 	escena.create_autos();
+	escena.setupWebGLBuffers();
 
 	drawScene();
 }

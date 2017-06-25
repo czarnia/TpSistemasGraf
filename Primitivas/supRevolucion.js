@@ -38,7 +38,6 @@ function supRevolucion(){
 				this.grilla.color_buffer.push(color[2] * j/step);
 			};
     };
-    this.grilla.setupWebGLBuffers();
   }
 
   this.draw = function(mvMatrix_total){

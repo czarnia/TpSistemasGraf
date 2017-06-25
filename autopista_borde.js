@@ -60,7 +60,7 @@ function Borde(){
 
 		this.escalado = mat4.create();
 		mat4.identity(this.escalado);
-		
+
 		this.camino = curva_camino;
 
 		this.superficie.create(this.camino, 100.0, this.perfil.forma, this.perfil.normal, [0.66, 0.66, 0.66]);
@@ -101,5 +101,9 @@ function Borde(){
 		mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
 
 		this.superficie.draw(mvMatrix_total);
+	}
+
+	this.setupWebGLBuffers = function(){
+		this.superficie.setupWebGLBuffers();
 	}
 }

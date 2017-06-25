@@ -14,6 +14,11 @@ function Autopista(){
 
 	this.escalado = null;
 
+	this.initTexture = function(texture_file){
+		this.calle_ida.initTexture(texture_file);
+		this.calle_vuelta.initTexture(texture_file);
+	}
+
 	this.create = function(curva_camino, dist_pilares, dist_faroles){
 		this.rotacion = mat4.create();
     mat4.identity(this.rotacion);
@@ -31,7 +36,7 @@ function Autopista(){
 
 		curva_camino.discretizar();
 
-		this.calle_ida.initTexture("Texturas/autopista.jpg");
+
 		this.calle_ida.create_perfil(7, 0.5);
 		this.calle_ida.mover_perfil([-6, 0.75, 0]);
 		this.calle_ida.create(curva_camino, true);
@@ -42,16 +47,16 @@ function Autopista(){
 		this.borde_ida.create(curva_camino);
 		this.borde_ida.translate([0.0, 0.0, sube]);
 
-		this.calle_vuelta.initTexture("Texturas/autopista.jpg");
 		this.calle_vuelta.create_perfil(7, 0.5);
 		this.calle_vuelta.mover_perfil([6, 0.75, 0]);
 		this.calle_vuelta.create(curva_camino, true);
 		this.calle_vuelta.translate([0.0, 0.0, sube + -0.5]);
 
+
 		this.borde_vuelta.create_perfil();
 		this.borde_vuelta.mover_perfil(6);
 		this.borde_vuelta.create(curva_camino);
-		this.borde_vuelta.translate([0.0, 0.0, sube]);		
+		this.borde_vuelta.translate([0.0, 0.0, sube]);
 
 		var medio = curva_camino.discretizaciones[curva_camino.discretizaciones.length / 2];
 		this.punto_medio = curva_camino.get_punto(medio);
@@ -96,8 +101,7 @@ function Autopista(){
 				tan_l = [1.0, 0.0, 0.0];
 				var farol = new Luminaria();
 				farol.create(0.65, 20.0, 10.0, 5.0, 2.0, 1.5);
-				farol.setupWebGLBuffers();
-				farol.scale(0.2, 0.2, 0.2);
+				farol.scale(0.5, 0.5, 0.5);
 
 				vec3.normalize(tan, tan);
 				vec3.normalize(tan_l, tan_l);
@@ -247,5 +251,18 @@ function Autopista(){
 		for (var i = 0; i < this.faroles.length; i++) {
 			this.faroles[i].draw(mvMatrix_total);
 		}
+	}
+
+	this.setupWebGLBuffers = function(){
+		for (var i = 0; i < this.pilares.length; i++) {
+			this.pilares[i].setupWebGLBuffers();
+		}
+		for (var i = 0; i < this.faroles.length; i++) {
+			this.faroles[i].setupWebGLBuffers();
+		}
+		this.calle_ida.setupWebGLBuffers();
+		this.calle_vuelta.setupWebGLBuffers();
+		this.borde_ida.setupWebGLBuffers();
+		this.borde_vuelta.setupWebGLBuffers();
 	}
 }

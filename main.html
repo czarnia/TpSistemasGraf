@@ -139,7 +139,7 @@
 
 	<!-- Vertex shader para texturas EDIFICIOS -->
 	<script id="shader-texture-edif-vs" type="x-shader/x-vertex">
-			attribute vec3 aVertexPosition;			
+			attribute vec3 aVertexPosition;
 			attribute vec2 aTextureCoord;
 
 			uniform mat4 uMVMatrix;
@@ -179,7 +179,7 @@
 			uv.y -= uAlturaPB;
 			uv.y /= uAlturaPisos;
 			gl_FragColor = texture2D(uSamplerPisos, uv);
-		}		
+		}
 	}
 	</script>
 
@@ -524,6 +524,8 @@
 					escena.create_mapa();
 					escena.create_autos();
 
+					escena.setupWebGLBuffers();
+
 					comienzo_autopista = escena.autopista.get_comienzo();
 
 					vec3.multiply(comienzo_autopista, comienzo_autopista, [1, -1, 1]);
@@ -758,7 +760,7 @@
 
 				//PARA SHADER TEXTURAS
 				gl.useProgram(shaderProgramTexturedObject);
-				gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix);				
+				gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix);
 				//--------------------------------
 				//PARA SHADER EDIFICIO
 				gl.useProgram(shaderProgramEdificio);
@@ -771,7 +773,7 @@
 				// ruta.draw();
 /*				edif.tick(t);
 				edif.draw(mvMatrix);*/
-				// escena.tick(t);
+				escena.tick(t);
 				escena.draw(mvMatrix);
 				// calle.draw();
 

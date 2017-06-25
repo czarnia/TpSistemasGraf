@@ -6,11 +6,12 @@ function Calle(){
 		normal:null
 	}
 	this.final_curva = null;
-	this.texture_buffer = null;
 	this.niveles = null;
 
 	this.rotacion = null;
 	this.traslacion = null;
+
+	this.es_autopista = false;
 
 	//Hardcodeo todo para probar despues vamos a valores reales
 	this.create_perfil = function(ancho, alto){
@@ -55,13 +56,6 @@ function Calle(){
 
 		this.path = curva_camino;
 
-		this.superficie.con_textura = true;
-		this.superficie.texture = this.texture;
-		if(es_autopista)
-			this.superficie.texture_buffer = this.create_text_buffer_au();
-		else
-			this.superficie.texture_buffer = this.create_text_buffer_st();
-
 		this.superficie.create(this.path, this.niveles, this.perfil.forma, this.perfil.normal,
 				 [0.0, 0.0, 0.0]);
 
@@ -92,33 +86,29 @@ function Calle(){
 		//MEJORAR, TRATAR DE NO CREAR CURVA CADA VEZ O NO DISCRETIZAR CADA VEZ
 		this.path.create(puntos);
 		this.path.setupWebGLBuffers();
-		this.path.discretizar();
-		this.create(this.path);
+		this.create(this.path, false);
 	}
 
 	this.initTexture = function(texture_file){
-		var aux_texture = gl.createTexture();
-        this.texture = aux_texture;
-        this.texture.image = new Image();
-        // this.texture.image.handleLoadedTexture = this.handleLoadedTexture;
-
-        this.texture.image.onload = function () {
-               handleLoadedTexture(aux_texture, false);
-        }
-        this.texture.image.src = texture_file;
+		var texture_buffer = this.create_text_buffer_au();
+		this.superficie.initTexture(texture_file);
+		this.superficie.asign_text_buffer(texture_buffer);
 	}
 
 	//Crea el texture buffer para la calle de la autopista
 	this.create_text_buffer_au = function(){
-		this.texture_buffer = [];
+		var texture_buffer = [];
 		this.path.discretizar_step(this.niveles);
 
 		var long_curva = this.path.distancias_discret[this.path.distancias_discret.length-1];
 
-		this.texture_buffer = [];
 		for(var i = 0; i < this.niveles; i++){
 			for (var j = 0; j < this.perfil.forma.length; j++) {
-				var v = 10*(this.path.distancias_discret[i]/long_curva);
+				var repeticion = 10;
+				if (this.es_autopista){
+					repeticion += 70;
+				}
+				var v = repeticion*(this.path.distancias_discret[i]/long_curva);
 				switch(j){
 					case 0:
 						var u = 0;
@@ -136,48 +126,16 @@ function Calle(){
 						var u = 0;
 						break;
 				}
-				this.texture_buffer.push(u);
-				this.texture_buffer.push(v);
+				texture_buffer.push(u);
+				texture_buffer.push(v);
 			}
 		}
-		return this.texture_buffer;
+		return texture_buffer;
 	}
 
 	//Crea el texture buffer para la calle entre los edificios
 	this.create_text_buffer_st = function(){
-		this.texture_buffer = [];
-		for(var i = 0; i < this.niveles; i++){
-			for (var j = 0; j < this.perfil.forma.length; j++) {
-				switch(j){
-					case 0:
-						var u = 0;
-						break;
-					case 1:
-						var u = 0.125;
-						break;
-					case 2:
-						var u = 0.125 * 7;
-						break;
-					case 3:
-						var u = 0.125 * 8;
-						break;
-					case 4:
-						var u = 0;
-						break;
-				}
-				if( i < 50){
-					// var punto = this.path.get_punto(nivel);
-					
-					var v = 0.02 * i ;
-				}else{
-					var v = 0.02 * (i - 50) ;
-				}
-				this.texture_buffer.push(u);
-				this.texture_buffer.push(v);
-			}
-		}
-
-		return this.texture_buffer;
+		return this.create_text_buffer_au();
 	}
 
 	this.translate_acum = function(v){
@@ -220,5 +178,9 @@ function Calle(){
 		mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
 
 		this.superficie.draw(mvMatrix_total);
+	}
+
+	this.setupWebGLBuffers = function(){
+		this.superficie.setupWebGLBuffers();
 	}
 }

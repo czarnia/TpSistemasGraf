@@ -105,7 +105,7 @@ function VertexGrid () {
         // hemos creado.
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         // 3. Cargamos datos de las posiciones en el buffer.
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);        
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
 
         if(this.texture_buffer != null){
           this.webgl_texture_buffer = gl.createBuffer();
@@ -134,7 +134,7 @@ function VertexGrid () {
       if(this.texture_buffer != null){
           gl.useProgram(shaderProgramTexturedObject);
           var u_model_view_matrix = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
-          gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);         
+          gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);
 
           var vertexTextureAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aTextureCoord");
           gl.enableVertexAttribArray(vertexTextureAttribute);
@@ -162,14 +162,28 @@ function VertexGrid () {
           gl.enableVertexAttribArray(vertexPositionAttribute);
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
           gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-        }        
+        }
 
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
       // Dibujamos.
       gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
-
-
       gl.useProgram(glProgram);
     }
+
+    this.asign_text_buffer = function(buffer){
+      this.texture_buffer = buffer;
+    }
+
+    this.initTexture = function(texture_file){
+  		var aux_texture = gl.createTexture();
+      this.texture = aux_texture;
+      this.texture.image = new Image();
+
+      this.texture.image.onload = function () {
+        handleLoadedTexture(aux_texture, false);
+      }
+
+      this.texture.image.src = texture_file;
+  	}
 }
