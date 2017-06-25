@@ -85,7 +85,7 @@ function Escena(){
 					manzana.translate([this.lado_manzana/2 - (this.lado_manzana/10) + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
 									this.lado_manzana/2 - (this.lado_manzana/10) + i * (this.lado_manzana + this.ancho_calle)]);
-
+					manzana.initTexture("Texturas/vereda.jpg");
 					this.manzanas.push(manzana);
 					//Crear manzana
 				}
