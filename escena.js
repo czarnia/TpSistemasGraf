@@ -147,7 +147,7 @@ function Escena(){
 		}
 
     for (var i = 0; i < this.manzanas.length; i++) {
-			//this.manzanas[i].tick(t);
+			this.manzanas[i].tick(t);
 		}
 	}
 
