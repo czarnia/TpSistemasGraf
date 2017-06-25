@@ -59,11 +59,6 @@ function Escena(){
 	}
 
 	this.create_mapa = function(){
-/*		this.plano.create(this.lado, this.lado, [0.5, 0.0, 0.0]);
-		this.plano.createIndexBuffer();
-		this.plano.rotate(Math.PI/2, [1.0, 0.0, 0.0]);
-		this.plano.translate([this.lado/2, 0.0, this.lado/2]);*/
-
 		this.plazas = [];
 		this.manzanas = [];
 

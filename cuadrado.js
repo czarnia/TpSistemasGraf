@@ -304,8 +304,8 @@ function Cuadrado(){
           gl.uniform1i(shaderProgramEdificio.samplerPisos, 1);
 
           gl.uniform1f(shaderProgramEdificio.Altura, this.y_total);
-          gl.uniform1f(shaderProgramEdificio.AlturaPB, this.y_total / 5);
-          gl.uniform1f(shaderProgramEdificio.AlturaPisos, (this.y_total - this.y_total / 5) / 2);
+          gl.uniform1f(shaderProgramEdificio.AlturaPB, 1);
+          gl.uniform1f(shaderProgramEdificio.AlturaPisos, (this.y_total - 1) / 2);
 
           var vertexPositionAttribute = gl.getAttribLocation(shaderProgramEdificio, "aVertexPosition");
           gl.enableVertexAttribArray(vertexPositionAttribute);

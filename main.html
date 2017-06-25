@@ -162,7 +162,6 @@
 	<script id="shader-texture-edif-fs" type="x-shader/x-fragment">
 	precision mediump float;
 	varying vec2 vTextureCoord;
-	// varying vec2 vTextureCoord2;
 
 	uniform float uAlturaPB;
 	uniform float uAlturaPisos;
@@ -468,26 +467,6 @@
 			}
 
 			this.handleLoadedTexture = function(texture, con_mipmap){
-				/*gl.bindTexture(gl.TEXTURE_2D, escena.autopista.calle_ida.texture);
-		        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-		        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, escena.autopista.calle_ida.texture.image);
-		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-		        gl.generateMipmap(gl.TEXTURE_2D);
-		        gl.bindTexture(gl.TEXTURE_2D, null);
-
-		        gl.bindTexture(gl.TEXTURE_2D, escena.autopista.calle_vuelta.texture);
-		        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-		        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, escena.autopista.calle_vuelta.texture.image);
-		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-						gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
- 					 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
- 					 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-		        gl.generateMipmap(gl.TEXTURE_2D);
-		        gl.bindTexture(gl.TEXTURE_2D, null);*/
-
 		        gl.bindTexture(gl.TEXTURE_2D, texture);
 		        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 		        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
@@ -507,9 +486,6 @@
 			var comienzo_autopista = [];
 
 			function setupBuffers(){
-/*					cuadrado = new Edificio();
-					cuadrado.create(2,2,1.5);
-					cuadrado.setupWebGLBuffers();*/
 					var puntos = [];
 					puntos.push([0.0, 0.0, 0.0]);
 					puntos.push([0.0, 0.0, 0.0]);
