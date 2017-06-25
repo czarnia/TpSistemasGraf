@@ -108,7 +108,7 @@ function Escena(){
 		this.autopista.create(camino, dist_pilares, dist_faroles);
 		this.autopista.scale(this.lado/final, this.lado/final, this.lado/final);
 		this.autopista.rotate([1.0, 0.0, 0.0], Math.PI / 2);
-		this.autopista.initTexture("Texturas/autopista.jpg", "Texturas/uv_grid2.jpg");
+		this.autopista.initTexture("Texturas/autopista.jpg", "Texturas/concreto.jpg");
 
 		this.esc_autopista = [this.lado/final, this.lado/final, this.lado/final];
 	}

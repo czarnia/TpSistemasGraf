@@ -22,8 +22,8 @@ function Autopista(){
 			this.pilares[i].initTexture(texture_file_estructura);
 		}
 
-		/*this.borde_ida.initTexture(texture_file_estructura);
-		this.borde_vuelta.initTexture(texture_file_estructura);*/
+		this.borde_ida.initTexture(texture_file_estructura);
+		this.borde_vuelta.initTexture(texture_file_estructura);
 	}
 
 	this.create = function(curva_camino, dist_pilares, dist_faroles){

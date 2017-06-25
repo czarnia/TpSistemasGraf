@@ -130,7 +130,7 @@ function PilarAutopista(){
 		distancias_discret_tramos.push(dist_tramo);
 
 		for (var j = 1; j < this.perfil.length; j++){
-			dist_tramo += this.perfil[j-1].distancias_discret[this.perfil[j].distancias_discret.length-1];
+			dist_tramo += this.perfil[j-1].distancias_discret[this.perfil[j-1].distancias_discret.length-1];
 			distancias_discret_tramos.push(dist_tramo);
 		}
 

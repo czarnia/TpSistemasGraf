@@ -116,6 +116,13 @@ function Borde(){
 	this.create_text_buffer = function(){
 		var texture_buffer = [];
 
+		for (var i = 0; i < 100; i++){
+			for (var j = 0; j < this.perfil.forma.length; j++){
+				var punto = this.perfil.forma[j];
+				texture_buffer.push(punto[0]+punto[1]+6.5);
+				texture_buffer.push(i*0.3);
+			}
+		}
 		return texture_buffer;
 	}
 }
