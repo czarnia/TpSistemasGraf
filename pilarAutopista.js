@@ -104,4 +104,61 @@ function PilarAutopista(){
 	this.setupWebGLBuffers = function(){
 		this.superficie.setupWebGLBuffers();
 	}
+
+	this.initTexture = function(texture_file){
+		var texture_buffer = this.create_text_buffer();
+		this.superficie.initTexture(texture_file);
+		this.superficie.asign_text_buffer(texture_buffer);
+	}
+
+	this.create_text_buffer = function(){
+		var texture_buffer = [];
+
+		for (var i = 0; i < this.perfil.length; i++){
+			this.perfil[i].discretizar_step(40);
+		}
+
+		var repeticion = 500;
+		var long_curva = 0;
+
+		for (var j = 0; j < this.perfil.length; j++){
+			long_curva += this.perfil[j].distancias_discret[this.perfil[j].distancias_discret.length-1];
+		}
+
+		var distancias_discret_tramos = [];
+		var dist_tramo = 0;
+		distancias_discret_tramos.push(dist_tramo);
+
+		for (var j = 1; j < this.perfil.length; j++){
+			dist_tramo += this.perfil[j-1].distancias_discret[this.perfil[j].distancias_discret.length-1];
+			distancias_discret_tramos.push(dist_tramo);
+		}
+
+		var p2 = this.perfil[0].get_punto(0);
+		var v1 = vec3.fromValues(-20,83,0.0);
+		var v2 = vec3.fromValues(p2[0], p2[1], p2[2]);
+		var dist_ini = vec3.distance(v1, v2);
+
+		long_curva += dist_ini;
+
+		for (var i = 0; i < 60; i++){
+			for (var j = 0; j < this.perfil.length+1; j++){
+				if (j == 0){
+					var v = dist_ini/long_curva;
+					var u = i/60;
+					texture_buffer.push(u);
+					texture_buffer.push(v);
+				}else{
+					for (var k = 0; k < 40; k++){
+						var v = (this.perfil[j-1].distancias_discret[k]+dist_ini+distancias_discret_tramos[j-1])/long_curva;
+						var u = i/60;
+
+						texture_buffer.push(u);
+						texture_buffer.push(v);
+					}
+				}
+			}
+		}
+		return texture_buffer;
+	}
 }

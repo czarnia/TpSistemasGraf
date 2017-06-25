@@ -106,4 +106,16 @@ function Borde(){
 	this.setupWebGLBuffers = function(){
 		this.superficie.setupWebGLBuffers();
 	}
+
+	this.initTexture = function(texture_file){
+		var texture_buffer = this.create_text_buffer();
+		this.superficie.initTexture(texture_file);
+		this.superficie.asign_text_buffer(texture_buffer);
+	}
+
+	this.create_text_buffer = function(){
+		var texture_buffer = [];
+
+		return texture_buffer;
+	}
 }

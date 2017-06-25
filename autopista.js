@@ -14,9 +14,16 @@ function Autopista(){
 
 	this.escalado = null;
 
-	this.initTexture = function(texture_file){
-		this.calle_ida.initTexture(texture_file);
-		this.calle_vuelta.initTexture(texture_file);
+	this.initTexture = function(texture_file_calle, texture_file_estructura){
+		this.calle_ida.initTexture(texture_file_calle);
+		this.calle_vuelta.initTexture(texture_file_calle);
+
+		for (var i = 0; i < this.pilares.length; i++){
+			this.pilares[i].initTexture(texture_file_estructura);
+		}
+
+		/*this.borde_ida.initTexture(texture_file_estructura);
+		this.borde_vuelta.initTexture(texture_file_estructura);*/
 	}
 
 	this.create = function(curva_camino, dist_pilares, dist_faroles){

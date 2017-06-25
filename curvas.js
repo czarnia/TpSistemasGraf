@@ -3,6 +3,9 @@ function curvaBesier(){
     this.puntosDeControl = null;
     this.paso = null;
 
+    this.discretizaciones = null;
+    this.distancias_discret = null;
+
     //Defino las bases
     this.base0 = function(u) {
       return (1-u)*(1-u)*(1-u);
@@ -140,6 +143,39 @@ function curvaBesier(){
 
           // Dibujamos.
         gl.drawElements(gl.LINE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
+    }
+
+    this.discretizar = function(){
+        this.discretizaciones = [];
+        this.distancias_discret = [];
+        var aux = vec3.create();
+        var ant = vec3.fromValues(0.0, 0.0, 0.0);
+        var dist = 0;
+        for (var i = 0; i < (this.valores_u * 10); i += 1) {
+            aux = this.get_punto(i/10);
+            this.discretizaciones.push(i/10);
+            dist += vec3.distance(ant, aux);
+            this.distancias_discret.push(dist);
+            ant = aux;
+        }
+    }
+
+    this.discretizar_step = function(step){
+        this.discretizaciones = [];
+        this.distancias_discret = [];
+        var aux = vec3.create();
+        var ant = this.get_punto(0);
+        var dist = 0;
+        this.distancias_discret.push(dist);
+
+        for (var i = 1; i < step; i += 1) {
+            var u = (camino.valores_u/step)*i;
+            aux = this.get_punto(u);
+            this.discretizaciones.push(u);
+            dist += vec3.distance(vec3.fromValues(ant[0], ant[1], ant[2]), vec3.fromValues(aux[0], aux[1], aux[2]));
+            this.distancias_discret.push(dist);
+            ant = aux;
+        }
     }
 
 }
