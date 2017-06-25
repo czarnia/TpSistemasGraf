@@ -62,8 +62,7 @@ function Escena(){
 /*		this.plano.create(this.lado, this.lado, [0.5, 0.0, 0.0]);
 		this.plano.createIndexBuffer();
 		this.plano.rotate(Math.PI/2, [1.0, 0.0, 0.0]);
-		this.plano.translate([this.lado/2, 0.0, this.lado/2]);
-		this.plano.setupWebGLBuffers();*/
+		this.plano.translate([this.lado/2, 0.0, this.lado/2]);*/
 
 		this.plazas = [];
 		this.manzanas = [];
@@ -74,13 +73,11 @@ function Escena(){
 					 i * (this.lado_manzana + this.ancho_calle), this.lado_manzana) == true){
 					//Crear plaza
 					var plaza = new Plaza();
-					//plaza.initTexture("Texturas/pasto.jpg");
 					plaza.create(this.lado_manzana, 0.5);
-					//PREGUNTAR ANA CUANTO TRASLADAR
 					plaza.translate([this.lado_manzana/2 - (this.lado_manzana/10) + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
 									this.lado_manzana/2 - (this.lado_manzana/10) + i * (this.lado_manzana + this.ancho_calle)]);
-
+					plaza.initTexture("Texturas/plaza.jpg");
 					this.plazas.push(plaza);
 				}else{
 					var manzana = new Manzana();
@@ -150,7 +147,7 @@ function Escena(){
 		}
 
     for (var i = 0; i < this.manzanas.length; i++) {
-			this.manzanas[i].tick(t);
+			//this.manzanas[i].tick(t);
 		}
 	}
 
