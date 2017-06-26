@@ -4,7 +4,7 @@ function VertexGrid () {
     this.cols = null;
     this.rows = null;
     this.index_buffer = null;
-    this.texture = null;
+    this.textures = [];
 
     this.position_buffer = null;
     this.color_buffer = null;
@@ -126,6 +126,36 @@ function VertexGrid () {
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
     }
 
+    this.drawCalle = function(mvMatrix_total, long_calle, lado_manzana, lado_cruce){
+      gl.useProgram(shaderProgramCalle);
+
+      gl.uniformMatrix4fv(shaderProgramCalle.ModelViewMatrixUniform, false, mvMatrix_total);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
+      gl.vertexAttribPointer(shaderProgramCalle.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, this.textures[0]);
+      gl.uniform1i(shaderProgramCalle.samplerCalle, 0);
+
+      gl.activeTexture(gl.TEXTURE1);
+      gl.bindTexture(gl.TEXTURE_2D, this.textures[1]);
+      gl.uniform1i(shaderProgramCalle.samplerCruce, 1);
+
+      gl.uniform1f(shaderProgramCalle.largo, long_calle);
+      gl.uniform1f(shaderProgramCalle.finManzana, lado_manzana);
+      gl.uniform1f(shaderProgramCalle.finCruce, lado_cruce);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+      gl.vertexAttribPointer(shaderProgramCalle.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+
+      // Dibujamos.
+      gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
+      gl.useProgram(glProgram);
+    }
+
     // Esta funci�n es la que se encarga de configurar todo lo necesario
     // para dibujar el VertexGrid.
     // En el caso del ejemplo puede observarse que la �ltima l�nea del m�todo
@@ -133,23 +163,19 @@ function VertexGrid () {
     this.drawVertexGrid = function(mvMatrix_total){
       if(this.texture_buffer != null){
           gl.useProgram(shaderProgramTexturedObject);
-          var u_model_view_matrix = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
-          gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);
 
-          var vertexTextureAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aTextureCoord");
-          gl.enableVertexAttribArray(vertexTextureAttribute);
+          gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix_total);
+
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
-          gl.vertexAttribPointer(vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
+          gl.vertexAttribPointer(shaderProgramTexturedObject.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
 
           gl.activeTexture(gl.TEXTURE0);
-          gl.bindTexture(gl.TEXTURE_2D, this.texture);
+          gl.bindTexture(gl.TEXTURE_2D, this.textures[0]);
           gl.uniform1i(shaderProgramTexturedObject.samplerUniform, 0);
 
-          var vertexPositionAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aVertexPosition");
-          gl.enableVertexAttribArray(vertexPositionAttribute);
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-          gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-        }else{
+          gl.vertexAttribPointer(shaderProgramTexturedObject.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+      }else{
           var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 
           gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);
@@ -177,13 +203,14 @@ function VertexGrid () {
 
     this.initTexture = function(texture_file){
   		var aux_texture = gl.createTexture();
-      this.texture = aux_texture;
-      this.texture.image = new Image();
+      // this.texture = aux_texture;
+      aux_texture.image = new Image();
 
-      this.texture.image.onload = function () {
+      aux_texture.image.onload = function () {
         handleLoadedTexture(aux_texture, false);
       }
 
-      this.texture.image.src = texture_file;
+      aux_texture.image.src = texture_file;
+      this.textures.push(aux_texture);
   	}
 }

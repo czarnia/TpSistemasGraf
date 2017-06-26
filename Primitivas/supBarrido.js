@@ -108,6 +108,10 @@ function supBarrido(){
 		this.grilla.drawVertexGrid(mvMatrix_total);
 	}
 
+	this.drawCalle = function(mvMatrix_total, long_calle, lado_manzana, lado_cruce){
+		this.grilla.drawCalle(mvMatrix_total, long_calle, lado_manzana, lado_cruce);
+	}
+
 	this.initTexture = function(texture_file){
 		this.grilla.initTexture(texture_file);
 	}
