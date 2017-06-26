@@ -49,4 +49,12 @@ function supRevolucion(){
   this.setupWebGLBuffers = function(){
     this.grilla.setupWebGLBuffers();
   }
+
+  this.initTexture = function(texture_file){
+		this.grilla.initTexture(texture_file);
+	}
+
+	this.asign_text_buffer = function(buffer){
+		this.grilla.asign_text_buffer(buffer);
+	}
 }

@@ -73,7 +73,7 @@ function Escena(){
 					plaza.translate([this.lado_manzana/2 - (this.lado_manzana/10) + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
 									this.lado_manzana/2 - (this.lado_manzana/10) + i * (this.lado_manzana + this.ancho_calle)]);
-					plaza.initTexture("Texturas/plaza.jpg");
+					//plaza.initTexture("Texturas/plaza.jpg");
 					this.plazas.push(plaza);
 				}else{
 					var manzana = new Manzana();
@@ -81,7 +81,7 @@ function Escena(){
 					manzana.translate([this.lado_manzana/2 - (this.lado_manzana/10) + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
 									this.lado_manzana/2 - (this.lado_manzana/10) + i * (this.lado_manzana + this.ancho_calle)]);
-					manzana.initTexture("Texturas/vereda.jpg");
+					//manzana.initTexture("Texturas/vereda.jpg");
 					this.manzanas.push(manzana);
 					//Crear manzana
 				}
@@ -109,7 +109,7 @@ function Escena(){
 		this.autopista.create(camino, dist_pilares, dist_faroles);
 		this.autopista.scale(this.lado/final, this.lado/final, this.lado/final);
 		this.autopista.rotate([1.0, 0.0, 0.0], Math.PI / 2);
-		this.autopista.initTexture("Texturas/autopista.jpg");
+		this.autopista.initTexture("Texturas/autopista.jpg", "Texturas/concreto.jpg");
 
 		this.esc_autopista = [this.lado/final, this.lado/final, this.lado/final];
 	}
@@ -139,11 +139,11 @@ function Escena(){
 
 	this.tick = function(t){
 		for (var i = 0; i < this.autos.length; i++) {
-			this.autos[i].tick(t);
+			//this.autos[i].tick(t);
 		}
 
     for (var i = 0; i < this.manzanas.length; i++) {
-			this.manzanas[i].tick(t);
+			//this.manzanas[i].tick(t);
 		}
 	}
 

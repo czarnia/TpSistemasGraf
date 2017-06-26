@@ -104,12 +104,14 @@ function Calle(){
 
 		var long_curva = this.path.distancias_discret[this.path.distancias_discret.length-1];
 
+		var repeticion = 80;
+
+		if (!this.es_autopista){
+			repeticion += 70;
+		}
+
 		for(var i = 0; i < this.niveles; i++){
 			for (var j = 0; j < this.perfil.forma.length; j++) {
-				var repeticion = 10;
-				if (this.es_autopista){
-					repeticion += 70;
-				}
 				var v = repeticion*(this.path.distancias_discret[i]/long_curva);
 				switch(j){
 					case 0:
@@ -128,6 +130,7 @@ function Calle(){
 						var u = 0;
 						break;
 				}
+
 				texture_buffer.push(u);
 				texture_buffer.push(v);
 			}
