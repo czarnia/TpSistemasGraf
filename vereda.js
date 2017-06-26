@@ -5,8 +5,8 @@ function Vereda(){
 		normal:[]
 	}
 	this.camino_perfil = null;
-  this.tapa1 = new SupFan();
-  this.tapa2 = new SupFan();
+	this.tapa1 = new SupFan();
+	this.tapa2 = new SupFan();
 	this.lado = null;
 	this.alto = null;
 

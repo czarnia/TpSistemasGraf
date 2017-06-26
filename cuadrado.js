@@ -277,7 +277,6 @@ function Cuadrado(){
   this.draw = function(mvMatrix_scene){
     if(this.textures.length > 0){
           gl.useProgram(shaderProgramEdificio);
-          var u_model_view_matrix = gl.getUniformLocation(shaderProgramEdificio, "uMVMatrix");
 
           var mvMatrix_cuadrado = mat4.create();
           mat4.identity(mvMatrix_cuadrado);
@@ -288,12 +287,10 @@ function Cuadrado(){
           mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_cuadrado);
           mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
 
-          gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);       
+          gl.uniformMatrix4fv(shaderProgramEdificio.ModelViewMatrixUniform, false, mvMatrix_total);       
 
-          var vertexTextureAttribute = gl.getAttribLocation(shaderProgramEdificio, "aTextureCoord");
-          gl.enableVertexAttribArray(vertexTextureAttribute);
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
-          gl.vertexAttribPointer(vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
+          gl.vertexAttribPointer(shaderProgramEdificio.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
 
           gl.activeTexture(gl.TEXTURE0);
           gl.bindTexture(gl.TEXTURE_2D, this.textures[0]);
@@ -307,10 +304,8 @@ function Cuadrado(){
           gl.uniform1f(shaderProgramEdificio.AlturaPB, 1);
           gl.uniform1f(shaderProgramEdificio.AlturaPisos, (this.y_total - 1) / 2);
 
-          var vertexPositionAttribute = gl.getAttribLocation(shaderProgramEdificio, "aVertexPosition");
-          gl.enableVertexAttribArray(vertexPositionAttribute);
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-          gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+          gl.vertexAttribPointer(shaderProgramEdificio.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
         }else{
           var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 

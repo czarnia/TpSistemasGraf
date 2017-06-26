@@ -7,14 +7,16 @@ function Calle(){
 	}
 	this.final_curva = null;
 	this.niveles = null;
+	this.lado_manzana = null;
+	this.ancho = null;
 
 	this.rotacion = null;
 	this.traslacion = null;
 
 	this.es_autopista = false;
 
-	//Hardcodeo todo para probar despues vamos a valores reales
 	this.create_perfil = function(ancho, alto){
+		this.ancho = ancho;
 		this.perfil.forma = [];
 		this.perfil.normal = [];
 		this.niveles = 100;
@@ -25,12 +27,6 @@ function Calle(){
 		this.perfil.forma.push([ancho / 2, -alto / 2, 0.0]);
 		this.perfil.forma.push([-ancho / 2, -alto / 2, 0.0]);
 
-/*		this.perfil.forma.push([-3.0, 0.5, 0.0]);
-		this.perfil.forma.push([-2.5, 1.0, 0.0]);
-		this.perfil.forma.push([2.5, 1.0, 0.0]);
-		this.perfil.forma.push([3.0, 0.5, 0.0]);
-		this.perfil.forma.push([-3.0, 0.5, 0.0]);*/
-
 		//Para que matchee con la tangente de la curva
 		this.perfil.normal.push([0.0, 0.0, 1.0]);
 		//Para que matchee con la normal de la curva
@@ -38,13 +34,14 @@ function Calle(){
 	}
 
 	this.mover_perfil = function(mov){
-		//var v_mov = vec3.fromValues(mov, 0, 0);
 		for (var i = 0; i < this.perfil.forma.length; i++) {
             vec3.add(this.perfil.forma[i], mov, this.perfil.forma[i]);
 		}
 	}
 
 	this.create = function(curva_camino, es_autopista){
+		this.es_autopista = es_autopista;
+		
 		this.rotacion = mat4.create();
 		mat4.identity(this.rotacion);
 
@@ -62,8 +59,11 @@ function Calle(){
 		this.final_curva = this.superficie.final;
 	}
 
-	this.create_calle_escena = function(dimension, final){
+	this.create_calle_escena = function(dimension, final, lado_manzana){
 		var puntos = [];
+		this.niveles = 50;
+		this.lado_manzana = lado_manzana;
+		this.dimension = dimension;
 
 		puntos.push([0.0, 0.0, 0.0]);
 		puntos.push([0.0, 0.0, 0.0]);
@@ -83,14 +83,16 @@ function Calle(){
 		puntos.push(final);
 		puntos.push(final);
 
-		//MEJORAR, TRATAR DE NO CREAR CURVA CADA VEZ O NO DISCRETIZAR CADA VEZ
 		this.path.create(puntos);
 		this.path.setupWebGLBuffers();
 		this.create(this.path, false);
 	}
 
 	this.initTexture = function(texture_file){
-		var texture_buffer = this.create_text_buffer_au();
+		if(this.es_autopista)
+			var texture_buffer = this.create_text_buffer_au();
+		else
+			var texture_buffer = this.create_text_buffer_st();
 		this.superficie.initTexture(texture_file);
 		this.superficie.asign_text_buffer(texture_buffer);
 	}
@@ -135,7 +137,53 @@ function Calle(){
 
 	//Crea el texture buffer para la calle entre los edificios
 	this.create_text_buffer_st = function(){
-		return this.create_text_buffer_au();
+		var texture_buffer = [];
+		this.path.discretizar_step(this.niveles);
+
+		// var k = 1, k_ant = 0;
+		var long_curva = this.path.distancias_discret[this.path.distancias_discret.length-1];
+
+		for(var i = 0; i < this.niveles; i++){
+			for (var j = 0; j < this.perfil.forma.length; j++) {
+				var repeticion = 1;
+
+				/*if(this.path.distancias_discret[i] <= (this.lado_manzana * k)){
+					var dif = this.path.distancias_discret[i] - (this.lado_manzana + this.ancho) * (k - 1);
+					var v = repeticion*(dif/this.lado_manzana);
+				}else if(this.path.distancias_discret[i] <= ((this.lado_manzana + this.ancho) * k)){
+					var dif = this.path.distancias_discret[i] - this.lado_manzana * k;
+					var v = dif / this.ancho;
+				}else{
+					k++;
+					var dif = this.path.distancias_discret[i] - (this.lado_manzana + this.ancho) * (k - 1);
+					var v = repeticion*(dif/this.lado_manzana);
+				}*/
+				var v = repeticion*(this.path.distancias_discret[i]/*/long_curva*/);
+
+				switch(j){
+					case 0:
+						var u = 0;
+						break;
+					case 1:
+						var u = 0.125;
+						break;
+					case 2:
+						var u = 0.125 * 7;
+						break;
+					case 3:
+						var u = 0.125 * 8;
+						break;
+					case 4:
+						var u = 0;
+						break;
+				}
+				texture_buffer.push(u);
+				texture_buffer.push(v);
+			}
+		}
+		this.texture_buffer = texture_buffer;
+		return texture_buffer;
+		// return this.create_text_buffer_au();
 	}
 
 	this.translate_acum = function(v){
@@ -165,19 +213,58 @@ function Calle(){
 		this.superficie.scale(_x, _y, _z);
 	}
 
+	this.debug_shader = function(){
+		var k = 1;
+		var v = 0;
+		for(var i = 1; i < this.texture_buffer.length; i+=2){
+			v = this.texture_buffer[i] * this.dimension;
+			if((this.texture_buffer[i] * this.dimension) <= (this.lado_manzana * k + this.ancho * (k - 1.0))){
+				v -= (this.lado_manzana + this.ancho) * (k - 1.0);
+				v /= this.lado_manzana;
+				// uv.x /= 0.25 / uAlturaPB;
+				// gl_FragColor = texture2D(uSamplerCalle, uv);
+			}else if((this.texture_buffer[i] * this.dimension) <= ((this.lado_manzana + this.ancho) * k)){
+				v -= ((this.lado_manzana * k) + this.ancho * (k - 1.0));
+				v /= this.ancho;
+				// gl_FragColor = texture2D(uSamplerCruce, uv);
+			}else{
+				k++;
+				v -= (this.lado_manzana + this.ancho) * (k - 1.0);
+				v /= this.lado_manzana;
+				// uv.x /= 0.25 / uAlturaPB;
+				// gl_FragColor = texture2D(uSamplerCalle, uv);
+			}
+			console.log("V: ", v);
+		}
+	}
+
 	this.draw = function(mvMatrix_scene){
 		var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 
-	  var mvMatrix_calle = mat4.create();
-	  mat4.identity(mvMatrix_calle);
-	  mat4.multiply(mvMatrix_calle, this.traslacion, this.rotacion);
+		var mvMatrix_calle = mat4.create();
+		mat4.identity(mvMatrix_calle);
+		mat4.multiply(mvMatrix_calle, this.traslacion, this.rotacion);
 
-	  var mvMatrix_total = mat4.create();
-	  mat4.identity(mvMatrix_total);
-	  mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_calle);
+		var mvMatrix_total = mat4.create();
+		mat4.identity(mvMatrix_total);
+		mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_calle);
 		mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
 
 		this.superficie.draw(mvMatrix_total);
+	}
+
+	//No necesario hacer otra al final
+	this.drawCalle = function(mvMatrix_scene, long_calle, lado_manzana, lado_cruce){
+		var mvMatrix_calle = mat4.create();
+		mat4.identity(mvMatrix_calle);
+		mat4.multiply(mvMatrix_calle, this.traslacion, this.rotacion);
+
+		var mvMatrix_total = mat4.create();
+		mat4.identity(mvMatrix_total);
+		mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_calle);
+		mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
+
+		this.superficie.drawCalle(mvMatrix_total, long_calle, lado_manzana, lado_cruce);
 	}
 
 	this.setupWebGLBuffers = function(){

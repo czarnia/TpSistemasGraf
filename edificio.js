@@ -39,8 +39,7 @@ function Edificio(){
 
   //Primero va la de PB y despues la de los demas pisos
   this.initTexture = function(texture_file){
-    var aux_texture = gl.createTexture();
-    var texture = aux_texture;
+    var texture = gl.createTexture();
     texture.image = new Image();
 
     texture.image.onload = function () {

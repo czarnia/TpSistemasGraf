@@ -183,6 +183,83 @@
 	}
 	</script>
 
+	<!-- Vertex shader para texturas CALLES -->
+	<script id="shader-texture-calle-vs" type="x-shader/x-vertex">
+			attribute vec3 aVertexPosition;
+			attribute vec2 aTextureCoord;
+
+			uniform mat4 uMVMatrix;
+			uniform mat4 uPMatrix;
+			uniform float uAltura;
+
+			varying vec2 vTextureCoord;
+
+			void main(void) {
+					// vec3 aux = aVertexPosition;
+					// aux.y *= uAltura; //probar en y sino
+					gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+					vTextureCoord = aTextureCoord;
+					// vTextureCoord.y *= uAltura;
+			}
+
+	</script>
+
+	<!--Fragment shader Texturas CALLES-->
+	<script id="shader-texture-calle-fs" type="x-shader/x-fragment">
+	precision mediump float;
+	varying vec2 vTextureCoord;
+
+	uniform float uFinManzana;
+	uniform float uFinCruce;
+	uniform sampler2D uSamplerCalle;
+	uniform sampler2D uSamplerCruce;
+
+	void main(void) {
+		vec2 uv = vTextureCoord;
+		float k = 1.0;
+		//Agregar if de acuerdo a la textura que uso
+/*		if(k == 0){
+			// uv.y /= uFinManzana;
+			// uv.x /= 0.25 / uAlturaPB;
+			// if((k == 2) || (k == 5) || (k == 8) || (k == 11) || (k == 14))
+			// 	gl_FragColor = texture2D(uSamplerCruce, uv);
+			// else
+			// 	gl_FragColor = texture2D(uSamplerCalle, uv);
+			gl_FragColor = texture2D(uSamplerCalle, uv);
+			if(vTextureCoord.y == 2.0)
+				k = 1;
+		}else{
+			// k++;
+			// uv.y -= uFinManzana;
+			// uv.y /= uFinCruce;
+			// if((k == 2) || (k == 5) || (k == 8) || (k == 11) || (k == 14))
+			// 	gl_FragColor = texture2D(uSamplerCruce, uv);
+			// else
+			// 	gl_FragColor = texture2D(uSamplerCalle, uv);
+			if(vTextureCoord.y > 1.0){
+				k = 0;
+				gl_FragColor = texture2D(uSamplerCalle, uv);
+			}else{
+				gl_FragColor = texture2D(uSamplerCruce, uv);			
+			}
+		}*/
+		if(vTextureCoord.y <= (uFinManzana * k + uFinCruce * (k - 1.0))){
+			uv.y -= (uFinManzana + uFinCruce) * (k - 1.0);
+			uv.y /= uFinManzana;
+			gl_FragColor = texture2D(uSamplerCalle, uv);
+		}else if(vTextureCoord.y <= ((uFinManzana + uFinCruce) * k)){
+			uv.y -= ((uFinManzana * k) + uFinCruce * (k - 1.0));
+			uv.y /= uFinCruce;
+			gl_FragColor = texture2D(uSamplerCruce, uv);
+		}else{
+			k++;
+			uv.y -= (uFinManzana + uFinCruce) * (k - 1.0);
+			uv.y /= uFinManzana;
+			gl_FragColor = texture2D(uSamplerCalle, uv);
+		}
+	}
+	</script>
+
 	<!-- Vertex shader para el canvas de la curva -->
 	<script id="shader-canvas-curva" type="x-shader/x-vertex">
 		// Los atributos son caracter�sticas propias de cada vertice.
@@ -327,32 +404,32 @@
 
 			function initShaders()
 			{
-					// Obtenemos los shaders ya compilados
-					var fragmentShader = getShader(gl, "shader-fs");
-					var vertexShader = getShader(gl, "shader-vs");
+				// Obtenemos los shaders ya compilados
+				var fragmentShader = getShader(gl, "shader-fs");
+				var vertexShader = getShader(gl, "shader-vs");
 
-					// Creamos un programa de shaders de WebGL.
-					glProgram = gl.createProgram();
+				// Creamos un programa de shaders de WebGL.
+				glProgram = gl.createProgram();
 
-					// Asociamos cada shader compilado al programa.
-					gl.attachShader(glProgram, vertexShader);
-					gl.attachShader(glProgram, fragmentShader);
+				// Asociamos cada shader compilado al programa.
+				gl.attachShader(glProgram, vertexShader);
+				gl.attachShader(glProgram, fragmentShader);
 
-					// Linkeamos los shaders para generar el programa ejecutable.
-					gl.linkProgram(glProgram);
+				// Linkeamos los shaders para generar el programa ejecutable.
+				gl.linkProgram(glProgram);
 
-					// Chequeamos y reportamos si hubo alg�n error.
-					if (!gl.getProgramParameter(glProgram, gl.LINK_STATUS)) {
-						alert("Unable to initialize the shader program: " +
-									gl.getProgramInfoLog(glProgram));
-						return null;
-					}
+				// Chequeamos y reportamos si hubo alg�n error.
+				if (!gl.getProgramParameter(glProgram, gl.LINK_STATUS)) {
+					alert("Unable to initialize the shader program: " +
+								gl.getProgramInfoLog(glProgram));
+					return null;
+				}
 
-					// Depende del tipo de objeto, el programa que uso
-					gl.useProgram(glProgram);
+				// Depende del tipo de objeto, el programa que uso
+				gl.useProgram(glProgram);
 
-					//SHADERS DE TEXTURAS
-					var fragmentShaderTexturedObj = getShader(gl, "shader-texture-fs");
+				//SHADERS DE TEXTURAS
+				var fragmentShaderTexturedObj = getShader(gl, "shader-texture-fs");
 			    var vertexShaderTexturedObj = getShader(gl, "shader-texture-vs");
 
 			    shaderProgramTexturedObject = gl.createProgram();
@@ -395,8 +472,8 @@
 		        shaderProgramEdificio.vertexPositionAttribute = gl.getAttribLocation(shaderProgramEdificio, "aVertexPosition");
 		        gl.enableVertexAttribArray(shaderProgramEdificio.vertexPositionAttribute);
 
-		        shaderProgramEdificio.textureCoordAttribute1 = gl.getAttribLocation(shaderProgramEdificio, "aTextureCoord");
-		        gl.enableVertexAttribArray(shaderProgramEdificio.textureCoordAttribute1);
+		        shaderProgramEdificio.textureCoordAttribute = gl.getAttribLocation(shaderProgramEdificio, "aTextureCoord");
+		        gl.enableVertexAttribArray(shaderProgramEdificio.textureCoordAttribute);
 
 		        shaderProgramEdificio.pMatrixUniform = gl.getUniformLocation(shaderProgramEdificio, "uPMatrix");
 		        shaderProgramEdificio.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramEdificio, "uMVMatrix");
@@ -405,6 +482,35 @@
 		        shaderProgramEdificio.Altura = gl.getUniformLocation(shaderProgramEdificio, "uAltura");
 		        shaderProgramEdificio.AlturaPB = gl.getUniformLocation(shaderProgramEdificio, "uAlturaPB");
 		        shaderProgramEdificio.AlturaPisos = gl.getUniformLocation(shaderProgramEdificio, "uAlturaPisos");
+
+		        //SHADERS DE TEXTURAS CALLE
+				var fragmentShaderCalle = getShader(gl, "shader-texture-calle-fs");
+		        var vertexShaderCalle = getShader(gl, "shader-texture-calle-vs");
+
+		        shaderProgramCalle = gl.createProgram();
+		        gl.attachShader(shaderProgramCalle, vertexShaderCalle);
+		        gl.attachShader(shaderProgramCalle, fragmentShaderCalle);
+		        gl.linkProgram(shaderProgramCalle);
+
+		        if (!gl.getProgramParameter(shaderProgramCalle, gl.LINK_STATUS)) {
+		            alert("Could not initialise shaders");
+		        }
+
+		        gl.useProgram(shaderProgramCalle);
+
+		        shaderProgramCalle.vertexPositionAttribute = gl.getAttribLocation(shaderProgramCalle, "aVertexPosition");
+		        gl.enableVertexAttribArray(shaderProgramCalle.vertexPositionAttribute);
+
+		        shaderProgramCalle.textureCoordAttribute = gl.getAttribLocation(shaderProgramCalle, "aTextureCoord");
+		        gl.enableVertexAttribArray(shaderProgramCalle.textureCoordAttribute);
+
+		        shaderProgramCalle.pMatrixUniform = gl.getUniformLocation(shaderProgramCalle, "uPMatrix");
+		        shaderProgramCalle.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramCalle, "uMVMatrix");
+		        shaderProgramCalle.samplerCalle = gl.getUniformLocation(shaderProgramCalle, "uSamplerCalle");
+		        shaderProgramCalle.samplerCruce = gl.getUniformLocation(shaderProgramCalle, "uSamplerCruce");
+		        shaderProgramCalle.largo = gl.getUniformLocation(shaderProgramCalle, "uAltura");
+		        shaderProgramCalle.finManzana = gl.getUniformLocation(shaderProgramCalle, "uFinManzana");
+		        shaderProgramCalle.finCruce = gl.getUniformLocation(shaderProgramCalle, "uFinCruce");
 
 				gl.useProgram(glProgram);
 			}
@@ -500,14 +606,19 @@
 					puntos.push([80.0, 40.0, 0.0]);
 					puntos.push([80.0, 40.0, 0.0]);
 
-/*					camino = new curvaBspline3();
+					camino = new curvaBspline3();
 					camino.create(puntos);
 					camino.setupWebGLBuffers();
 
-					calle = new Calle();
-					calle.initTexture("tramo-dobleamarilla.jpg");
-					calle.create_perfil(6, 0.5);
-					calle.create(camino);*/
+/*					calle = new Calle();
+					calle.create_perfil(5.0, 0.5);
+					calle.create_calle_escena(35.0, [0.0, 0.0, 35.0], 2.0);
+					// calle.initTexture("Texturas/tramo-dobleamarilla.jpg");
+					calle.initTexture("Texturas/uv_grid2.jpg");
+					calle.initTexture("Texturas/cruce.jpg");
+					calle.setupWebGLBuffers();
+					calle.debug_shader();
+					*/
 
 /*					edif = new Edificio();
 					edif.create(10, 20, 10, [0, 0, 0], [0, 0, 0], 350.0);
@@ -727,11 +838,14 @@
 				// PARA SHADER TEXTURAS
 				gl.useProgram(shaderProgramTexturedObject);
 				gl.uniformMatrix4fv(shaderProgramTexturedObject.pMatrixUniform, false, pMatrix);
-				gl.useProgram(glProgram);
 				//------------------------
 				// PARA SHADER EDIFICIO
 				gl.useProgram(shaderProgramEdificio);
-				gl.uniformMatrix4fv(shaderProgramEdificio.pMatrixUniform, false, pMatrix);
+				gl.uniformMatrix4fv(shaderProgramEdificio.pMatrixUniform, false, pMatrix);		
+				//------------------------
+				// PARA SHADER CALLE
+				gl.useProgram(shaderProgramCalle);
+				gl.uniformMatrix4fv(shaderProgramCalle.pMatrixUniform, false, pMatrix);
 				gl.useProgram(glProgram);
 				//------------------------
 
@@ -765,6 +879,10 @@
 				//PARA SHADER EDIFICIO
 				gl.useProgram(shaderProgramEdificio);
 				gl.uniformMatrix4fv(shaderProgramEdificio.ModelViewMatrixUniform, false, mvMatrix);
+				//---------------
+				//PARA SHADER CALLE
+				gl.useProgram(shaderProgramCalle);
+				gl.uniformMatrix4fv(shaderProgramCalle.ModelViewMatrixUniform, false, mvMatrix);
 				gl.useProgram(glProgram);
 				//---------------
 
@@ -775,7 +893,7 @@
 				edif.draw(mvMatrix);*/
 				escena.tick(t);
 				escena.draw(mvMatrix);
-				// calle.draw();
+				// calle.drawCalle(mvMatrix, 35.0, 2.0, 5.0);
 
 			}
 
