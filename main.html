@@ -604,6 +604,7 @@
 					edif.setupWebGLBuffers();*/
 
 					escena = new Escena();
+					escena.initTextures();
 
 					//Cant manzanas, lado manzana, ancho calle
 					escena.create_manzanas(6.0, 5.0, 1.0);
@@ -818,7 +819,7 @@
 				//------------------------
 				// PARA SHADER EDIFICIO
 				gl.useProgram(shaderProgramEdificio);
-				gl.uniformMatrix4fv(shaderProgramEdificio.pMatrixUniform, false, pMatrix);		
+				gl.uniformMatrix4fv(shaderProgramEdificio.pMatrixUniform, false, pMatrix);
 				//------------------------
 				// PARA SHADER CALLE
 				gl.useProgram(shaderProgramCalle);

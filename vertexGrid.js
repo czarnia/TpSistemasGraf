@@ -201,16 +201,7 @@ function VertexGrid () {
       this.texture_buffer = buffer;
     }
 
-    this.initTexture = function(texture_file){
-  		var aux_texture = gl.createTexture();
-      // this.texture = aux_texture;
-      aux_texture.image = new Image();
-
-      aux_texture.image.onload = function () {
-        handleLoadedTexture(aux_texture, false);
-      }
-
-      aux_texture.image.src = texture_file;
-      this.textures.push(aux_texture);
+    this.initTexture = function(texture){
+      this.textures.push(texture);
   	}
 }

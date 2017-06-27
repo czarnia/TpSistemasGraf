@@ -105,15 +105,7 @@ function SupFan(){
     this.texture_buffer = buffer;
   }
 
-  this.initTexture = function(texture_file){
-		var aux_texture = gl.createTexture();
-    this.texture = aux_texture;
-    this.texture.image = new Image();
-
-    this.texture.image.onload = function () {
-      handleLoadedTexture(aux_texture, false);
-    }
-
-    this.texture.image.src = texture_file;
-	}
+  this.initTexture = function(texture){
+    this.texture = texture;
+  }
 }
