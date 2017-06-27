@@ -275,7 +275,7 @@ function Cuadrado(){
   }
 
   this.draw = function(mvMatrix_scene){
-    if(this.textures.length > 0){
+    if(this.textures.length > 1){
           gl.useProgram(shaderProgramEdificio);
 
           var mvMatrix_cuadrado = mat4.create();
@@ -287,7 +287,7 @@ function Cuadrado(){
           mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_cuadrado);
           mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
 
-          gl.uniformMatrix4fv(shaderProgramEdificio.ModelViewMatrixUniform, false, mvMatrix_total);       
+          gl.uniformMatrix4fv(shaderProgramEdificio.ModelViewMatrixUniform, false, mvMatrix_total);
 
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
           gl.vertexAttribPointer(shaderProgramEdificio.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
@@ -306,6 +306,29 @@ function Cuadrado(){
 
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
           gl.vertexAttribPointer(shaderProgramEdificio.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+        }else if (this.textures.length == 1){
+          gl.useProgram(shaderProgramTexturedObject);
+
+          var mvMatrix_cuadrado = mat4.create();
+          mat4.identity(mvMatrix_cuadrado);
+          mat4.multiply(mvMatrix_cuadrado, this.traslacion, this.rotacion);
+
+          var mvMatrix_total = mat4.create();
+          mat4.identity(mvMatrix_total);
+          mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_cuadrado);
+          mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
+
+          gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix_total);
+
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
+          gl.vertexAttribPointer(shaderProgramTexturedObject.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+
+          gl.activeTexture(gl.TEXTURE0);
+          gl.bindTexture(gl.TEXTURE_2D, this.textures[0]);
+          gl.uniform1i(shaderProgramTexturedObject.samplerUniform, 0);
+
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+          gl.vertexAttribPointer(shaderProgramTexturedObject.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
         }else{
           var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 
@@ -337,6 +360,11 @@ function Cuadrado(){
     gl.drawElements(gl.TRIANGLES, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
 
     gl.useProgram(glProgram);
+  }
+
+  this.initTexture = function(texture){
+    this.textures = [];
+    this.textures.push(texture);
   }
 
 }
