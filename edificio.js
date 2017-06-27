@@ -8,7 +8,8 @@ function Edificio(){
   this.superficie = null;
   this.techo = null;
 
-  this.textures = null;
+  this.textures = null
+  this.textures_data = null;
 
   this.pos = null;
   this.t = null;
@@ -16,6 +17,7 @@ function Edificio(){
 
   this.create = function(_x, _y, _z, pos, color, t_crec) {
     this.textures = [];
+    this.textures_data = [];
 
     this.x = _x;
     this.y = _y;
@@ -45,14 +47,17 @@ function Edificio(){
     texture.image.onload = function () {
            handleLoadedTexture(texture, false);
     }
-    texture.image.src = texture_file;
+    texture.image.src = texture_file.nombre;
     //Como hay varias texturas agrego a un vector
     this.textures.push(texture);
+    this.textures_data.push(texture_file);
   }
 
   this.setupWebGLBuffers = function (){
     this.superficie.textures.push(this.textures[0]);
     this.superficie.textures.push(this.textures[1]);
+    this.superficie.textures_data.push(this.textures_data[0]);
+    this.superficie.textures_data.push(this.textures_data[1]);
     this.superficie.setupWebGLBuffers();
 
     this.techo.setupWebGLBuffers();

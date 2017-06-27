@@ -5,6 +5,7 @@ function Cuadrado(){
   this.y_total = null;
 
   this.textures = null;
+  this.textures_data = null;
 
   this.index_buffer = null;
 
@@ -23,6 +24,7 @@ function Cuadrado(){
 
   this.create = function(x, y, z, color) {
     this.textures = [];
+    this.textures_data = [];
 
     this.rotacion = mat4.create();
     mat4.identity(this.rotacion);
@@ -301,8 +303,8 @@ function Cuadrado(){
           gl.uniform1i(shaderProgramEdificio.samplerPisos, 1);
 
           gl.uniform1f(shaderProgramEdificio.Altura, this.y_total);
-          gl.uniform1f(shaderProgramEdificio.AlturaPB, 1);
-          gl.uniform1f(shaderProgramEdificio.AlturaPisos, (this.y_total - 1) / 2);
+          gl.uniform1f(shaderProgramEdificio.AlturaPB, this.textures_data[0].y/128);
+          gl.uniform1f(shaderProgramEdificio.AlturaPisos, this.textures_data[1].y/128);
 
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
           gl.vertexAttribPointer(shaderProgramEdificio.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
