@@ -144,13 +144,13 @@ function PilarAutopista(){
 		for (var i = 0; i < 60; i++){
 			for (var j = 0; j < this.perfil.length+1; j++){
 				if (j == 0){
-					var v = dist_ini/long_curva;
+					var v = 2*dist_ini/long_curva;
 					var u = i/60;
 					texture_buffer.push(u);
 					texture_buffer.push(v);
 				}else{
 					for (var k = 0; k < 40; k++){
-						var v = (this.perfil[j-1].distancias_discret[k]+dist_ini+distancias_discret_tramos[j-1])/long_curva;
+						var v = 2*(this.perfil[j-1].distancias_discret[k]+dist_ini+distancias_discret_tramos[j-1])/long_curva;
 						var u = i/60;
 
 						texture_buffer.push(u);

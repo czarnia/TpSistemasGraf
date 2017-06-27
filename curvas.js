@@ -169,7 +169,7 @@ function curvaBesier(){
         this.distancias_discret.push(dist);
 
         for (var i = 1; i < step; i += 1) {
-            var u = (camino.valores_u/step)*i;
+            var u = (this.valores_u/step)*i;
             aux = this.get_punto(u);
             this.discretizaciones.push(u);
             dist += vec3.distance(vec3.fromValues(ant[0], ant[1], ant[2]), vec3.fromValues(aux[0], aux[1], aux[2]));
