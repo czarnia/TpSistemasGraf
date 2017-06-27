@@ -45,7 +45,7 @@ function Escena(){
 		auto1.translate([0,5.5,3]);
 
 		var curva_auto1 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
-		auto1.agregar_movimiento(curva_auto1, 200);
+		auto1.agregar_movimiento(curva_auto1, 250);
 
 
 
@@ -56,7 +56,7 @@ function Escena(){
 
 		var curva_auto2 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
 		curva_auto2.dar_vuelta_curva();
-		auto2.agregar_movimiento(curva_auto2, 150);
+		auto2.agregar_movimiento(curva_auto2, 400);
 
 		this.autos.push(auto1);
 		this.autos.push(auto2);
