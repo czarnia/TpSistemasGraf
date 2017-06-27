@@ -27,6 +27,12 @@ function Calle(){
 		this.perfil.forma.push([ancho / 2, -alto / 2, 0.0]);
 		this.perfil.forma.push([-ancho / 2, -alto / 2, 0.0]);
 
+		/*this.perfil.forma.push([0.0, 0.0, 0.0]);
+		this.perfil.forma.push([(ancho / 6), alto, 0.0]);
+		this.perfil.forma.push([ancho - (ancho / 6), alto, 0.0]);
+		this.perfil.forma.push([ancho, 0.0, 0.0]);
+		this.perfil.forma.push([0.0, 0.0, 0.0]);*/
+
 		//Para que matchee con la tangente de la curva
 		this.perfil.normal.push([0.0, 0.0, 1.0]);
 		//Para que matchee con la normal de la curva

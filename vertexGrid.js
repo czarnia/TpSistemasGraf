@@ -143,8 +143,8 @@ function VertexGrid () {
       gl.uniform1i(shaderProgramCalle.samplerCruce, 1);
 
       gl.uniform1f(shaderProgramCalle.largo, long_calle);
-      gl.uniform1f(shaderProgramCalle.finManzana, lado_manzana);
-      gl.uniform1f(shaderProgramCalle.finCruce, lado_cruce);
+      gl.uniform1f(shaderProgramCalle.finManzana, lado_manzana /*- lado_cruce/6*/);
+      gl.uniform1f(shaderProgramCalle.finCruce, lado_cruce /*- 2*lado_cruce/6*/);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
       gl.vertexAttribPointer(shaderProgramCalle.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);

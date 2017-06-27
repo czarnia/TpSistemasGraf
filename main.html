@@ -221,7 +221,7 @@
 		for(int i = 0; i >= 0; i++){
 			if(vTextureCoord.y <= (uFinManzana * k + uFinCruce * (k - 1.0))){
 				listorti = 1;
-				uv.y -= (uFinManzana + uFinCruce) * (k - 1.0);
+				uv.y -= (uFinManzana + uFinCruce) * (k - 1.0)/* - uFinCruce/6.0*/;
 				uv.y /= uFinManzana;
 				gl_FragColor = texture2D(uSamplerCalle, uv);
 			}else if(vTextureCoord.y <= ((uFinManzana + uFinCruce) * k)){
@@ -648,7 +648,7 @@
 		    	phi: Math.PI/2
 		    }
 		    var free_camera_st = {
-		    	pos: [0.0, -1.0, -20.0],
+		    	pos: [0.0, -1.0, -17.5],
 		    	theta: Math.PI/2,
 		    	phi: Math.PI/2
 		    }
@@ -867,7 +867,7 @@
 				// ruta.draw();
 /*				edif.tick(t);
 				edif.draw(mvMatrix);*/
-				escena.tick(t);
+				// escena.tick(t);
 				escena.draw(mvMatrix);
 				// calle.drawCalle(mvMatrix, 35.0, 2.0, 5.0);
 

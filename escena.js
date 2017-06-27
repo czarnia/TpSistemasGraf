@@ -70,28 +70,28 @@ function Escena(){
 					//Crear plaza
 					var plaza = new Plaza();
 					plaza.create(this.lado_manzana, 0.5);
-					plaza.translate([this.lado_manzana/2 - (this.lado_manzana/10) + j*(this.lado_manzana + this.ancho_calle),
+					plaza.translate_acum([this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
-									this.lado_manzana/2 - (this.lado_manzana/10) + i * (this.lado_manzana + this.ancho_calle)]);
-					plaza.initTexture("Texturas/plaza.jpg");
+									this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + i * (this.lado_manzana + this.ancho_calle)]);
+					// plaza.initTexture("Texturas/plaza.jpg");
 					this.plazas.push(plaza);
 				}else{
 					var manzana = new Manzana();
 					manzana.create(this.lado_manzana, 0.5, 325.0, this.manzanas.length * 400);
-					manzana.translate([this.lado_manzana/2 - (this.lado_manzana/10) + j*(this.lado_manzana + this.ancho_calle),
+					manzana.translate([this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
-									this.lado_manzana/2 - (this.lado_manzana/10) + i * (this.lado_manzana + this.ancho_calle)]);
-					manzana.initTexture("Texturas/vereda.jpg");
+									this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + i * (this.lado_manzana + this.ancho_calle)]);
+					// manzana.initTexture("Texturas/vereda.jpg");
 					this.manzanas.push(manzana);
 					//Crear manzana
 				}
 				if(i == 0 && (j < this.cant_manzanas - 1)){
 					this.calles[j].rotate([0.0, 1.0, 0.0], Math.PI/2);
-					this.calles[j].translate([0.0, 0.0, (j + 1) * this.lado_manzana + j * this.ancho_calle]);
+					this.calles[j].translate([0.0, 0.0, (j + 1) * this.lado_manzana + j * this.ancho_calle + this.ancho_calle/2]);
 				}
 			}
 			if(i < this.cant_manzanas - 1){
-				this.calles[(this.cant_manzanas-1) + i].translate([(i + 1) * this.lado_manzana + i * this.ancho_calle, 0.0, 0.0]);
+				this.calles[(this.cant_manzanas-1) + i].translate([(i + 1) * this.lado_manzana + i * this.ancho_calle + this.ancho_calle/2, 0.0, 0.0]);
 			}
 		}
 
