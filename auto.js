@@ -144,7 +144,7 @@ function Auto(){
     var distancia = vec3.distance(pos_act, pos_ant);
 
     for (var i = 0; i < 4; i++){
-      var angulo = distancia/(Math.PI);
+      var angulo = 15*distancia/(Math.PI);
       this.ruedas[i].rotate_acum([0,0,1], angulo);
     }
 
