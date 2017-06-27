@@ -24,16 +24,16 @@ function Edificio(){
     this.t = t_crec;
     this.pos = pos;
 
-    this.y_act = 0;    
+    this.y_act = 0;
 
     this.superficie = new Cuadrado();
     this.superficie.create(this.x, this.y, this.z, color);
-    this.superficie.translate([pos[0], 0.0000000000000000000000001, pos[2]]);
+    this.superficie.translate([pos[0], 0.0000000000000000000000001+pos[1], pos[2]]);
     this.superficie.scale_abs(this.x, 0.0000000000000000000000001, this.z);
 
     this.techo = new Cuadrado();
     this.techo.create_tapa(this.x, this.y, this.z, [0.66, 0.66, 0.66]);
-    this.techo.translate([pos[0], 0.0000000000000000000000001, pos[2]]);
+    this.techo.translate([pos[0], 0.0000000000000000000000001+pos[1], pos[2]]);
     this.techo.scale_abs(this.x, 0.0000000000000000000000001, this.z);
   }
 
