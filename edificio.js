@@ -8,9 +8,6 @@ function Edificio(){
   this.superficie = null;
   this.techo = null;
 
-  this.textures = null
-  this.textures_data = null;
-
   this.pos = null;
   this.t = null;
   this.t_pasado = 0;
@@ -41,25 +38,54 @@ function Edificio(){
 
   //Primero va la de PB y despues la de los demas pisos
   this.initTexture = function(texture_file){
-    var texture = gl.createTexture();
-    texture.image = new Image();
+    this.superficie.initTexture(texture_file);
+    this.create_text_buffer();
+  }
 
-    texture.image.onload = function () {
-           handleLoadedTexture(texture, false);
-    }
-    texture.image.src = texture_file.nombre;
-    //Como hay varias texturas agrego a un vector
-    this.textures.push(texture);
-    this.textures_data.push(texture_file);
+  this.create_text_buffer = function(){
+    var texture_buffer = [
+          // Front face
+          0.0, 0.0,
+          1.0, 0.0,
+          1.0, this.y_act / this.y,
+          0.0, this.y_act / this.y,
+
+          // Back face
+          1.0, 0.0,
+          1.0, this.y_act / this.y,
+          0.0, this.y_act / this.y,
+          0.0, 0.0,
+
+          // Top face
+          0.0, this.y_act / this.y,
+          0.0, 0.0,
+          1.0, 0.0,
+          1.0, this.y_act / this.y,
+
+          // Bottom face
+          1.0, this.y_act / this.y,
+          0.0, this.y_act / this.y,
+          0.0, 0.0,
+          1.0, 0.0,
+
+          // Right face
+          1.0, 0.0,
+          1.0, this.y_act / this.y,
+          0.0, this.y_act / this.y,
+          0.0, 0.0,
+
+          // Left face
+          0.0, 0.0,
+          1.0, 0.0,
+          1.0, this.y_act / this.y,
+          0.0, this.y_act / this.y,
+        ];
+
+        this.superficie.asign_text_buffer(texture_buffer);
   }
 
   this.setupWebGLBuffers = function (){
-    this.superficie.textures.push(this.textures[0]);
-    this.superficie.textures.push(this.textures[1]);
-    this.superficie.textures_data.push(this.textures_data[0]);
-    this.superficie.textures_data.push(this.textures_data[1]);
     this.superficie.setupWebGLBuffers();
-
     this.techo.setupWebGLBuffers();
   }
 
@@ -77,12 +103,12 @@ function Edificio(){
     this.pos[1] += aumento_y/2;
     this.superficie.translate_acum([0,aumento_y/2,0]);
     this.superficie.scale_abs(this.x, this.y_act, this.z);
-    this.superficie.actualizar_texture_buffer();
+    this.create_text_buffer();
     this.superficie.setupWebGLBuffers();
 
     this.techo.translate_acum([0,aumento_y/2,0]);
     this.techo.scale_abs(this.x, this.y_act, this.z);
-    this.techo.setupWebGLBuffers();
+    //this.techo.setupWebGLBuffers();
   }
 
   this.translate_acum = function(v){

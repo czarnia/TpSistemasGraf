@@ -72,7 +72,7 @@ function Escena(){
 
 	this.create_mapa = function(){
 		this.cielo.create(this.lado*4, this.lado*4, this.lado*4, [this.lado/2, this.lado/2, 0], [0.3,0.6,1]);
-		this.cielo.initTexture(this.texturas[8]);
+		//this.cielo.initTexture(this.texturas[8]);
 
 		this.plazas = [];
 		this.manzanas = [];

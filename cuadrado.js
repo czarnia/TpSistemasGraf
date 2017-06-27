@@ -40,14 +40,6 @@ function Cuadrado(){
     this.y = y;
     this.y_total = y;
 
-    /*this.position_buffer = [ -x/2, y/2, z/2,
-                            -x/2, y/2, -z/2,
-                            x/2, y/2, z/2,
-                            x/2, y/2, -z/2,
-                            -x/2, -y/2, z/2,
-                            -x/2, -y/2, -z/2,
-                            x/2, -y/2, z/2,
-                            x/2, -y/2, -z/2];*/
     this.position_buffer = [
             // Front face
             -x/2, -y/2, z/2, //esquina inferior izq
@@ -104,87 +96,8 @@ function Cuadrado(){
       this.color_buffer.push(color[2]);
     }
 
-    this.texture_buffer = [];
-
-    this.texture_buffer = [
-          // Front face
-          0.0, 0.0,
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-
-          // Back face
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-
-          // Top face
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-
-          // Bottom face
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-          1.0, 0.0,
-
-          // Right face
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-
-          // Left face
-          0.0, 0.0,
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-        ];
-
   }
 
-  this.actualizar_texture_buffer = function(){
-    this.texture_buffer = [
-          // Front face
-          0.0, 0.0,
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-
-          // Back face
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-
-          // Top face
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-
-          // Bottom face
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-          1.0, 0.0,
-
-          // Right face
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-
-          // Left face
-          0.0, 0.0,
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-        ];
-  }
 
   this.create_tapa = function(x, y, z, color){
     this.textures = [];
@@ -364,9 +277,26 @@ function Cuadrado(){
     gl.useProgram(glProgram);
   }
 
-  this.initTexture = function(texture){
+  this.addTexture = function(texture){
     this.textures = [];
     this.textures.push(texture);
+  }
+
+  this.initTexture = function (texture_file){
+    var texture = gl.createTexture();
+    texture.image = new Image();
+
+    texture.image.onload = function () {
+           handleLoadedTexture(texture, false);
+    }
+    texture.image.src = texture_file.nombre;
+    //Como hay varias texturas agrego a un vector
+    this.textures.push(texture);
+    this.textures_data.push(texture_file);
+  }
+
+  this.asign_text_buffer = function(buffer){
+    this.texture_buffer = buffer;
   }
 
 }
