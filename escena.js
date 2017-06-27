@@ -17,7 +17,7 @@ function Escena(){
 	this.autos = [];
 
   //uv_grid2: 0, trama-doble: 1, cruce: 2, rueda: 3, plaza: 4, vereda: 5, autopista: 6, concreto: 7, cielo: 8.
-	this.texturas_nombres = ["Texturas/uv_grid2.jpg", "Texturas/tramo-dobleamarilla.jpg", "Texturas/cruce.jpg", "Texturas/rueda.jpg", "Texturas/plaza.jpg", "Texturas/vereda.jpg", "Texturas/autopista.jpg", "Texturas/concreto.jpg", "Texturas/sky"];
+	this.texturas_nombres = ["Texturas/uv_grid2.jpg", "Texturas/tramo-dobleamarilla.jpg", "Texturas/cruce.jpg", "Texturas/rueda.jpg", "Texturas/plaza.jpg", "Texturas/vereda.jpg", "Texturas/autopista.jpg", "Texturas/concreto.jpg", "Texturas/sky.jpg"];
 	this.texturas = [];
 
 
@@ -39,7 +39,7 @@ function Escena(){
 			calle.create_perfil(this.ancho_calle, 0.5);
 			calle.create_calle_escena(this.lado, [0.0, 0.0, this.lado], this.lado_manzana);
 			calle.initTexture(this.texturas[1]);
-			calle.initTexture(this.texturas[2]);
+			calle.initTexture(this.texturas[0]);
 			this.calles.push(calle);
 		}
 	}
@@ -72,7 +72,7 @@ function Escena(){
 
 	this.create_mapa = function(){
 		this.cielo.create(this.lado*4, this.lado*4, this.lado*4, [this.lado/2, this.lado/2, 0], [0.3,0.6,1]);
-		//this.cielo.initTexture(this.texturas[8]);
+		this.cielo.initTexture(this.texturas[8]);
 
 		this.plazas = [];
 		this.manzanas = [];
