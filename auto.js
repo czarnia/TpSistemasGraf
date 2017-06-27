@@ -170,4 +170,10 @@ function Auto(){
     }
     this.mover();
   }
+
+  this.initTexture = function(texture_file){
+    for (var i = 0; i < this.ruedas.length; i++){
+      this.ruedas[i].initTexture(texture_file);
+    }
+  }
 }

@@ -68,4 +68,44 @@ function Rueda(){
 	this.setupWebGLBuffers = function(){
 		this.superficie.setupWebGLBuffers();
 	}
+
+	this.initTexture = function(texture_file){
+		var texture_buffer = this.create_text_buffer();
+		this.superficie.initTexture(texture_file);
+		this.superficie.asign_text_buffer(texture_buffer);
+	}
+
+	this.create_text_buffer = function(){
+		var texture_buffer = [];
+
+		for (var i = 0; i < 40; i++){
+			var punto = [0,0.45,0];
+			var angulo_nivel = i * Math.PI*2 / (40-1);
+			var mat_rotacion = mat4.create();
+			mat4.identity(mat_rotacion);
+			mat4.rotate(mat_rotacion, mat_rotacion, angulo_nivel, [0,0,1]);
+
+			vec3.transformMat4(punto, punto, mat_rotacion);
+
+			var u_borde = punto[0];
+			var v_borde = punto[1];
+
+			texture_buffer.push(u_borde+0.5);
+			texture_buffer.push(v_borde+0.5);
+
+			texture_buffer.push(0.5);
+			texture_buffer.push(0.5);
+
+			texture_buffer.push(0.5);
+			texture_buffer.push(0.5);
+
+			texture_buffer.push(u_borde+0.5);
+			texture_buffer.push(v_borde+0.5);
+
+			texture_buffer.push(u_borde+0.5);
+			texture_buffer.push(v_borde+0.5);
+		}
+
+		return texture_buffer;
+	}
 }
