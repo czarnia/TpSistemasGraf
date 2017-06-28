@@ -287,7 +287,7 @@ function Cuadrado(){
     texture.image = new Image();
 
     texture.image.onload = function () {
-           handleLoadedTexture(texture, false);
+           handleLoadedTexture(texture, true);
     }
     texture.image.src = texture_file.nombre;
     //Como hay varias texturas agrego a un vector
