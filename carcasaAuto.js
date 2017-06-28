@@ -4,6 +4,7 @@ function CarcasaAuto(){
 		forma:[],
 		normal:[]
 	}
+  this.perfil_curva = null;
   this.tapa1 = new SupFan();
   this.tapa2 = new SupFan();
 	this.largo = null; //x
@@ -113,6 +114,7 @@ function CarcasaAuto(){
 
     this.perfil.normal.push([0,0,1]);
     this.perfil.normal.push([0,1,0]);
+    this.perfil_curva = camino;
   }
 
   this.setupWebGLBuffers = function(){
@@ -155,6 +157,50 @@ function CarcasaAuto(){
     /*this.superficie.rotate_acum(angulo,eje);
     this.tapa1.rotate_acum(angulo,eje);
     this.tapa2.rotate_acum(angulo,eje);*/
+  }
+
+  this.initTexture = function(texture_file){
+		this.tapa1.initTexture(texture_file);
+		this.tapa2.initTexture(texture_file);
+		this.superficie.initTexture(texture_file);
+		this.create_text_buffer();
+	}
+
+  this.create_text_buffer = function(){
+    var texture_buffer_tapas = [];
+    var texture_buffer_superfice = [];
+
+		this.perfil_curva.discretizar_step(this.perfil.forma.lenght);
+
+		var long_curva = this.perfil_curva.distancias_discret[this.perfil_curva.distancias_discret.length-1];
+
+    for (var j = 0; j < 40; j++){
+      for (var i = 0; i < this.perfil.forma.lenght; i++){
+        var u = this.perfil_curva.distancias_discret[i]/long_curva;
+        var v = j/3;
+
+        texture_buffer_superfice.push(u);
+        texture_buffer_superfice.push(v);
+      }
+    }
+
+    texture_buffer_tapas.push(0.5);
+    texture_buffer_tapas.push(0.5);
+
+    for (var i = 0; i < this.perfil.forma.length; i++){
+      var punto = this.perfil.forma[i];
+      var u = 0.9*(punto[0]+this.largo/2)/this.largo+0.05;
+      var v = 0.9/3*((punto[1]+this.alto/2)/this.alto)+1/3;
+
+      texture_buffer_tapas.push(u);
+      texture_buffer_tapas.push(v);
+    }
+
+
+
+    this.tapa1.asign_text_buffer(texture_buffer_tapas);
+    this.tapa2.asign_text_buffer(texture_buffer_tapas);
+    this.superficie.asign_text_buffer(texture_buffer_superfice);
   }
 
 }

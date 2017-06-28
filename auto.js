@@ -13,7 +13,7 @@ function Auto(){
   this.altura = null;
 
   this.create = function(color_carcasa, color_rueda, ancho, alto, largo, r_rueda, ancho_rueda){
-    var posiciones_ruedas = [[-1/5*largo, -alto/2, -ancho/2], [1/4*largo, -alto/2, -ancho/2], [-1/5*largo, -alto/2, ancho/2], [1/4*largo, -alto/2, ancho/2]];
+    var posiciones_ruedas = [[-1.1/3*largo, -alto/2+0.09, -ancho/2], [0.87/3*largo, -alto/2+0.09, -ancho/2], [-1.1/3*largo, -alto/2+0.09, ancho/2], [0.87/3*largo, -alto/2+0.09, ancho/2]];
 
     this.ubic = 0;
     this.t = 0;
@@ -171,9 +171,10 @@ function Auto(){
     this.mover();
   }
 
-  this.initTexture = function(texture_file){
+  this.initTexture = function(texture_file_carcasa, texture_file_ruedas){
+    this.carcasa.initTexture(texture_file_carcasa);
     for (var i = 0; i < this.ruedas.length; i++){
-      this.ruedas[i].initTexture(texture_file);
+      this.ruedas[i].initTexture(texture_file_ruedas);
     }
   }
 }
