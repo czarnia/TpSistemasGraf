@@ -121,12 +121,9 @@ function CarcasaAuto(){
     var camino = new curvaBspline3();
 		var puntos_control = [];
 
-    /*puntos_control.push([0, -(this.alto/2), 0]);
-    puntos_control.push([0, -(this.alto/2), 0]);
-    puntos_control.push([0, -(this.alto/2), 0]);
     puntos_control.push([0, -(this.alto/2), 0]);
 
-    puntos_control.push([-(this.largo/2), -(this.alto/2), 0]);*/
+    puntos_control.push([-(this.largo/2), -(this.alto/2), 0]);
 
     puntos_control.push([-(this.largo/2), -(this.alto/4), 0]);
     puntos_control.push([-(this.largo/2), -(this.alto/4), 0]);
@@ -161,12 +158,9 @@ function CarcasaAuto(){
     puntos_control.push([(this.largo/2), -(this.alto/4), 0]);
     puntos_control.push([(this.largo/2), -(this.alto/4), 0]);
 
-    /*puntos_control.push([(this.largo/2), -(this.alto/2), 0]);
+    puntos_control.push([(this.largo/2), -(this.alto/2), 0]);
 
     puntos_control.push([0, -(this.alto/2), 0]);
-    puntos_control.push([0, -(this.alto/2), 0]);
-    puntos_control.push([0, -(this.alto/2), 0]);
-    puntos_control.push([0, -(this.alto/2), 0]);*/
 
 
     camino.create(puntos_control);
@@ -244,7 +238,7 @@ function CarcasaAuto(){
     for (var j = 0; j < 40; j++){
       for (var i = 0; i < this.perfil.forma.length; i++){
         var u = 0.035+0.90*this.perfil_curva.distancias_discret[i]/long_curva;
-        var v = 1.2-((j/40)*(2.53/3));
+        var v = 1.2-((j/40)*(2.5/3));
 
         texture_buffer_superfice.push(u);
         texture_buffer_superfice.push(v);
