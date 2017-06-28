@@ -5,6 +5,7 @@ function Cuadrado(){
   this.y_total = null;
 
   this.textures = null;
+  this.textures_data = null;
 
   this.index_buffer = null;
 
@@ -25,6 +26,7 @@ function Cuadrado(){
 
   this.create = function(x, y, z, color) {
     this.textures = [];
+    this.textures_data = [];
 
     this.rotacion = mat4.create();
     mat4.identity(this.rotacion);
@@ -40,14 +42,6 @@ function Cuadrado(){
     this.y = y;
     this.y_total = y;
 
-    /*this.position_buffer = [ -x/2, y/2, z/2,
-                            -x/2, y/2, -z/2,
-                            x/2, y/2, z/2,
-                            x/2, y/2, -z/2,
-                            -x/2, -y/2, z/2,
-                            -x/2, -y/2, -z/2,
-                            x/2, -y/2, z/2,
-                            x/2, -y/2, -z/2];*/
     this.position_buffer = [
             // Front face
             -x/2, -y/2, z/2, //esquina inferior izq
@@ -103,47 +97,7 @@ function Cuadrado(){
       this.color_buffer.push(color[1]);
       this.color_buffer.push(color[2]);
     }
-
-    this.texture_buffer = [];
-
-    this.texture_buffer = [
-          // Front face
-          0.0, 0.0,
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-
-          // Back face
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-
-          // Top face
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-
-          // Bottom face
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-          1.0, 0.0,
-
-          // Right face
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-
-          // Left face
-          0.0, 0.0,
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-        ];
-
+    
     this.normal_buffer = [
             // Front face
              0.0,  0.0,  1.0,
@@ -180,48 +134,8 @@ function Cuadrado(){
             -1.0,  0.0,  0.0,
             -1.0,  0.0,  0.0,
             -1.0,  0.0,  0.0];
-
   }
 
-  this.actualizar_texture_buffer = function(){
-    this.texture_buffer = [
-          // Front face
-          0.0, 0.0,
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-
-          // Back face
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-
-          // Top face
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-
-          // Bottom face
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-          1.0, 0.0,
-
-          // Right face
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-          0.0, 0.0,
-
-          // Left face
-          0.0, 0.0,
-          1.0, 0.0,
-          1.0, this.y / this.y_total,
-          0.0, this.y / this.y_total,
-        ];
-  }
 
   this.create_tapa = function(x, y, z, color){
     this.textures = [];
@@ -320,7 +234,7 @@ function Cuadrado(){
   }
 
   this.draw = function(mvMatrix_scene){
-    if(this.textures.length > 0){
+    if(this.textures.length > 1){
           gl.useProgram(shaderProgramEdificio);
 
           var mvMatrix_cuadrado = mat4.create();
@@ -332,7 +246,7 @@ function Cuadrado(){
           mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_cuadrado);
           mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
 
-          gl.uniformMatrix4fv(shaderProgramEdificio.ModelViewMatrixUniform, false, mvMatrix_total);       
+          gl.uniformMatrix4fv(shaderProgramEdificio.ModelViewMatrixUniform, false, mvMatrix_total);
 
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
           gl.vertexAttribPointer(shaderProgramEdificio.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
@@ -346,8 +260,8 @@ function Cuadrado(){
           gl.uniform1i(shaderProgramEdificio.samplerPisos, 1);
 
           gl.uniform1f(shaderProgramEdificio.Altura, this.y_total);
-          gl.uniform1f(shaderProgramEdificio.AlturaPB, 1);
-          gl.uniform1f(shaderProgramEdificio.AlturaPisos, (this.y_total - 1) / 2);
+          gl.uniform1f(shaderProgramEdificio.AlturaPB, this.textures_data[0].y/128);
+          gl.uniform1f(shaderProgramEdificio.AlturaPisos, this.textures_data[1].y/128);
 
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
           gl.vertexAttribPointer(shaderProgramEdificio.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
@@ -366,6 +280,29 @@ function Cuadrado(){
           }else{
             gl.uniform1i(shaderProgramEdificio.useLightingUniform, false);
           }
+        }else if (this.textures.length == 1){
+          gl.useProgram(shaderProgramTexturedObject);
+
+          var mvMatrix_cuadrado = mat4.create();
+          mat4.identity(mvMatrix_cuadrado);
+          mat4.multiply(mvMatrix_cuadrado, this.traslacion, this.rotacion);
+
+          var mvMatrix_total = mat4.create();
+          mat4.identity(mvMatrix_total);
+          mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_cuadrado);
+          mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
+
+          gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix_total);
+
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
+          gl.vertexAttribPointer(shaderProgramTexturedObject.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+
+          gl.activeTexture(gl.TEXTURE0);
+          gl.bindTexture(gl.TEXTURE_2D, this.textures[0]);
+          gl.uniform1i(shaderProgramTexturedObject.samplerUniform, 0);
+
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+          gl.vertexAttribPointer(shaderProgramTexturedObject.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
         }else{
           var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 
@@ -397,6 +334,28 @@ function Cuadrado(){
     gl.drawElements(gl.TRIANGLES, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
 
     gl.useProgram(glProgram);
+  }
+
+  this.addTexture = function(texture){
+    this.textures = [];
+    this.textures.push(texture);
+  }
+
+  this.initTexture = function (texture_file){
+    var texture = gl.createTexture();
+    texture.image = new Image();
+
+    texture.image.onload = function () {
+           handleLoadedTexture(texture, true);
+    }
+    texture.image.src = texture_file.nombre;
+    //Como hay varias texturas agrego a un vector
+    this.textures.push(texture);
+    this.textures_data.push(texture_file);
+  }
+
+  this.asign_text_buffer = function(buffer){
+    this.texture_buffer = buffer;
   }
 
 }

@@ -8,14 +8,13 @@ function Edificio(){
   this.superficie = null;
   this.techo = null;
 
-  this.textures = null;
-
   this.pos = null;
   this.t = null;
   this.t_pasado = 0;
 
   this.create = function(_x, _y, _z, pos, color, t_crec) {
     this.textures = [];
+    this.textures_data = [];
 
     this.x = _x;
     this.y = _y;
@@ -24,39 +23,74 @@ function Edificio(){
     this.t = t_crec;
     this.pos = pos;
 
-    this.y_act = 0;    
+    this.y_act = 0;
 
     this.superficie = new Cuadrado();
     this.superficie.create(this.x, this.y, this.z, color);
-    this.superficie.translate([pos[0], 0.0000000000000000000000001, pos[2]]);
+    this.superficie.translate([pos[0], 0.0000000000000000000000001+pos[1], pos[2]]);
     this.superficie.scale_abs(this.x, 0.0000000000000000000000001, this.z);
 
     this.techo = new Cuadrado();
     this.techo.create_tapa(this.x, this.y, this.z, [0.66, 0.66, 0.66]);
-    this.techo.translate([pos[0], 0.0000000000000000000000001, pos[2]]);
+    this.techo.translate([pos[0], 0.0000000000000000000000001+pos[1], pos[2]]);
     this.techo.scale_abs(this.x, 0.0000000000000000000000001, this.z);
   }
 
   //Primero va la de PB y despues la de los demas pisos
   this.initTexture = function(texture_file){
-    var texture = gl.createTexture();
-    texture.image = new Image();
+    this.superficie.initTexture(texture_file);
+    this.create_text_buffer();
+  }
 
-    texture.image.onload = function () {
-           handleLoadedTexture(texture, false);
-    }
-    texture.image.src = texture_file;
-    //Como hay varias texturas agrego a un vector
-    this.textures.push(texture);
+  this.create_text_buffer = function(){
+    var texture_buffer = [
+          // Front face
+          0.0, 0.0,
+          1.0, 0.0,
+          1.0, this.y_act / this.y,
+          0.0, this.y_act / this.y,
+
+          // Back face
+          1.0, 0.0,
+          1.0, this.y_act / this.y,
+          0.0, this.y_act / this.y,
+          0.0, 0.0,
+
+          // Top face
+          0.0, this.y_act / this.y,
+          0.0, 0.0,
+          1.0, 0.0,
+          1.0, this.y_act / this.y,
+
+          // Bottom face
+          1.0, this.y_act / this.y,
+          0.0, this.y_act / this.y,
+          0.0, 0.0,
+          1.0, 0.0,
+
+          // Right face
+          1.0, 0.0,
+          1.0, this.y_act / this.y,
+          0.0, this.y_act / this.y,
+          0.0, 0.0,
+
+          // Left face
+          0.0, 0.0,
+          1.0, 0.0,
+          1.0, this.y_act / this.y,
+          0.0, this.y_act / this.y,
+        ];
+
+        this.superficie.asign_text_buffer(texture_buffer);
   }
 
   this.setupWebGLBuffers = function (){
-    if(this.textures.length > 0){
-      this.superficie.textures.push(this.textures[0]);
-      this.superficie.textures.push(this.textures[1]);
-    }
-    this.superficie.setupWebGLBuffers();
 
+    // if(this.textures.length > 0){
+    //   this.superficie.textures.push(this.textures[0]);
+    //   this.superficie.textures.push(this.textures[1]);
+    // }
+    this.superficie.setupWebGLBuffers();
     this.techo.setupWebGLBuffers();
   }
 
@@ -74,12 +108,12 @@ function Edificio(){
     this.pos[1] += aumento_y/2;
     this.superficie.translate_acum([0,aumento_y/2,0]);
     this.superficie.scale_abs(this.x, this.y_act, this.z);
-    this.superficie.actualizar_texture_buffer();
+    this.create_text_buffer();
     this.superficie.setupWebGLBuffers();
 
     this.techo.translate_acum([0,aumento_y/2,0]);
     this.techo.scale_abs(this.x, this.y_act, this.z);
-    this.techo.setupWebGLBuffers();
+    //this.techo.setupWebGLBuffers();
   }
 
   this.translate_acum = function(v){

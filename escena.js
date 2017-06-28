@@ -5,6 +5,9 @@ function Escena(){
 	this.lado_manzana = [];
 	this.calles = [];
 	// this.plano = new Plano();
+
+	this.cielo = new SkyBox();
+
 	this.plazas = [];
 	this.manzanas = [];
 	this.autopista = [];
@@ -12,6 +15,11 @@ function Escena(){
 	this.esc_autopista = [];
 
 	this.autos = [];
+
+  //uv_grid2: 0, trama-doble: 1, cruce: 2, rueda: 3, plaza: 4, vereda: 5, autopista: 6, concreto: 7, cielo: 8.
+	this.texturas_nombres = ["Texturas/uv_grid2.jpg", "Texturas/tramo-dobleamarilla.jpg", "Texturas/cruce.jpg", "Texturas/rueda.jpg", "Texturas/plaza.jpg", "Texturas/vereda.jpg", "Texturas/autopista.jpg", "Texturas/concreto.jpg", "Texturas/Day_Skybox.jpg"];
+	this.texturas = [];
+
 
 	this.create_manzanas = function(cant_manzanas, lado_manzana,
 							ancho_calle){
@@ -30,8 +38,8 @@ function Escena(){
 
 			calle.create_perfil(this.ancho_calle, 0.5);
 			calle.create_calle_escena(this.lado, [0.0, 0.0, this.lado], this.lado_manzana);
-			calle.initTexture("Texturas/tramo-dobleamarilla.jpg");
-			calle.initTexture("Texturas/cruce.jpg");
+			calle.initTexture(this.texturas[1]);
+			calle.initTexture(this.texturas[0]);
 			this.calles.push(calle);
 		}
 	}
@@ -41,7 +49,7 @@ function Escena(){
 
 		var auto1 = new Auto();
 		auto1.create([0.6,0,0.4], [0.6,0.6,0.7], 0.9, 0.8, 1.7, 0.1, 0.07);
-		auto1.initTexture("Texturas/rueda.jpg");
+		auto1.initTexture(this.texturas[3]);
 		auto1.translate([0,5.5,3]);
 
 		var curva_auto1 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
@@ -51,7 +59,7 @@ function Escena(){
 
 		var auto2 = new Auto();
 		auto2.create([0,0.5,0.4], [0.6,0.6,0.7], 0.9, 1, 1.5, 0.1, 0.07);
-		auto2.initTexture("Texturas/rueda.jpg");
+		auto2.initTexture(this.texturas[3]);
 		auto2.translate([0,5.5,2]);
 
 		var curva_auto2 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
@@ -63,6 +71,9 @@ function Escena(){
 	}
 
 	this.create_mapa = function(){
+		this.cielo.create(this.lado*4, this.lado*4, this.lado*4, [this.lado/2, this.lado/2, 0], [0.3,0.6,1]);
+		this.cielo.initTexture(this.texturas[8]);
+
 		this.plazas = [];
 		this.manzanas = [];
 
@@ -76,7 +87,8 @@ function Escena(){
 					plaza.translate_acum([this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
 									this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + i * (this.lado_manzana + this.ancho_calle)]);
-					// plaza.initTexture("Texturas/plaza.jpg");
+
+					plaza.initTexture(this.texturas[4]);
 					this.plazas.push(plaza);
 				}else{
 					var manzana = new Manzana();
@@ -84,7 +96,7 @@ function Escena(){
 					manzana.translate([this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
 									this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + i * (this.lado_manzana + this.ancho_calle)]);
-					// manzana.initTexture("Texturas/vereda.jpg");
+					manzana.initTexture(this.texturas[5]);
 					this.manzanas.push(manzana);
 					//Crear manzana
 				}
@@ -112,13 +124,15 @@ function Escena(){
 		this.autopista.create(camino, dist_pilares, dist_faroles);
 		this.autopista.scale(this.lado/final, this.lado/final, this.lado/final);
 		this.autopista.rotate([1.0, 0.0, 0.0], Math.PI / 2);
-		this.autopista.initTexture("Texturas/autopista.jpg", "Texturas/concreto.jpg");
+		this.autopista.initTexture(this.texturas[6], this.texturas[7]);
 
 		this.esc_autopista = [this.lado/final, this.lado/final, this.lado/final];
 	}
 
 	this.draw = function(mvScene){
 		// this.plano.draw();
+
+		this.cielo.draw(mvScene);
 
 		for (var i = 0; i < this.calles.length; i++) {
 			this.calles[i].drawCalle(mvScene, this.lado, this.lado_manzana, this.ancho_calle);
@@ -151,6 +165,8 @@ function Escena(){
 	}
 
 	this.setupWebGLBuffers = function(){
+		this.cielo.setupWebGLBuffers();
+
 		for (var i = 0; i < this.calles.length; i++) {
 			this.calles[i].setupWebGLBuffers();
 		}
@@ -169,4 +185,25 @@ function Escena(){
 
 		this.autopista.setupWebGLBuffers();
 	}
+
+	this.initTextures = function(){
+		for (var i = 0; i < this.texturas_nombres.length; i++){
+			var bool = true;
+			if (i == 8){
+				bool = false;
+			}
+			this.initTexture(this.texturas_nombres[i], bool);
+		};
+	}
+
+	this.initTexture = function(texture_file, bool){
+		var aux_texture = gl.createTexture();
+		aux_texture.image = new Image();
+		aux_texture.image.onload = function () {
+			handleLoadedTexture(aux_texture, bool);
+		}
+		aux_texture.image.src = texture_file;
+		this.texturas.push(aux_texture);
+	}
+
 }

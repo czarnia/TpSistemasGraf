@@ -33,6 +33,7 @@
 	<script type="text/javascript" src="auto.js"></script>
 	<script type="text/javascript" src="rueda.js"></script>
 	<script type="text/javascript" src="carcasaAuto.js"></script>
+	<script type="text/javascript" src="skybox.js"></script>
 
 
 	</head>
@@ -612,59 +613,60 @@
 			var v_texturas_PB = [];
 
 			function loadTextures(){
-				v_texturas_pisos.push("Texturas/ed1_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed2_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed3_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed4_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed5_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed6_fachada.jpg");
-				v_texturas_pisos.push("Texturas/ed7_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed8_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed9_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed10_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed11_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed12_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed13_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed14_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed15_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed16_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed17_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed18_pisos.jpg");
-				v_texturas_pisos.push("Texturas/ed19_pisos.jpg");
-				v_texturas_PB.push("Texturas/ed1_pb.jpg");
-				v_texturas_PB.push("Texturas/ed2_pb.jpg");
-				v_texturas_PB.push("Texturas/ed3_pb.jpg");
-				v_texturas_PB.push("Texturas/ed4_pb.jpg");
-				v_texturas_PB.push("Texturas/ed5_pb.jpg");
-				v_texturas_PB.push("Texturas/ed6_pb.jpg");
-				v_texturas_PB.push("Texturas/ed7_pb.jpg");
-				v_texturas_PB.push("Texturas/ed8_pb.jpg");
-				v_texturas_PB.push("Texturas/ed9_pb.jpg");
-				v_texturas_PB.push("Texturas/ed10_pb.jpg");
-				v_texturas_PB.push("Texturas/ed11_pb.jpg");
-				v_texturas_PB.push("Texturas/ed12_pb.jpg");
-				v_texturas_PB.push("Texturas/ed13_pb.jpg");
-				v_texturas_PB.push("Texturas/ed14_pb.jpg");
-				v_texturas_PB.push("Texturas/ed15_pb.jpg");
-				v_texturas_PB.push("Texturas/ed16_pb.jpg");
-				v_texturas_PB.push("Texturas/ed17_pb.jpg");
-				v_texturas_PB.push("Texturas/ed18_pb.jpg");
-				v_texturas_PB.push("Texturas/ed19_pb.jpg");
+				v_texturas_pisos.push({nombre:"Texturas/ed1_pisos.jpg", x:512, y:512});
+				v_texturas_pisos.push({nombre:"Texturas/ed2_pisos.jpg", x:512, y:512});
+				v_texturas_pisos.push({nombre:"Texturas/ed3_pisos.jpg", x:256, y:512});
+				v_texturas_pisos.push({nombre:"Texturas/ed4_pisos.jpg", x:512, y:512});
+				v_texturas_pisos.push({nombre:"Texturas/ed5_pisos.jpg", x: 256, y: 512});
+				v_texturas_pisos.push({nombre: "Texturas/ed6_fachada.jpg", x: 256, y:512});
+				v_texturas_pisos.push({nombre:"Texturas/ed7_pisos.jpg", x: 512, y: 512});
+				v_texturas_pisos.push({nombre:"Texturas/ed8_pisos.jpg", x: 512, y: 512});
+				v_texturas_pisos.push({nombre:"Texturas/ed9_pisos.jpg", x: 512, y: 512});
+				v_texturas_pisos.push({nombre:"Texturas/ed10_pisos.jpg", x: 256, y: 512});
+				v_texturas_pisos.push({nombre:"Texturas/ed11_pisos.jpg", x: 512, y: 512});
+				v_texturas_pisos.push({nombre:"Texturas/ed12_pisos.jpg", x: 256, y: 512});
+				v_texturas_pisos.push({nombre:"Texturas/ed13_pisos.jpg", x: 256, y: 512});
+				v_texturas_pisos.push({nombre:"Texturas/ed14_pisos.jpg", x: 512, y: 512});
+				v_texturas_pisos.push({nombre:"Texturas/ed15_pisos.jpg", x: 512, y: 512});
+				v_texturas_pisos.push({nombre:"Texturas/ed16_pisos.jpg", x: 512, y: 512});
+				v_texturas_pisos.push({nombre:"Texturas/ed17_pisos.jpg", x: 512, y: 512});
+				v_texturas_pisos.push({nombre:"Texturas/ed18_pisos.jpg", x: 512, y: 256});
+				v_texturas_pisos.push({nombre:"Texturas/ed19_pisos.jpg", x: 512, y: 512});
+				v_texturas_PB.push({nombre:"Texturas/ed1_pb.jpg", x: 128, y: 64});
+				v_texturas_PB.push({nombre:"Texturas/ed2_pb.jpg", x: 128, y: 64});
+				v_texturas_PB.push({nombre:"Texturas/ed3_pb.jpg", x: 128, y: 64});
+				v_texturas_PB.push({nombre:"Texturas/ed4_pb.jpg", x: 256, y: 64});
+				v_texturas_PB.push({nombre:"Texturas/ed5_pb.jpg", x: 128, y: 128});
+				v_texturas_PB.push({nombre:"Texturas/ed6_pb.jpg", x: 256, y: 64});
+				v_texturas_PB.push({nombre:"Texturas/ed7_pb.jpg", x: 256, y: 64});
+				v_texturas_PB.push({nombre:"Texturas/ed8_pb.jpg", x: 256, y: 128});
+				v_texturas_PB.push({nombre:"Texturas/ed9_pb.jpg", x: 256, y: 64});
+				v_texturas_PB.push({nombre:"Texturas/ed10_pb.jpg", x: 128, y: 64});
+				v_texturas_PB.push({nombre:"Texturas/ed11_pb.jpg", x: 256, y: 64});
+				v_texturas_PB.push({nombre:"Texturas/ed12_pb.jpg", x: 256, y: 64});
+				v_texturas_PB.push({nombre:"Texturas/ed13_pb.jpg", x: 256, y: 128});
+				v_texturas_PB.push({nombre:"Texturas/ed14_pb.jpg", x: 256, y: 128});
+				v_texturas_PB.push({nombre:"Texturas/ed15_pb.jpg", x: 128, y: 64});
+				v_texturas_PB.push({nombre:"Texturas/ed16_pb.jpg", x: 256, y: 64});
+				v_texturas_PB.push({nombre:"Texturas/ed17_pb.jpg", x: 256, y: 64});
+				v_texturas_PB.push({nombre:"Texturas/ed18_pb.jpg", x: 128, y: 64});
+				v_texturas_PB.push({nombre:"Texturas/ed19_pb.jpg", x: 128, y: 128});
 			}
 
-			this.handleLoadedTexture = function(texture, con_mipmap){
+			this.handleLoadedTexture = function(texture, repeat){
 		        gl.bindTexture(gl.TEXTURE_2D, texture);
 		        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 		        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
 		        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-		        if(con_mipmap){
-			        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-			        gl.generateMipmap(gl.TEXTURE_2D);
-			    }else{
-			    	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		        if(!repeat){
+							gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+			        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+			        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+			    	}else{
+			    		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 			        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
 			        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-			    }
+			    	}
 
 		        gl.bindTexture(gl.TEXTURE_2D, null);
 			}
@@ -708,6 +710,7 @@
 					edif.setupWebGLBuffers();*/
 
 					escena = new Escena();
+					escena.initTextures();
 
 					//Cant manzanas, lado manzana, ancho calle
 					escena.create_manzanas(6.0, 5.0, 1.0);
@@ -934,7 +937,7 @@
 				//------------------------
 				// PARA SHADER EDIFICIO
 				gl.useProgram(shaderProgramEdificio);
-				gl.uniformMatrix4fv(shaderProgramEdificio.pMatrixUniform, false, pMatrix);		
+				gl.uniformMatrix4fv(shaderProgramEdificio.pMatrixUniform, false, pMatrix);
 				//------------------------
 				// PARA SHADER CALLE
 				gl.useProgram(shaderProgramCalle);
