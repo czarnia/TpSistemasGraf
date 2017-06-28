@@ -14,12 +14,16 @@ function Autopista(){
 
 	this.escalado = null;
 
-	this.initTexture = function(texture_file_calle, texture_file_estructura){
+	this.initTexture = function(texture_file_calle, texture_file_estructura, texture_file_faroles){
 		this.calle_ida.initTexture(texture_file_calle);
 		this.calle_vuelta.initTexture(texture_file_calle);
 
 		for (var i = 0; i < this.pilares.length; i++){
 			this.pilares[i].initTexture(texture_file_estructura);
+		}
+
+		for (var i = 0; i < this.faroles.length; i++){
+			this.faroles[i].initTexture(texture_file_faroles);
 		}
 
 		this.borde_ida.initTexture(texture_file_estructura);
@@ -107,7 +111,7 @@ function Autopista(){
 
 				tan_l = [1.0, 0.0, 0.0];
 				var farol = new Luminaria();
-				farol.create(0.65, 20.0, 10.0, 5.0, 2.0, 1.5);
+				farol.create(0.35, 17.0, 7.0, 3.0, 1.0, 1.0);
 				farol.scale(0.5, 0.5, 0.5);
 
 				vec3.normalize(tan, tan);

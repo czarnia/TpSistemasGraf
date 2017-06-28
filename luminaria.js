@@ -1,4 +1,5 @@
 function Luminaria(){
+	this.radio = null;
 	this.poste = new supBarrido();
   this.foco = new Cuadrado();
 	this.perfil = {
@@ -36,9 +37,14 @@ function Luminaria(){
   }
 
 	this.create = function(radio, alto, largo, _x, _y, _z){
+			this.radio = radio;
+
 	    var puntos_forma = devolver_puntos_circulo(radio, 30);
 	    var camino = this.camino(alto, largo);
 			var color = [1,0.843,0];
+
+			this.perfil.forma = puntos_forma[0];
+
 	    this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1], color);
 	    this.foco.create(_z, _y, _x, color); //8,3,6
 
@@ -98,6 +104,76 @@ function Luminaria(){
 
 		this.poste.draw(mvMatrix_total);
 		this.foco.draw(mvMatrix_total);
+	}
+
+	this.initTexture = function(texture){
+		var texture_buffer_poste = this.create_text_buffer_poste();
+		var texture_buffer_foco = this.create_text_buffer_foco();
+
+		this.poste.asign_text_buffer(texture_buffer_poste);
+		this.foco.asign_text_buffer(texture_buffer_foco);
+
+		this.poste.initTexture(texture);
+		this.foco.addTexture(texture);
+	}
+
+	this.create_text_buffer_foco = function(){
+		var texture_buffer = [
+          // Front face
+          0.0, 0.0,
+          1.0, 0.0,
+          1.0, 1,
+          0.0, 1,
+
+          // Back face
+          1.0, 0.0,
+          1.0, 1,
+          0.0, 1,
+          0.0, 0.0,
+
+          // Top face
+          0.0, 1,
+          0.0, 0.0,
+          1.0, 0.0,
+          1.0, 1,
+
+          // Bottom face
+          1.0, 1,
+          0.0, 1,
+          0.0, 0.0,
+          1.0, 0.0,
+
+          // Right face
+          1.0, 0.0,
+          1.0, 1,
+          0.0, 1,
+          0.0, 0.0,
+
+          // Left face
+          0.0, 0.0,
+          1.0, 0.0,
+          1.0, 1,
+          0.0, 1,
+        ];
+
+		return texture_buffer;
+	}
+
+	this.create_text_buffer_poste = function(){
+		var texture_buffer = []
+
+		for (var i = 0; i < 40; i++){
+			for (var j = 0; j < this.perfil.forma.length; j++){
+				var punto = this.perfil.forma[j];
+				var u = (punto[1]+punto[2])/this.radio;
+				var v = i*0.5;
+
+				texture_buffer.push(u);
+				texture_buffer.push(v);
+			}
+		}
+
+		return texture_buffer;
 	}
 }
 
