@@ -5,10 +5,13 @@ function CarcasaAuto(){
 		normal:[],
     normales:[]
 	}
+  this.perfil_completo = {
+    forma:[],
+    normales:[]
+  }
   this.normales_tapa1 = [];
   this.normales_tapa2 = [];
   this.perfil_curva = null;
-  this.perfil_completo = null;
   this.tapa1 = new SupFan();
   this.tapa2 = new SupFan();
 	this.largo = null; //x
@@ -35,8 +38,12 @@ function CarcasaAuto(){
     this.tapa2.create(this.perfil, color_tapa);*/
 
     this.crear_perfil_completo(100);
-    this.superficie.create(camino, 40, this.perfil.forma, this.perfil.normal, color);
+    this.superficie.create(camino, 40, this.perfil, color);
+
+    this.perfil_completo.normales = this.normales_tapa1;
     this.tapa1.create(this.perfil_completo, color_tapa);
+
+    this.perfil_completo.normales = this.normales_tapa2;
     this.tapa2.create(this.perfil_completo, color_tapa);
 
     this.traslacion_tapa1 = mat4.create();
@@ -120,12 +127,15 @@ function CarcasaAuto(){
 
     camino.create(puntos_control);
 
-    this.perfil_completo = [];
+    // this.perfil_completo = [];
 
     for (var i = 0; i < step; i++){
       var u = (camino.valores_u/step)*i;
       var punto = camino.get_punto(u);
-      this.perfil_completo.push(punto);
+      this.perfil_completo.forma.push(punto);
+      // this.perfil_completo.normales.push();
+      this.normales_tapa1.push([0.0, 0.0, -1.0]);
+      this.normales_tapa2.push([0.0, 0.0, 1.0]);
     }
   }
 
@@ -182,8 +192,8 @@ function CarcasaAuto(){
       var punto = camino.get_punto(u);
       this.perfil.forma.push(punto);
       this.perfil.normales.push([0.0, 1.0, 0.0]);
-      this.normales_tapa1.push([0.0, 0.0, 1.0]);
-      this.normales_tapa2.push([0.0, 0.0, -1.0]);
+      // this.normales_tapa1.push([0.0, 0.0, 1.0]);
+      // this.normales_tapa2.push([0.0, 0.0, -1.0]);
     }
 
     this.perfil.normal.push([0,0,1]);
@@ -263,8 +273,8 @@ function CarcasaAuto(){
     texture_buffer_tapas.push(0.5);
     texture_buffer_tapas.push(0.5);
 
-    for (var i = 0; i < this.perfil_completo.length; i++){
-      var punto = this.perfil_completo[i];
+    for (var i = 0; i < this.perfil_completo.forma.length; i++){
+      var punto = this.perfil_completo.forma[i];
       var u = 0.9*(punto[0]+this.largo/2)/this.largo+0.05;
       var v = 0.9/3*((punto[1]+this.alto/2)/this.alto)+1/3;
 
