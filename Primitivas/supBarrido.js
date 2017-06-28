@@ -5,9 +5,9 @@ function supBarrido(){
 	this.final = null;
 	this.puntos_curva = [];
 
-	this.create = function(camino, niveles, puntos_forma, normales_forma, color){
+	this.create = function(camino, niveles, perfil, color){
 
-		var cols = puntos_forma.length; //Las columnas tendran los puntos de la forma
+		var cols = perfil.forma.length; //Las columnas tendran los puntos de la forma
 										//Los niveles son la cantidad de repeticiones de la forma
 		this.grilla.create(niveles, cols);
 
@@ -15,6 +15,8 @@ function supBarrido(){
 
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
+		if(perfil.normales)
+			this.grilla.normal_buffer = [];
 
 		this.grilla.createIndexBuffer();
 
@@ -36,11 +38,11 @@ function supBarrido(){
 
 			//******PARA QUE COINCIDA CON LA TANGENTE*******
 			vec3.normalize(tan, tan);
-			vec3.normalize(normales_forma[0], normales_forma[0]);
-			var angulo = Math.acos(vec3.dot(tan, normales_forma[0]));
+			vec3.normalize(perfil.normal[0], perfil.normal[0]);
+			var angulo = Math.acos(vec3.dot(tan, perfil.normal[0]));
 
 			var eje = vec3.create();
-			vec3.cross(eje, tan, normales_forma[0]);
+			vec3.cross(eje, tan, perfil.normal[0]);
 
 			//La forma debe tener la orientacion de la normal, entonces la roto acorde
 			var mat_rotacion_tan = mat4.create();
@@ -49,7 +51,7 @@ function supBarrido(){
 
 			//******PARA QUE COINCIDA CON LA NORMAL*******
 			normal_mod = vec3.create();
-			vec3.transformMat4(normal_mod, normales_forma[1], mat_rotacion_tan);
+			vec3.transformMat4(normal_mod, perfil.normal[1], mat_rotacion_tan);
 			vec3.normalize(normal, normal);
 			vec3.normalize(normal_mod, normal_mod);
 			var angulo_norm = Math.acos(vec3.dot(normal, normal_mod));
@@ -62,10 +64,9 @@ function supBarrido(){
 			mat4.identity(mat_rotacion_norm);
 			mat4.rotate(mat_rotacion_norm, mat_rotacion_norm, angulo_norm, eje_norm);
 
-			//Creo una matriz con las normales
 			//Recorro cada punto de la figura
-			for (var j = 0; j < puntos_forma.length; j++) {
-				var punto_figura = vec3.fromValues(puntos_forma[j][0], puntos_forma[j][1], puntos_forma[j][2]);
+			for (var j = 0; j < perfil.forma.length; j++) {
+				var punto_figura = vec3.fromValues(perfil.forma[j][0], perfil.forma[j][1], perfil.forma[j][2]);
 				//Roto
 				vec3.transformMat4(punto_figura, punto_figura, mat_rotacion_tan);
 				//Roto para que coincidan las normales
@@ -76,6 +77,12 @@ function supBarrido(){
 				this.grilla.position_buffer.push(punto_figura[0]);
 				this.grilla.position_buffer.push(punto_figura[1]);
 				this.grilla.position_buffer.push(punto_figura[2]);
+
+				if(perfil.normales){
+					this.grilla.normal_buffer.push(perfil.normales[j][0]);
+					this.grilla.normal_buffer.push(perfil.normales[j][1]);
+					this.grilla.normal_buffer.push(perfil.normales[j][2]);
+				}
 
 				if(!this.con_textura){
 					this.grilla.color_buffer.push(color[0]);

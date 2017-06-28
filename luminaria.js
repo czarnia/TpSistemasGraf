@@ -3,7 +3,8 @@ function Luminaria(){
   this.foco = new Cuadrado();
 	this.perfil = {
 		forma:null,
-		normal:null
+		normal:null,
+		normales:null
 	}
 	this.rotacion = null;
 	this.traslacion = null;
@@ -36,10 +37,11 @@ function Luminaria(){
   }
 
 	this.create = function(radio, alto, largo, _x, _y, _z){
-	    var puntos_forma = devolver_puntos_circulo(radio, 30);
+	    var puntos_forma = devolver_puntos_circulo(radio, 30, this.perfil);
 	    var camino = this.camino(alto, largo);
 			var color = [1,0.843,0];
-	    this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1], color);
+	    // this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1], color);
+	    this.poste.create(camino, 40, this.perfil, color);
 	    this.foco.create(_z, _y, _x, color); //8,3,6
 
 	    var ubic_foco = camino.puntosDeControl[camino.puntosDeControl.length-1];
@@ -102,7 +104,7 @@ function Luminaria(){
 }
 
 
-function devolver_puntos_circulo(radio, step){
+function devolver_puntos_circulo(radio, step, perfil){
 	var normales = [];
 	var puntos = [];
 
@@ -124,5 +126,7 @@ function devolver_puntos_circulo(radio, step){
 	};
 	valores.push(puntos);
 	valores.push(normales);
+	perfil.forma = puntos;
+	perfil.normal = normales;
 	return valores;
 }

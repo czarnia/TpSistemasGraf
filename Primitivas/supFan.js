@@ -62,37 +62,39 @@ function SupFan(){
 
   this.draw = function(mvMatrix_total){
     if(this.texture_buffer != null){
-        gl.useProgram(shaderProgramTexturedObject);
-        var u_model_view_matrix = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
-        gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);
+      gl.useProgram(shaderProgramTexturedObject);
+      var u_model_view_matrix = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
+      gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);
 
-        var vertexTextureAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aTextureCoord");
-        gl.enableVertexAttribArray(vertexTextureAttribute);
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
-        gl.vertexAttribPointer(vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
+      var vertexTextureAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aTextureCoord");
+      gl.enableVertexAttribArray(vertexTextureAttribute);
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
+      gl.vertexAttribPointer(vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
 
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, this.texture);
-        gl.uniform1i(shaderProgramTexturedObject.samplerUniform, 0);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, this.texture);
+      gl.uniform1i(shaderProgramTexturedObject.samplerUniform, 0);
 
-        var vertexPositionAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aVertexPosition");
-        gl.enableVertexAttribArray(vertexPositionAttribute);
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-        gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-      }else{
-        var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
+      var vertexPositionAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aVertexPosition");
+      gl.enableVertexAttribArray(vertexPositionAttribute);
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+      gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
-        gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);
-        var vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
-        gl.enableVertexAttribArray(vertexColorAttribute);
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-        gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+      gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, false);
+    }else{
+      var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 
-        var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
-        gl.enableVertexAttribArray(vertexPositionAttribute);
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-        gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-      }
+      gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix_total);
+      var vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
+      gl.enableVertexAttribArray(vertexColorAttribute);
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
+      gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+
+      var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
+      gl.enableVertexAttribArray(vertexPositionAttribute);
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+      gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+    }    
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 

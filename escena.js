@@ -76,7 +76,7 @@ function Escena(){
 					plaza.translate_acum([this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
 									this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + i * (this.lado_manzana + this.ancho_calle)]);
-					plaza.initTexture("Texturas/plaza.jpg");
+					// plaza.initTexture("Texturas/plaza.jpg");
 					this.plazas.push(plaza);
 				}else{
 					var manzana = new Manzana();
@@ -84,7 +84,7 @@ function Escena(){
 					manzana.translate([this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
 									this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + i * (this.lado_manzana + this.ancho_calle)]);
-					manzana.initTexture("Texturas/vereda.jpg");
+					// manzana.initTexture("Texturas/vereda.jpg");
 					this.manzanas.push(manzana);
 					//Crear manzana
 				}

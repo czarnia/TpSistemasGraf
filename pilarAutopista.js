@@ -1,6 +1,7 @@
 function PilarAutopista(){
 	this.superficie = new supRevolucion();
 	this.perfil = [];
+	this.perfil_normales = [];
 
 	this.traslacion = null;
 	this.rotacion = null;
@@ -22,13 +23,13 @@ function PilarAutopista(){
 		this.superficie.create([0,1,0], puntos_perfil, Math.PI*2, 60.0, [0.66, 0.66, 0.66]);
 
 		this.rotacion = mat4.create();
-    mat4.identity(this.rotacion);
+	    mat4.identity(this.rotacion);
 
-    this.traslacion = mat4.create();
-    mat4.identity(this.traslacion);
+	    this.traslacion = mat4.create();
+	    mat4.identity(this.traslacion);
 
 		this.escalado = mat4.create();
-    mat4.identity(this.escalado);
+	    mat4.identity(this.escalado);
 	}
 
 	this.crear_perfil = function(){
@@ -40,20 +41,45 @@ function PilarAutopista(){
 		var p_pilar = [];
 		var p_base = [];
 
+		var n_copa = [];
+		var n_pilar = [];
+		var n_base = [];
+
 		p_copa.push([-20,80,0]);
+		n_copa.push([-1.0, 0.0, 0.0]);
+
 		p_copa.push([-20,80,0]);
+		n_copa.push([-1.0, 0.0, 0.0]);
+
 		p_copa.push([-7,70,0]);
+		n_copa.push([-1.0, 0.0, 0.0]);
+
 		p_copa.push([-7,70,0]);
+		n_copa.push([-1.0, 0.0, 0.0]);
 
 		p_pilar.push([-7,70,0]);
+		n_pilar.push([-1.0, 0.0, 0.0]);
+
 		p_pilar.push([-7,70,0]);
+		n_pilar.push([-1.0, 0.0, 0.0]);
+
 		p_pilar.push([-7,20,0]);
+		n_pilar.push([-1.0, 0.0, 0.0]);
+
 		p_pilar.push([-7,20,0]);
+		n_pilar.push([-1.0, 0.0, 0.0]);
 
 		p_base.push([-7,20,0]);
+		n_base.push([-1.0, 0.0, 0.0]);
+
 		p_base.push([-15,15,0]);
+		n_base.push([-1.0, 0.0, 0.0]);
+
 		p_base.push([-15,10,0]);
+		n_base.push([-1.0, 0.0, 0.0]);
+
 		p_base.push([-20,0,0]);
+		n_base.push([-1.0, 0.0, 0.0]);
 
 		copa.create(p_copa);
 		pilar.create(p_pilar);

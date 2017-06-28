@@ -110,18 +110,36 @@
 	<!-- Vertex shader para texturas -->
 	<script id="shader-texture-vs" type="x-shader/x-vertex">
 			attribute vec3 aVertexPosition;
+			attribute vec3 aVertexNormal;
 			attribute vec2 aTextureCoord;
 
 			uniform mat4 uMVMatrix;
 			uniform mat4 uPMatrix;
+			uniform mat3 uNMatrix;
+
+			uniform vec3 uAmbientColor;
+
+		    uniform vec3 uLightingDirection;
+		    uniform vec3 uDirectionalColor;
+
+		    uniform bool uUseLighting;
 
 			varying vec2 vTextureCoord;
+			varying vec3 vLightWeighting;
+			varying vec3 vVertexNormal;
 
 			void main(void) {
-					// gl_Position es una variable "built-in" de GLSL que es usada para
-					// almacenar la posici�n resultante del fragmento.
 					gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
 					vTextureCoord = aTextureCoord;
+					vVertexNormal = aVertexNormal;
+
+					if (!uUseLighting) {
+			            vLightWeighting = vec3(1.0, 1.0, 1.0);
+			        } else {
+			            vec3 transformedNormal = uNMatrix * aVertexNormal;
+			            float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
+			            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+			        }
 			}
 	</script>
 
@@ -129,31 +147,57 @@
 	<script id="shader-texture-fs" type="x-shader/x-fragment">
 	precision mediump float;
 	varying vec2 vTextureCoord;
+	varying vec3 vLightWeighting;
+	varying vec3 vVertexNormal;
 
 	uniform sampler2D uSampler;
 
 	void main(void) {
-		gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+		gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+		// gl_FragColor = vec4(vVertexNormal.rgb, 1.0);
 	}
 	</script>
 
 	<!-- Vertex shader para texturas EDIFICIOS -->
 	<script id="shader-texture-edif-vs" type="x-shader/x-vertex">
 			attribute vec3 aVertexPosition;
+			attribute vec3 aVertexNormal;
 			attribute vec2 aTextureCoord;
 
 			uniform mat4 uMVMatrix;
 			uniform mat4 uPMatrix;
-			uniform float uAltura;
+			uniform mat3 uNMatrix;
+
+			uniform vec3 uAmbientColor;
+
+		    uniform vec3 uLightingDirection;
+		    uniform vec3 uDirectionalColor;
+
+		    uniform bool uUseLighting;
 
 			varying vec2 vTextureCoord;
+			varying vec3 vLightWeighting;
+			varying vec3 vVertexNormal;
+
+			uniform float uAltura;
 
 			void main(void) {
 					// vec3 aux = aVertexPosition;
 					// aux.y *= uAltura; //probar en y sino
 					gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
 					vTextureCoord = aTextureCoord;
+					vVertexNormal = aVertexNormal;
+
 					vTextureCoord.y *= uAltura;
+
+					if (!uUseLighting) {
+			            vLightWeighting = vec3(1.0, 1.0, 1.0);
+			        } else {
+			            vec3 transformedNormal = uNMatrix * aVertexNormal;
+			            float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
+			            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+			        }
 			}
 
 	</script>
@@ -162,6 +206,8 @@
 	<script id="shader-texture-edif-fs" type="x-shader/x-fragment">
 	precision mediump float;
 	varying vec2 vTextureCoord;
+	varying vec3 vLightWeighting;
+	varying vec3 vVertexNormal;
 
 	uniform float uAlturaPB;
 	uniform float uAlturaPisos;
@@ -170,29 +216,48 @@
 
 	void main(void) {
 		vec2 uv = vTextureCoord;
+		// vec4 textureColor;
 		//Agregar if de acuerdo a la textura que uso
 		if(vTextureCoord.y <= uAlturaPB){
 			uv.y /= uAlturaPB;
 			// uv.x /= 0.25 / uAlturaPB;
-			gl_FragColor = texture2D(uSamplerPB, uv);
+			vec4 textureColor = texture2D(uSamplerPB, uv);
+			gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+			// gl_FragColor = vec4(vVertexNormal.rgb, 1.0);
 		}else{
 			uv.y -= uAlturaPB;
 			uv.y /= uAlturaPisos;
-			gl_FragColor = texture2D(uSamplerPisos, uv);
+			vec4 textureColor = texture2D(uSamplerPisos, uv);
+			gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+			// gl_FragColor = vec4(vVertexNormal.rgb, 1.0);
 		}
+
+		// gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
 	}
 	</script>
 
 	<!-- Vertex shader para texturas CALLES -->
 	<script id="shader-texture-calle-vs" type="x-shader/x-vertex">
 			attribute vec3 aVertexPosition;
+			attribute vec3 aVertexNormal;
 			attribute vec2 aTextureCoord;
 
 			uniform mat4 uMVMatrix;
 			uniform mat4 uPMatrix;
-			uniform float uAltura;
+			uniform mat3 uNMatrix;
+
+			uniform vec3 uAmbientColor;
+
+		    uniform vec3 uLightingDirection;
+		    uniform vec3 uDirectionalColor;
+
+		    uniform bool uUseLighting;
 
 			varying vec2 vTextureCoord;
+			varying vec3 vLightWeighting;
+			varying vec3 vVertexNormal;
+
+			uniform float uAltura;
 
 			void main(void) {
 					// vec3 aux = aVertexPosition;
@@ -200,6 +265,15 @@
 					gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
 					vTextureCoord = aTextureCoord;
 					// vTextureCoord.y *= uAltura;
+					vVertexNormal = aVertexNormal;
+
+					if (!uUseLighting) {
+			            vLightWeighting = vec3(1.0, 1.0, 1.0);
+			        } else {
+			            vec3 transformedNormal = uNMatrix * aVertexNormal;
+			            float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
+			            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+			        }
 			}
 
 	</script>
@@ -208,6 +282,8 @@
 	<script id="shader-texture-calle-fs" type="x-shader/x-fragment">
 	precision mediump float;
 	varying vec2 vTextureCoord;
+	varying vec3 vLightWeighting;
+	varying vec3 vVertexNormal;
 
 	uniform float uFinManzana;
 	uniform float uFinCruce;
@@ -219,16 +295,18 @@
 		float k = 1.0;
 		int listorti = 0;
 		for(int i = 0; i >= 0; i++){
-			if(vTextureCoord.y <= (uFinManzana * k + uFinCruce * (k - 1.0))){
+			if(vTextureCoord.y < (uFinManzana * k + uFinCruce * (k - 1.0))){
 				listorti = 1;
 				uv.y -= (uFinManzana + uFinCruce) * (k - 1.0)/* - uFinCruce/6.0*/;
 				uv.y /= uFinManzana;
-				gl_FragColor = texture2D(uSamplerCalle, uv);
-			}else if(vTextureCoord.y <= ((uFinManzana + uFinCruce) * k)){
+				vec4 textureColor = texture2D(uSamplerCalle, uv);
+				gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+			}else if(vTextureCoord.y < ((uFinManzana + uFinCruce) * k)){
 				listorti = 1;
 				uv.y -= ((uFinManzana * k) + uFinCruce * (k - 1.0));
 				uv.y /= uFinCruce;
-				gl_FragColor = texture2D(uSamplerCruce, uv);
+				vec4 textureColor = texture2D(uSamplerCruce, uv);
+				gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
 			}
 			k += 1.0;
 			if(listorti == 1)
@@ -426,10 +504,18 @@
 			    shaderProgramTexturedObject.textureCoordAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aTextureCoord");
 			    gl.enableVertexAttribArray(shaderProgramTexturedObject.textureCoordAttribute);
 
+			    shaderProgramTexturedObject.vertexNormalAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aVertexNormal");
+       			gl.enableVertexAttribArray(shaderProgramTexturedObject.vertexNormalAttribute);
 
 		        shaderProgramTexturedObject.pMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPMatrix");
 		        shaderProgramTexturedObject.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uMVMatrix");
+		        shaderProgramTexturedObject.nMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uNMatrix");
 		        shaderProgramTexturedObject.samplerUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uSampler");
+		        shaderProgramTexturedObject.useLightingUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uUseLighting");
+		        shaderProgramTexturedObject.ambientColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uAmbientColor");
+		        shaderProgramTexturedObject.lightingDirectionUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uLightingDirection");
+		        shaderProgramTexturedObject.directionalColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uDirectionalColor");
+
 
 		        //SHADERS DE TEXTURAS EDIFICIOS
 				var fragmentShaderEdificio = getShader(gl, "shader-texture-edif-fs");
@@ -452,13 +538,21 @@
 		        shaderProgramEdificio.textureCoordAttribute = gl.getAttribLocation(shaderProgramEdificio, "aTextureCoord");
 		        gl.enableVertexAttribArray(shaderProgramEdificio.textureCoordAttribute);
 
+		        shaderProgramEdificio.vertexNormalAttribute = gl.getAttribLocation(shaderProgramEdificio, "aVertexNormal");
+       			gl.enableVertexAttribArray(shaderProgramEdificio.vertexNormalAttribute);
+
 		        shaderProgramEdificio.pMatrixUniform = gl.getUniformLocation(shaderProgramEdificio, "uPMatrix");
 		        shaderProgramEdificio.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramEdificio, "uMVMatrix");
+		        shaderProgramEdificio.nMatrixUniform = gl.getUniformLocation(shaderProgramEdificio, "uNMatrix");
 		        shaderProgramEdificio.samplerPB = gl.getUniformLocation(shaderProgramEdificio, "uSamplerPB");
 		        shaderProgramEdificio.samplerPisos = gl.getUniformLocation(shaderProgramEdificio, "uSamplerPisos");
 		        shaderProgramEdificio.Altura = gl.getUniformLocation(shaderProgramEdificio, "uAltura");
 		        shaderProgramEdificio.AlturaPB = gl.getUniformLocation(shaderProgramEdificio, "uAlturaPB");
 		        shaderProgramEdificio.AlturaPisos = gl.getUniformLocation(shaderProgramEdificio, "uAlturaPisos");
+		        shaderProgramEdificio.useLightingUniform = gl.getUniformLocation(shaderProgramEdificio, "uUseLighting");
+		        shaderProgramEdificio.ambientColorUniform = gl.getUniformLocation(shaderProgramEdificio, "uAmbientColor");
+		        shaderProgramEdificio.lightingDirectionUniform = gl.getUniformLocation(shaderProgramEdificio, "uLightingDirection");
+		        shaderProgramEdificio.directionalColorUniform = gl.getUniformLocation(shaderProgramEdificio, "uDirectionalColor");
 
 		        //SHADERS DE TEXTURAS CALLE
 				var fragmentShaderCalle = getShader(gl, "shader-texture-calle-fs");
@@ -481,8 +575,17 @@
 		        shaderProgramCalle.textureCoordAttribute = gl.getAttribLocation(shaderProgramCalle, "aTextureCoord");
 		        gl.enableVertexAttribArray(shaderProgramCalle.textureCoordAttribute);
 
+		        shaderProgramCalle.vertexNormalAttribute = gl.getAttribLocation(shaderProgramCalle, "aVertexNormal");
+       			gl.enableVertexAttribArray(shaderProgramCalle.vertexNormalAttribute);
+
+
 		        shaderProgramCalle.pMatrixUniform = gl.getUniformLocation(shaderProgramCalle, "uPMatrix");
 		        shaderProgramCalle.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramCalle, "uMVMatrix");
+		        shaderProgramCalle.nMatrixUniform = gl.getUniformLocation(shaderProgramCalle, "uNMatrix");
+			        shaderProgramCalle.useLightingUniform = gl.getUniformLocation(shaderProgramCalle, "uUseLighting");
+		        shaderProgramCalle.ambientColorUniform = gl.getUniformLocation(shaderProgramCalle, "uAmbientColor");
+		        shaderProgramCalle.lightingDirectionUniform = gl.getUniformLocation(shaderProgramCalle, "uLightingDirection");
+		        shaderProgramCalle.directionalColorUniform = gl.getUniformLocation(shaderProgramCalle, "uDirectionalColor");
 		        shaderProgramCalle.samplerCalle = gl.getUniformLocation(shaderProgramCalle, "uSamplerCalle");
 		        shaderProgramCalle.samplerCruce = gl.getUniformLocation(shaderProgramCalle, "uSamplerCruce");
 		        shaderProgramCalle.largo = gl.getUniformLocation(shaderProgramCalle, "uAltura");
@@ -588,19 +691,20 @@
 					camino.setupWebGLBuffers();
 
 /*					calle = new Calle();
-					calle.create_perfil(5.0, 0.5);
-					calle.create_calle_escena(35.0, [0.0, 0.0, 35.0], 2.0);
+					calle.create_perfil(1.0, 0.5);
+					// calle.create_calle_escena(35.0, [0.0, 0.0, 35.0], 5.0);
+					calle.create(camino, true);
 					// calle.initTexture("Texturas/tramo-dobleamarilla.jpg");
-					calle.initTexture("Texturas/uv_grid2.jpg");
-					calle.initTexture("Texturas/cruce.jpg");
+					calle.initTexture("Texturas/autopista.jpg");
+					// calle.initTexture("Texturas/cruce.jpg");
 					calle.setupWebGLBuffers();
-					calle.debug_shader();
-					*/
+					// calle.debug_shader();*/
+					
 
 /*					edif = new Edificio();
 					edif.create(10, 20, 10, [0, 0, 0], [0, 0, 0], 350.0);
-					edif.initTexture("ed12_pb.jpg");
-					edif.initTexture("ed1_pisos.jpg");
+					// edif.initTexture("ed12_pb.jpg");
+					// edif.initTexture("ed1_pisos.jpg");
 					edif.setupWebGLBuffers();*/
 
 					escena = new Escena();
@@ -639,8 +743,12 @@
 
 		    var cameraMatrixAu = mat4.create();
 		    mat4.identity(cameraMatrixAu);
+		    var rotationMatrixAu = mat4.create();
+		    mat4.identity(rotationMatrixAu);
 		    var cameraMatrixSt = mat4.create();
 		    mat4.identity(cameraMatrixSt);
+		    var rotationMatrixSt = mat4.create();
+		    mat4.identity(rotationMatrixSt);
 
 		    var free_camera_au = {
 		    	pos: [0.0, 0.0, 0.0],
@@ -698,7 +806,7 @@
 	        			handleCams();
 		    			break;
 	        	}
-	        	actualizar_CameraMatrix(handleKeyDownFreeStreet.camera, handleKeyDownFreeStreet.mat);
+	        	actualizar_CameraMatrix(handleKeyDownFreeStreet.camera, handleKeyDownFreeStreet.mat, handleKeyDownFreeStreet.rot);
 	        }
 
 	        function handleMouseMoveFreeStreet(event){
@@ -723,7 +831,7 @@
 		        lastMouseX2 = newX;
 		        lastMouseY2 = newY;
 
-		        actualizar_CameraMatrix(handleMouseMoveFreeStreet.camera, handleMouseMoveFreeStreet.mat);
+		        actualizar_CameraMatrix(handleMouseMoveFreeStreet.camera, handleMouseMoveFreeStreet.mat, handleMouseMoveFreeStreet.rot);
 	        }
 
 		    function handleMouseMove(event) {
@@ -761,10 +869,13 @@
 		    	}
 		    }
 
-		    function actualizar_CameraMatrix(free_camera, cameraMatrix){
+		    function actualizar_CameraMatrix(free_camera, cameraMatrix, rotationMatrix){
 		    	mat4.identity(cameraMatrix);
+		    	mat4.identity(rotationMatrix);
 		    	mat4.rotate(cameraMatrix, cameraMatrix, free_camera.theta - Math.PI/2, [1.0, 0.0, 0.0]);
 		    	mat4.rotate(cameraMatrix, cameraMatrix, free_camera.phi, [0.0, 1.0, 0.0]);
+
+		    	mat4.multiply(rotationMatrix, cameraMatrix, rotationMatrix);
 
 		    	mat4.translate(cameraMatrix, cameraMatrix, free_camera.pos);
 		    }
@@ -773,12 +884,14 @@
 		    	primero = 0;
 	    		if(cant_C == 0){
 
-	    			actualizar_CameraMatrix(free_camera_st, cameraMatrixSt);
+	    			actualizar_CameraMatrix(free_camera_st, cameraMatrixSt, rotationMatrixSt);
 
 	    			handleMouseMoveFreeStreet.camera = free_camera_st;
 	    			handleKeyDownFreeStreet.camera = free_camera_st;
 	    			handleMouseMoveFreeStreet.mat = cameraMatrixSt;
 	    			handleKeyDownFreeStreet.mat = cameraMatrixSt;
+	    			handleMouseMoveFreeStreet.rot = rotationMatrixSt;
+	    			handleKeyDownFreeStreet.rot = rotationMatrixSt;
 
 	    			document.onmousemove = handleMouseMoveFreeStreet;
 	    			document.onkeydown = handleKeyDownFreeStreet;
@@ -787,12 +900,15 @@
 
 	    		}else if(cant_C == 1){
 
-	    			actualizar_CameraMatrix(free_camera_au, cameraMatrixAu);
+	    			actualizar_CameraMatrix(free_camera_au, cameraMatrixAu, rotationMatrixAu);
 
 	    			handleMouseMoveFreeStreet.camera = free_camera_au;
 	    			handleKeyDownFreeStreet.camera = free_camera_au;
 	    			handleMouseMoveFreeStreet.mat = cameraMatrixAu;
 	    			handleKeyDownFreeStreet.mat = cameraMatrixAu;
+	    			handleMouseMoveFreeStreet.rot = rotationMatrixAu;
+	    			handleKeyDownFreeStreet.rot = rotationMatrixAu;
+
 	    			document.onmousemove = handleMouseMoveFreeStreet;
 	    			document.onkeydown = handleKeyDownFreeStreet;
 	    			cant_C++;
@@ -828,7 +944,9 @@
 
 				var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 				// Preparamos una matriz de modelo+vista.
-				mat4.identity(mvMatrix);
+				mat4.identity(mvMatrix);			
+
+	            var lighting_direction = [-0.25, -0.25, -1.0];	                       
 
 				if((cant_C == 0) || (primero == 1)){
 					mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
@@ -836,12 +954,18 @@
 					mat4.multiply(mvMatrix, mvMatrix, escenaRotationMatrix);
 					//Traslado ancho y alto ciudad
 					mat4.translate(mvMatrix, mvMatrix, [-11.5, 0.0, -11.5]);
+					vec3.transformMat4(lighting_direction, lighting_direction, escenaRotationMatrix);
 				}else if(cant_C == 1){
+					vec3.transformMat4(lighting_direction, lighting_direction, rotationMatrixSt);
 					mat4.multiply(mvMatrix, mvMatrix, cameraMatrixSt);
 				}else{
+					vec3.transformMat4(lighting_direction, lighting_direction, rotationMatrixAu);
 					mat4.multiply(mvMatrix, mvMatrix, cameraMatrixAu);
-
 				}
+
+				var adjustedLD = vec3.create();
+	            vec3.normalize(adjustedLD, lighting_direction);
+	            vec3.scale(adjustedLD, adjustedLD, -1);	            
 
 				// mat4.rotate(mvMatrix, mvMatrix, t, [1.0, 0.0, 0.0]);
 				t = t + 0.1;
@@ -850,26 +974,36 @@
 
 				//PARA SHADER TEXTURAS
 				gl.useProgram(shaderProgramTexturedObject);
-				gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix);
+				gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix);				
+	            gl.uniform3fv(shaderProgramTexturedObject.lightingDirectionUniform, adjustedLD);
+	            gl.uniform3f(shaderProgramTexturedObject.ambientColorUniform, 0.2, 0.2, 0.2);
+            	gl.uniform3f(shaderProgramTexturedObject.directionalColorUniform, 0.8, 0.8, 0.8);
 				//--------------------------------
 				//PARA SHADER EDIFICIO
 				gl.useProgram(shaderProgramEdificio);
 				gl.uniformMatrix4fv(shaderProgramEdificio.ModelViewMatrixUniform, false, mvMatrix);
+				gl.uniform3fv(shaderProgramEdificio.lightingDirectionUniform, adjustedLD);
+				gl.uniform3f(shaderProgramEdificio.ambientColorUniform, 0.2, 0.2, 0.2);
+            	gl.uniform3f(shaderProgramEdificio.directionalColorUniform, 0.8, 0.8, 0.8);
 				//---------------
 				//PARA SHADER CALLE
 				gl.useProgram(shaderProgramCalle);
 				gl.uniformMatrix4fv(shaderProgramCalle.ModelViewMatrixUniform, false, mvMatrix);
+				gl.uniform3fv(shaderProgramCalle.lightingDirectionUniform, adjustedLD);
+				gl.uniform3f(shaderProgramCalle.ambientColorUniform, 0.2, 0.2, 0.2);
+            	gl.uniform3f(shaderProgramCalle.directionalColorUniform, 0.8, 0.8, 0.8);
 				gl.useProgram(glProgram);
 				//---------------
 
 				//cuadrado.draw();
 				// camino.draw();
 				// ruta.draw();
-/*				edif.tick(t);
-				edif.draw(mvMatrix);*/
+				// edif.tick(t);
+				// edif.draw(mvMatrix);
 				escena.tick(t);
 				escena.draw(mvMatrix);
 				// calle.drawCalle(mvMatrix, 35.0, 2.0, 5.0);
+				// calle.draw(mvMatrix);
 
 			}
 

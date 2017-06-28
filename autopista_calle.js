@@ -3,7 +3,9 @@ function Calle(){
 	this.path = new curvaBspline3();
 	this.perfil = {
 		forma:null,
-		normal:null
+		normal:null,
+		//Para iluminacion
+		normales:null
 	}
 	this.final_curva = null;
 	this.niveles = null;
@@ -19,19 +21,46 @@ function Calle(){
 		this.ancho = ancho;
 		this.perfil.forma = [];
 		this.perfil.normal = [];
+		this.perfil.normales = [];
 		this.niveles = 100;
 
+		// this.perfil.forma.push([-ancho / 2, -alto / 2, 0.0]);
+		// this.perfil.normales.push([0.0, 1.0, 0.0]);
+
+/*		var aux = vec3.create();
+		vec3.subtract(aux, [-(ancho / 2) + (ancho / 6), alto / 2, 0.0], [-ancho / 2, -alto / 2, 0.0]);
+		vec3.rotateZ(aux, aux, [-ancho / 2, -alto / 2, 0.0], Math.PI/2);*/
+
 		this.perfil.forma.push([-ancho / 2, -alto / 2, 0.0]);
+		this.perfil.normales.push([0.0, -1.0, 0.0]);
+
 		this.perfil.forma.push([-(ancho / 2) + (ancho / 6), alto / 2, 0.0]);
+		this.perfil.normales.push([0.0, 1.0, 0.0]);
+
 		this.perfil.forma.push([(ancho / 2) - (ancho / 6), alto / 2, 0.0]);
+		this.perfil.normales.push([0.0, 1.0, 0.0]);
+
+/*		var aux2 = vec3.create();
+		vec3.subtract(aux2, [(ancho / 2) - (ancho / 6), alto / 2, 0.0], [ancho / 2, -alto / 2, 0.0]);
+		vec3.rotateZ(aux2, aux2, [ancho / 2, -alto / 2, 0.0], -Math.PI/2);*/
+
 		this.perfil.forma.push([ancho / 2, -alto / 2, 0.0]);
+		this.perfil.normales.push([0.0, -1.0, 0.0]);
+
 		this.perfil.forma.push([-ancho / 2, -alto / 2, 0.0]);
+		this.perfil.normales.push([0.0, -1.0, 0.0]);
 
 		/*this.perfil.forma.push([0.0, 0.0, 0.0]);
 		this.perfil.forma.push([(ancho / 6), alto, 0.0]);
 		this.perfil.forma.push([ancho - (ancho / 6), alto, 0.0]);
 		this.perfil.forma.push([ancho, 0.0, 0.0]);
 		this.perfil.forma.push([0.0, 0.0, 0.0]);*/
+
+		/*this.perfil.forma.push([-ancho / 2, -alto / 2, 0.0]);
+		this.perfil.forma.push([-(ancho / 2), alto / 2, 0.0]);
+		this.perfil.forma.push([(ancho / 2), alto / 2, 0.0]);
+		this.perfil.forma.push([ancho / 2, -alto / 2, 0.0]);
+		this.perfil.forma.push([-ancho / 2, -alto / 2, 0.0]);*/
 
 		//Para que matchee con la tangente de la curva
 		this.perfil.normal.push([0.0, 0.0, 1.0]);
@@ -59,8 +88,7 @@ function Calle(){
 
 		this.path = curva_camino;
 
-		this.superficie.create(this.path, this.niveles, this.perfil.forma, this.perfil.normal,
-				 [0.0, 0.0, 0.0]);
+		this.superficie.create(this.path, this.niveles, this.perfil, [0.0, 0.0, 0.0]);
 
 		this.final_curva = this.superficie.final;
 	}

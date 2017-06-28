@@ -3,7 +3,8 @@ function Borde(){
 	this.camino = new curvaBspline3();
 	this.perfil = {
 		forma:null,
-		normal:null
+		normal:null,
+		normales:null
 	}
 
 	this.traslacion = null;
@@ -13,18 +14,35 @@ function Borde(){
 	this.create_perfil = function(){
 		this.perfil.forma = [];
 		this.perfil.normal = [];
+		this.perfil.normales = [];
 
 		//COMIENZA CONCRETO
 		this.perfil.forma.push([-3.0, 0.5, 0.0]);
+		this.perfil.normales.push([0.0, 1.0, 0.0]);
+
 		this.perfil.forma.push([-4.0, 1.5, 0.0]);
+		this.perfil.normales.push([0.0, 1.0, 0.0]);
+
 		this.perfil.forma.push([-5.0, 1.5, 0.0]);
+		this.perfil.normales.push([0.0, 1.0, 0.0]);
+
 		this.perfil.forma.push([-5.0, -1.5, 0.0]);
+		this.perfil.normales.push([0.0, -1.0, 0.0]);
+
 		this.perfil.forma.push([5.0, -1.5, 0.0]);
+		this.perfil.normales.push([0.0, -1.0, 0.0]);
+
 		this.perfil.forma.push([5.0, 1.5, 0.0]);
+		this.perfil.normales.push([0.0, 1.0, 0.0]);
+
 		this.perfil.forma.push([4.0, 1.5, 0.0]);
+		this.perfil.normales.push([0.0, 1.0, 0.0]);
+
 		this.perfil.forma.push([3.0, 0.5, 0.0]);
+		this.perfil.normales.push([0.0, 1.0, 0.0]);
 
 		this.perfil.forma.push([-3.0, 0.5, 0.0]);
+		this.perfil.normales.push([0.0, 1.0, 0.0]);
 
 		//Segunda autopista
 /*		this.perfil.forma.push([9.0, 0.5, 0.0]);
@@ -63,7 +81,7 @@ function Borde(){
 
 		this.camino = curva_camino;
 
-		this.superficie.create(this.camino, 100.0, this.perfil.forma, this.perfil.normal, [0.66, 0.66, 0.66]);
+		this.superficie.create(this.camino, 100.0, this.perfil, [0.66, 0.66, 0.66]);
 	}
 
 	this.translate_acum = function(v){

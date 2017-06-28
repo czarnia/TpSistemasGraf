@@ -17,6 +17,7 @@ function supRevolucion(){
 
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
+    this.grilla.normal_buffer = [];
 
 		this.grilla.createIndexBuffer();
 
@@ -32,6 +33,11 @@ function supRevolucion(){
 				this.grilla.position_buffer.push(punto[0]);
 				this.grilla.position_buffer.push(punto[1]);
 				this.grilla.position_buffer.push(punto[2]);
+
+        //Solamente para que se dibuje despues corregir
+        this.grilla.normal_buffer.push(punto[0]);
+        this.grilla.normal_buffer.push(punto[1]);
+        this.grilla.normal_buffer.push(punto[2]);
 
 				this.grilla.color_buffer.push(color[0]);
 				this.grilla.color_buffer.push(color[1] * i/step);

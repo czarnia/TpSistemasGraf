@@ -2,7 +2,8 @@ function Vereda(){
 	this.superficie = new supBarrido();
 	this.perfil = {
 		forma:[],
-		normal:[]
+		normal:[],
+		normales:null
 	}
 	this.camino_perfil = null;
 	this.tapa1 = new SupFan();
@@ -138,7 +139,7 @@ function Vereda(){
         this.alto = alto;
         var camino = this.camino();
         this.crear_perfil(100);
-        this.superficie.create(camino, 40, this.perfil.forma, this.perfil.normal, color);
+        this.superficie.create(camino, 40, this.perfil, color);
         this.tapa1.create(this.perfil.forma, color);
         this.tapa2.create(this.perfil.forma, color);
 

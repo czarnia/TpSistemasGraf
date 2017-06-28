@@ -51,8 +51,10 @@ function Edificio(){
   }
 
   this.setupWebGLBuffers = function (){
-    this.superficie.textures.push(this.textures[0]);
-    this.superficie.textures.push(this.textures[1]);
+    if(this.textures.length > 0){
+      this.superficie.textures.push(this.textures[0]);
+      this.superficie.textures.push(this.textures[1]);
+    }
     this.superficie.setupWebGLBuffers();
 
     this.techo.setupWebGLBuffers();

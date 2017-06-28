@@ -2,7 +2,8 @@ function CarcasaAuto(){
   this.superficie = new supBarrido();
 	this.perfil = {
 		forma:[],
-		normal:[]
+		normal:[],
+    normales:null
 	}
   this.tapa1 = new SupFan();
   this.tapa2 = new SupFan();
@@ -20,7 +21,7 @@ function CarcasaAuto(){
     var camino = this.camino();
     var color_tapa = [color[0]+02, color[1]+0.2, color[2]+0.5];
     this.crear_perfil(100);
-    this.superficie.create(camino, 40, this.perfil.forma, this.perfil.normal, color);
+    this.superficie.create(camino, 40, this.perfil, color);
     this.tapa1.create(this.perfil.forma, color_tapa);
     this.tapa2.create(this.perfil.forma, color_tapa);
 

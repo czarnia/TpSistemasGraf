@@ -11,10 +11,12 @@ function Cuadrado(){
   this.position_buffer = null;
   this.color_buffer = null;
   this.texture_buffer = null;
+  this.normal_buffer = null;
 
   this.webgl_position_buffer = null;
   this.webgl_color_buffer = null;
   this.webgl_texture_buffer = null;
+  this.webgl_normal_buffer = null;
   this.webgl_index_buffer = null;
 
   this.traslacion = null;
@@ -142,6 +144,43 @@ function Cuadrado(){
           0.0, this.y / this.y_total,
         ];
 
+    this.normal_buffer = [
+            // Front face
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+
+            // Back face
+             0.0,  0.0, -1.0,
+             0.0,  0.0, -1.0,
+             0.0,  0.0, -1.0,
+             0.0,  0.0, -1.0,
+
+            // Top face
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+
+            // Bottom face
+             0.0, -1.0,  0.0,
+             0.0, -1.0,  0.0,
+             0.0, -1.0,  0.0,
+             0.0, -1.0,  0.0,
+
+            // Right face
+             1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+
+            // Left face
+            -1.0,  0.0,  0.0,
+            -1.0,  0.0,  0.0,
+            -1.0,  0.0,  0.0,
+            -1.0,  0.0,  0.0];
+
   }
 
   this.actualizar_texture_buffer = function(){
@@ -229,7 +268,13 @@ function Cuadrado(){
           this.webgl_texture_buffer = gl.createBuffer();
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
           gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_buffer), gl.STATIC_DRAW);
-        }else{
+
+          if(this.normal_buffer){
+            this.webgl_normal_buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);
+          }
+      }else{
           // Repetimos los pasos 1. 2. y 3. para la informaci�n del color
           this.webgl_color_buffer = gl.createBuffer();
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
@@ -306,6 +351,21 @@ function Cuadrado(){
 
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
           gl.vertexAttribPointer(shaderProgramEdificio.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+          if(this.normal_buffer){
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+            gl.vertexAttribPointer(shaderProgramEdificio.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+
+            gl.uniform1i(shaderProgramEdificio.useLightingUniform, true);
+
+            var normalMatrix = mat3.create();
+            mat3.fromMat4(normalMatrix, mvMatrix_total);
+            mat3.invert(normalMatrix, normalMatrix);
+            mat3.transpose(normalMatrix, normalMatrix);
+            gl.uniformMatrix3fv(shaderProgramEdificio.nMatrixUniform, false, normalMatrix);
+          }else{
+            gl.uniform1i(shaderProgramEdificio.useLightingUniform, false);
+          }
         }else{
           var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 

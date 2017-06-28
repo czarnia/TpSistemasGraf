@@ -9,10 +9,12 @@ function VertexGrid () {
     this.position_buffer = null;
     this.color_buffer = null;
     this.texture_buffer = null;
+    this.normal_buffer = [];
 
     this.webgl_position_buffer = null;
     this.webgl_color_buffer = null;
     this.webgl_texture_buffer = null;
+    this.webgl_normal_buffer = null;
     this.webgl_index_buffer = null;
 
     this.create = function(_rows, _cols){
@@ -98,29 +100,30 @@ function VertexGrid () {
     // Esta funci�n crea e incializa los buffers dentro del pipeline para luego
     // utlizarlos a la hora de renderizar.
     this.setupWebGLBuffers = function(){
-
-        // 1. Creamos un buffer para las posicioens dentro del pipeline.
         this.webgl_position_buffer = gl.createBuffer();
-        // 2. Le decimos a WebGL que las siguientes operaciones que vamos a ser se aplican sobre el buffer que
-        // hemos creado.
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-        // 3. Cargamos datos de las posiciones en el buffer.
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
 
         if(this.texture_buffer != null){
           this.webgl_texture_buffer = gl.createBuffer();
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
           gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_buffer), gl.STATIC_DRAW);
+
+          this.webgl_normal_buffer = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);
         }else{
-          // Repetimos los pasos 1. 2. y 3. para la informaci�n del color
           this.webgl_color_buffer = gl.createBuffer();
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
           gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
         }
 
-        // Repetimos los pasos 1. 2. y 3. para la informaci�n de los �ndices
-        // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
-        // Notar tambi�n que se usa un array de enteros en lugar de floats.
+        // if(this.normal_buffer){
+        //   this.webgl_normal_buffer = gl.createBuffer();
+        //   gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+        //   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);
+        // }
+
         this.webgl_index_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
@@ -143,11 +146,26 @@ function VertexGrid () {
       gl.uniform1i(shaderProgramCalle.samplerCruce, 1);
 
       gl.uniform1f(shaderProgramCalle.largo, long_calle);
-      gl.uniform1f(shaderProgramCalle.finManzana, lado_manzana /*- lado_cruce/6*/);
+      gl.uniform1f(shaderProgramCalle.finManzana, lado_manzana - lado_cruce/6);
       gl.uniform1f(shaderProgramCalle.finCruce, lado_cruce /*- 2*lado_cruce/6*/);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
       gl.vertexAttribPointer(shaderProgramCalle.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+      if(this.normal_buffer.length > 0){
+        gl.uniform1i(shaderProgramCalle.useLightingUniform, true);        
+      }else{
+        gl.uniform1i(shaderProgramCalle.useLightingUniform, false);
+      }
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+      gl.vertexAttribPointer(shaderProgramCalle.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+
+      var normalMatrix = mat3.create();
+      mat3.fromMat4(normalMatrix, mvMatrix_total);
+      mat3.invert(normalMatrix, normalMatrix);
+      mat3.transpose(normalMatrix, normalMatrix);
+      gl.uniformMatrix3fv(shaderProgramCalle.nMatrixUniform, false, normalMatrix);
 
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
@@ -175,6 +193,29 @@ function VertexGrid () {
 
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
           gl.vertexAttribPointer(shaderProgramTexturedObject.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+          if(this.normal_buffer.length > 0){
+            // gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+            // gl.vertexAttribPointer(shaderProgramTexturedObject.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+
+            gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, true);            
+
+            // var normalMatrix = mat3.create();
+            // mat3.fromMat4(normalMatrix, mvMatrix_total);
+            // mat3.invert(normalMatrix, normalMatrix);
+            // mat3.transpose(normalMatrix, normalMatrix);
+            // gl.uniformMatrix3fv(shaderProgramTexturedObject.nMatrixUniform, false, normalMatrix);
+          }else{
+            gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, false);
+          }
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+          gl.vertexAttribPointer(shaderProgramTexturedObject.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+
+          var normalMatrix = mat3.create();
+          mat3.fromMat4(normalMatrix, mvMatrix_total);
+          mat3.invert(normalMatrix, normalMatrix);
+          mat3.transpose(normalMatrix, normalMatrix);
+          gl.uniformMatrix3fv(shaderProgramTexturedObject.nMatrixUniform, false, normalMatrix);
       }else{
           var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 
@@ -188,7 +229,7 @@ function VertexGrid () {
           gl.enableVertexAttribArray(vertexPositionAttribute);
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
           gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-        }
+       }
 
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
