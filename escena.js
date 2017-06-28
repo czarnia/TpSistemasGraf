@@ -46,11 +46,29 @@ function Escena(){
 
 	this.create_autos = function(){
 		this.autos = [];
+		this.posiciones_autos = [1.7, 2.7, 3.7, 1.7, 2.7, 3.7];
+		this.velocidades_auto = [600, 450, 550, 600, 700, 400];
 
-		var auto1 = new Auto();
+		for (var i = 0; i < 6; i++){
+			var auto = new Auto();
+			auto.create([0.6,0,0.4], [0.6,0.6,0.7], 0.5, 0.6, 1.3, 0.11, 0.07);
+			auto.initTexture(this.texturas[9],this.texturas[3]);
+			auto.translate([0,5.3,this.posiciones_autos[i]]);
+
+			var curva_auto = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
+			if (i > 2){
+				curva_auto.dar_vuelta_curva();
+			}
+
+			auto.agregar_movimiento(curva_auto, this.velocidades_auto[i]);
+
+			this.autos.push(auto);
+		}
+
+		/*var auto1 = new Auto();
 		auto1.create([0.6,0,0.4], [0.6,0.6,0.7], 0.5, 0.6, 1.3, 0.11, 0.07);
 		auto1.initTexture(this.texturas[9],this.texturas[3]);
-		auto1.translate([0,5.5,3]);
+		auto1.translate([0,5.3,3]);
 
 		var curva_auto1 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
 		auto1.agregar_movimiento(curva_auto1, 250);
@@ -60,14 +78,14 @@ function Escena(){
 		var auto2 = new Auto();
 		auto2.create([0,0.5,0.4], [0.6,0.6,0.7], 0.5, 0.6, 1.3, 0.11, 0.07);
 		auto2.initTexture(this.texturas[9],this.texturas[3]);
-		auto2.translate([0,5.5,2]);
+		auto2.translate([0,5.3,2]);
 
 		var curva_auto2 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
 		curva_auto2.dar_vuelta_curva();
 		auto2.agregar_movimiento(curva_auto2, 400);
 
 		this.autos.push(auto1);
-		this.autos.push(auto2);
+		this.autos.push(auto2);*/
 	}
 
 	this.create_mapa = function(){
