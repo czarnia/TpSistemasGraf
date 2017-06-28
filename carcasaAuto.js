@@ -3,8 +3,10 @@ function CarcasaAuto(){
 	this.perfil = {
 		forma:[],
 		normal:[],
-    normales:null
+    normales:[]
 	}
+  this.normales_tapa1 = [];
+  this.normales_tapa2 = [];
   this.tapa1 = new SupFan();
   this.tapa2 = new SupFan();
 	this.largo = null; //x
@@ -22,8 +24,12 @@ function CarcasaAuto(){
     var color_tapa = [color[0]+02, color[1]+0.2, color[2]+0.5];
     this.crear_perfil(100);
     this.superficie.create(camino, 40, this.perfil, color);
-    this.tapa1.create(this.perfil.forma, color_tapa);
-    this.tapa2.create(this.perfil.forma, color_tapa);
+
+    this.perfil.normales = this.normales_tapa1;
+    this.tapa1.create(this.perfil, color_tapa);
+    
+    this.perfil.normales = this.normales_tapa2;
+    this.tapa2.create(this.perfil, color_tapa);
 
     this.traslacion_tapa1 = mat4.create();
     mat4.identity(this.traslacion_tapa1);
@@ -110,6 +116,9 @@ function CarcasaAuto(){
       var u = (camino.valores_u/step)*i;
       var punto = camino.get_punto(u);
       this.perfil.forma.push(punto);
+      this.perfil.normales.push([0.0, 1.0, 0.0]);
+      this.normales_tapa1.push([0.0, 0.0, 1.0]);
+      this.normales_tapa2.push([0.0, 0.0, -1.0]);
     }
 
     this.perfil.normal.push([0,0,1]);

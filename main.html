@@ -302,12 +302,14 @@
 				uv.y /= uFinManzana;
 				vec4 textureColor = texture2D(uSamplerCalle, uv);
 				gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+				// gl_FragColor = vec4(vVertexNormal.rgb, 1.0);
 			}else if(vTextureCoord.y < ((uFinManzana + uFinCruce) * k)){
 				listorti = 1;
 				uv.y -= ((uFinManzana * k) + uFinCruce * (k - 1.0));
 				uv.y /= uFinCruce;
 				vec4 textureColor = texture2D(uSamplerCruce, uv);
 				gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+				// gl_FragColor = vec4(vVertexNormal.rgb, 1.0);
 			}
 			k += 1.0;
 			if(listorti == 1)
@@ -949,7 +951,7 @@
 				// Preparamos una matriz de modelo+vista.
 				mat4.identity(mvMatrix);			
 
-	            var lighting_direction = [-0.25, -0.25, -1.0];	                       
+	            var lighting_direction = [-0.25, -0.25, -1.0];
 
 				if((cant_C == 0) || (primero == 1)){
 					mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
@@ -1003,7 +1005,7 @@
 				// ruta.draw();
 				// edif.tick(t);
 				// edif.draw(mvMatrix);
-				escena.tick(t);
+				// escena.tick(t);
 				escena.draw(mvMatrix);
 				// calle.drawCalle(mvMatrix, 35.0, 2.0, 5.0);
 				// calle.draw(mvMatrix);

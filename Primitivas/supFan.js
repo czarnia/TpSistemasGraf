@@ -12,19 +12,32 @@ function SupFan(){
   this.texture_buffer = null;
   this.webgl_texture_buffer = null;
 
+  this.normal_buffer = [];
+  this.webgl_normal_buffer = null;
+
   this.create = function(perfil, color){
     this.position_buffer.push(0);
     this.position_buffer.push(0);
     this.position_buffer.push(0);
 
+    this.normal_buffer.push(perfil.normales[0][0]);
+    this.normal_buffer.push(perfil.normales[0][1]);
+    this.normal_buffer.push(perfil.normales[0][2]);
+
     this.color_buffer.push(color[0]);
     this.color_buffer.push(color[1]);
     this.color_buffer.push(color[2]);
 
-    for (var i = 0; i < perfil.length; i++){
-      this.position_buffer.push(perfil[i][0]);
-      this.position_buffer.push(perfil[i][1]);
-      this.position_buffer.push(perfil[i][2]);
+    for (var i = 0; i < perfil.forma.length; i++){
+      this.position_buffer.push(perfil.forma[i][0]);
+      this.position_buffer.push(perfil.forma[i][1]);
+      this.position_buffer.push(perfil.forma[i][2]);
+
+      if(perfil.normales){
+        this.normal_buffer.push(perfil.normales[i][0]);
+        this.normal_buffer.push(perfil.normales[i][1]);
+        this.normal_buffer.push(perfil.normales[i][2]);
+      }
 
       this.index_buffer.push(i);
 
@@ -33,7 +46,7 @@ function SupFan(){
       this.color_buffer.push(color[2]);
     }
 
-    this.index_buffer.push(perfil.length);
+    this.index_buffer.push(perfil.forma.length);
   }
 
   this.setupWebGLBuffers = function(){
@@ -53,6 +66,10 @@ function SupFan(){
         this.webgl_texture_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_buffer), gl.STATIC_DRAW);
+
+        this.webgl_normal_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);
       }else{
         this.webgl_color_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
@@ -80,7 +97,20 @@ function SupFan(){
       gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
       gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
-      gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, false);
+      if(this.normal_buffer.length > 0){
+        gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, true);            
+      }else{
+        gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, false);
+      }
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+      gl.vertexAttribPointer(shaderProgramTexturedObject.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+
+      var normalMatrix = mat3.create();
+      mat3.fromMat4(normalMatrix, mvMatrix_total);
+      mat3.invert(normalMatrix, normalMatrix);
+      mat3.transpose(normalMatrix, normalMatrix);
+      gl.uniformMatrix3fv(shaderProgramTexturedObject.nMatrixUniform, false, normalMatrix);
+
     }else{
       var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 

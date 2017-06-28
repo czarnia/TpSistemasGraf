@@ -3,8 +3,11 @@ function Vereda(){
 	this.perfil = {
 		forma:[],
 		normal:[],
-		normales:null
+		normales:[]
 	}
+	this.normales_tapa1 = [];
+	this.normales_tapa2 = [];
+	this.normales_borde = [];
 	this.camino_perfil = null;
 	this.tapa1 = new SupFan();
 	this.tapa2 = new SupFan();
@@ -103,6 +106,18 @@ function Vereda(){
       var u = (camino.valores_u/step)*i;
       var punto = camino.get_punto(u);
       this.perfil.forma.push(punto);
+      this.normales_tapa1.push([0.0, -1.0, 0.0]);
+      this.normales_tapa2.push([0.0, 1.0, 0.0]);
+	  // var aux = vec3.create();
+	  // vec3.normalize(aux, punto);
+      if(i < step/4)	     
+	    this.normales_borde.push([1.0, 0.0, 0.0]);
+	  else if(i < step/2)
+	  	this.normales_borde.push([0.0, 0.0, 1.0]);
+	  else if(i < 3*step/2)
+	  	this.normales_borde.push([-1.0, 0.0, 0.0]);
+	  else
+	  	this.normales_borde.push([0.0, 0.0, -1.0]);
     }
 
     this.perfil.normal.push([0,1,0]);
@@ -139,21 +154,26 @@ function Vereda(){
         this.alto = alto;
         var camino = this.camino();
         this.crear_perfil(100);
+
+        this.perfil.normales = this.normales_borde;
         this.superficie.create(camino, 40, this.perfil, color);
-        this.tapa1.create(this.perfil.forma, color);
-        this.tapa2.create(this.perfil.forma, color);
 
-				this.rotacion = mat4.create();
-		    mat4.identity(this.rotacion);
-		    this.traslacion = mat4.create();
-		    mat4.identity(this.traslacion);
+        this.perfil.normales = this.normales_tapa1;
+        this.tapa1.create(this.perfil, color);
+        this.perfil.normales = this.normales_tapa2;
+        this.tapa2.create(this.perfil, color);
 
-				this.traslacion_tapa1 = mat4.create();
-		    mat4.identity(this.traslacion_tapa1);
+		this.rotacion = mat4.create();
+		mat4.identity(this.rotacion);
+		this.traslacion = mat4.create();
+		mat4.identity(this.traslacion);
 
-		    this.traslacion_tapa2 = mat4.create();
-		    mat4.identity(this.traslacion_tapa2);
-				mat4.translate(this.traslacion_tapa2, this.traslacion_tapa2, [0,alto,0]);
+		this.traslacion_tapa1 = mat4.create();
+		mat4.identity(this.traslacion_tapa1);
+
+		this.traslacion_tapa2 = mat4.create();
+		mat4.identity(this.traslacion_tapa2);
+		mat4.translate(this.traslacion_tapa2, this.traslacion_tapa2, [0,alto,0]);
 	}
 
 	this.create_text_buffer = function(){

@@ -117,13 +117,6 @@ function VertexGrid () {
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
           gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
         }
-
-        // if(this.normal_buffer){
-        //   this.webgl_normal_buffer = gl.createBuffer();
-        //   gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
-        //   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);
-        // }
-
         this.webgl_index_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
@@ -195,16 +188,7 @@ function VertexGrid () {
           gl.vertexAttribPointer(shaderProgramTexturedObject.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
           if(this.normal_buffer.length > 0){
-            // gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
-            // gl.vertexAttribPointer(shaderProgramTexturedObject.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
-
             gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, true);            
-
-            // var normalMatrix = mat3.create();
-            // mat3.fromMat4(normalMatrix, mvMatrix_total);
-            // mat3.invert(normalMatrix, normalMatrix);
-            // mat3.transpose(normalMatrix, normalMatrix);
-            // gl.uniformMatrix3fv(shaderProgramTexturedObject.nMatrixUniform, false, normalMatrix);
           }else{
             gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, false);
           }

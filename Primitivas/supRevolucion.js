@@ -4,7 +4,7 @@ function supRevolucion(){
   this.angulo = null;
   this.grilla = new VertexGrid();
 
-  this.create = function(eje, perfil, angulo, step, color){
+  this.create = function(eje, perfil, perfil_normales, angulo, step, color){
 
     var muestreo = angulo/step;
 		this.grilla.create(step, perfil.length);
@@ -35,9 +35,12 @@ function supRevolucion(){
 				this.grilla.position_buffer.push(punto[2]);
 
         //Solamente para que se dibuje despues corregir
-        this.grilla.normal_buffer.push(punto[0]);
-        this.grilla.normal_buffer.push(punto[1]);
-        this.grilla.normal_buffer.push(punto[2]);
+        var normal = vec3.fromValues(perfil_normales[j][0], perfil_normales[j][1],
+         perfil_normales[j][2]);
+        vec3.transformMat4(normal, normal, mat_rotacion);
+        this.grilla.normal_buffer.push(normal[0]);
+        this.grilla.normal_buffer.push(normal[1]);
+        this.grilla.normal_buffer.push(normal[2]);
 
 				this.grilla.color_buffer.push(color[0]);
 				this.grilla.color_buffer.push(color[1] * i/step);

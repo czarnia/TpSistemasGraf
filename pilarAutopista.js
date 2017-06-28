@@ -11,16 +11,19 @@ function PilarAutopista(){
 	this.create = function(){
 		this.crear_perfil();
 		var puntos_perfil = [];
+		var normales_perfil = [];
 		puntos_perfil.push([-20,83,0]);
+		normales_perfil.push([-1.0, 0.0, 0.0]);
 		for (var j = 0; j < this.perfil.length; j++){
 			for (var i = 0; i < 40; i++){
 				var u = (this.perfil[j].valores_u/40)*i;
 				var punto = this.perfil[j].get_punto(u);
 				puntos_perfil.push(punto);
+				normales_perfil.push([-1.0, 0.0, 0.0]);
 			}
 		}
 
-		this.superficie.create([0,1,0], puntos_perfil, Math.PI*2, 60.0, [0.66, 0.66, 0.66]);
+		this.superficie.create([0,1,0], puntos_perfil, normales_perfil, Math.PI*2, 60.0, [0.66, 0.66, 0.66]);
 
 		this.rotacion = mat4.create();
 	    mat4.identity(this.rotacion);
@@ -46,40 +49,19 @@ function PilarAutopista(){
 		var n_base = [];
 
 		p_copa.push([-20,80,0]);
-		n_copa.push([-1.0, 0.0, 0.0]);
-
 		p_copa.push([-20,80,0]);
-		n_copa.push([-1.0, 0.0, 0.0]);
-
 		p_copa.push([-7,70,0]);
-		n_copa.push([-1.0, 0.0, 0.0]);
-
 		p_copa.push([-7,70,0]);
-		n_copa.push([-1.0, 0.0, 0.0]);
 
 		p_pilar.push([-7,70,0]);
-		n_pilar.push([-1.0, 0.0, 0.0]);
-
 		p_pilar.push([-7,70,0]);
-		n_pilar.push([-1.0, 0.0, 0.0]);
-
 		p_pilar.push([-7,20,0]);
-		n_pilar.push([-1.0, 0.0, 0.0]);
-
-		p_pilar.push([-7,20,0]);
-		n_pilar.push([-1.0, 0.0, 0.0]);
+		p_pilar.push([-7,20,0]);		
 
 		p_base.push([-7,20,0]);
-		n_base.push([-1.0, 0.0, 0.0]);
-
 		p_base.push([-15,15,0]);
-		n_base.push([-1.0, 0.0, 0.0]);
-
 		p_base.push([-15,10,0]);
-		n_base.push([-1.0, 0.0, 0.0]);
-
-		p_base.push([-20,0,0]);
-		n_base.push([-1.0, 0.0, 0.0]);
+		p_base.push([-20,0,0]);	
 
 		copa.create(p_copa);
 		pilar.create(p_pilar);

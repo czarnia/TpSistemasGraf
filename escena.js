@@ -84,18 +84,19 @@ function Escena(){
 					//Crear plaza
 					var plaza = new Plaza();
 					plaza.create(this.lado_manzana, 0.5);
-					plaza.translate_acum([this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + j*(this.lado_manzana + this.ancho_calle),
+					plaza.translate_acum([this.lado_manzana/2 + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
-									this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + i * (this.lado_manzana + this.ancho_calle)]);
+									this.lado_manzana/2 + i * (this.lado_manzana + this.ancho_calle)]);
 
 					plaza.initTexture(this.texturas[4]);
 					this.plazas.push(plaza);
 				}else{
 					var manzana = new Manzana();
 					manzana.create(this.lado_manzana, 0.5, 325.0, this.manzanas.length * 400);
-					manzana.translate([this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + j*(this.lado_manzana + this.ancho_calle),
+					manzana.translate([this.lado_manzana/2 + j*(this.lado_manzana + this.ancho_calle),
 										  0.0,
-									this.lado_manzana/2 /*- (this.lado_manzana/10)*/ + i * (this.lado_manzana + this.ancho_calle)]);
+									this.lado_manzana/2 + i * (this.lado_manzana + this.ancho_calle)]);
+
 					manzana.initTexture(this.texturas[5]);
 					this.manzanas.push(manzana);
 					//Crear manzana
@@ -130,9 +131,7 @@ function Escena(){
 	}
 
 	this.draw = function(mvScene){
-		// this.plano.draw();
-
-		this.cielo.draw(mvScene);
+		// this.cielo.draw(mvScene);
 
 		for (var i = 0; i < this.calles.length; i++) {
 			this.calles[i].drawCalle(mvScene, this.lado, this.lado_manzana, this.ancho_calle);

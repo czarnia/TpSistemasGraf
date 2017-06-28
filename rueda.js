@@ -2,7 +2,8 @@ function Rueda(){
 	this.superficie = new supRevolucion();
 	this.perfil = {
 		forma:null,
-		normal:null
+		normal:null,
+		normales:null
 	}
   this.radio = null;
   this.profundidad = null;
@@ -13,25 +14,33 @@ function Rueda(){
 	this.crear_perfil = function(){
 		this.perfil.forma = [];
 		this.perfil.normal = [];
+		this.perfil.normales = [];
 
 		this.perfil.forma.push([this.radio, 0.0, -this.profundidad/2]);
-    this.perfil.forma.push([0.0, 0.0, -this.profundidad/2]);
-    this.perfil.forma.push([0.0, 0.0, this.profundidad/2]);
+		this.perfil.forma.push([0.0, 0.0, -this.profundidad/2]);
+		this.perfil.forma.push([0.0, 0.0, this.profundidad/2]);
 		this.perfil.forma.push([this.radio, 0.0, this.profundidad/2]);
-    this.perfil.forma.push([this.radio, 0.0, -this.profundidad/2]);
+		this.perfil.forma.push([this.radio, 0.0, -this.profundidad/2]);
+
+		//Chequear si bien
+		this.perfil.normales.push([0.0, 0.0, 1.0]);
+		this.perfil.normales.push([0.0, 0.0, 1.0]);
+		this.perfil.normales.push([0.0, 0.0, 1.0]);
+		this.perfil.normales.push([0.0, 0.0, 1.0]);
+		this.perfil.normales.push([0.0, 0.0, 1.0]);
 	}
 
 	this.create = function(radio, profundidad, color){
-    this.radio = radio;
-    this.profundidad = profundidad;
+		this.radio = radio;
+		this.profundidad = profundidad;
 		this.crear_perfil();
-		this.superficie.create([0,0,1], this.perfil.forma, Math.PI*2, 40.0, color);
+		this.superficie.create([0,0,1], this.perfil.forma, this.perfil.normales, Math.PI*2, 40.0, color);
 
 		this.rotacion = mat4.create();
-    mat4.identity(this.rotacion);
+		mat4.identity(this.rotacion);
 
-    this.traslacion = mat4.create();
-    mat4.identity(this.traslacion);
+		this.traslacion = mat4.create();
+		mat4.identity(this.traslacion);
 	}
 
 	this.draw = function(mvMatrix_scene){
@@ -40,9 +49,9 @@ function Rueda(){
 		var mvMatrix_rueda = mat4.create();
 		mat4.identity(mvMatrix_rueda);
 		mat4.multiply(mvMatrix_rueda, this.traslacion, this.rotacion);
-    var mvMatrix_total = mat4.create();
-    mat4.identity(mvMatrix_total);
-    mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_rueda);
+		var mvMatrix_total = mat4.create();
+		mat4.identity(mvMatrix_total);
+		mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_rueda);
 
 		this.superficie.draw(mvMatrix_total);
 	}
