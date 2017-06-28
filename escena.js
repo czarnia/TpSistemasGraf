@@ -17,7 +17,7 @@ function Escena(){
 	this.autos = [];
 
   //uv_grid2: 0, trama-doble: 1, cruce: 2, rueda: 3, plaza: 4, vereda: 5, autopista: 6, concreto: 7, cielo: 8.
-	this.texturas_nombres = ["Texturas/uv_grid2.jpg", "Texturas/tramo-dobleamarilla.jpg", "Texturas/cruce.jpg", "Texturas/rueda.jpg", "Texturas/plaza.jpg", "Texturas/vereda.jpg", "Texturas/autopista.jpg", "Texturas/concreto.jpg", "Texturas/sky.jpg"];
+	this.texturas_nombres = ["Texturas/uv_grid2.jpg", "Texturas/tramo-dobleamarilla.jpg", "Texturas/cruce.jpg", "Texturas/rueda.jpg", "Texturas/plaza.jpg", "Texturas/vereda.jpg", "Texturas/autopista.jpg", "Texturas/concreto.jpg", "Texturas/skybox.jpg"];
 	this.texturas = [];
 
 
@@ -72,7 +72,7 @@ function Escena(){
 
 	this.create_mapa = function(){
 		this.cielo.create(this.lado*4, this.lado*4, this.lado*4, [this.lado/2, this.lado/2, 0], [0.3,0.6,1]);
-		//this.cielo.initTexture(this.texturas[8]);
+		this.cielo.initTexture(this.texturas[8]);
 
 		this.plazas = [];
 		this.manzanas = [];
@@ -142,14 +142,14 @@ function Escena(){
 		}
 
 		for (var i = 0; i < this.manzanas.length; i++) {
-			this.manzanas[i].draw(mvScene);
+			//this.manzanas[i].draw(mvScene);
 		}
 
 		for (var i = 0; i < this.autos.length; i++) {
-			this.autos[i].draw(mvScene);
+			//this.autos[i].draw(mvScene);
 		}
 
-		this.autopista.draw(mvScene);
+		//this.autopista.draw(mvScene);
 
 	}
 
