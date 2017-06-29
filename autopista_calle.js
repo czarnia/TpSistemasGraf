@@ -36,6 +36,8 @@ function Calle(){
 		this.perfil.normales.push([-1.0, 0.0, 0.0]);
 
 		this.perfil.forma.push([-(ancho / 2) + (ancho / 6), alto / 2, 0.0]);
+		this.perfil.normales.push([-1.0, 0.0, 0.0]);
+		this.perfil.forma.push([-(ancho / 2) + (ancho / 6), alto / 2, 0.0]);
 		this.perfil.normales.push([0.0, 1.0, 0.0]);
 
 		// this.perfil.forma.push([-(ancho / 2) + (ancho / 6), alto / 2, 0.0]);
@@ -43,6 +45,8 @@ function Calle(){
 
 		this.perfil.forma.push([(ancho / 2) - (ancho / 6), alto / 2, 0.0]);
 		this.perfil.normales.push([0.0, 1.0, 0.0]);
+		this.perfil.forma.push([(ancho / 2) - (ancho / 6), alto / 2, 0.0]);
+		this.perfil.normales.push([1.0, 0.0, 0.0]);
 
 		// this.perfil.forma.push([(ancho / 2) - (ancho / 6), alto / 2, 0.0]);
 		// this.perfil.normales.push([1.0, 0.0, 0.0]);

@@ -79,9 +79,20 @@ function supBarrido(){
 				this.grilla.position_buffer.push(punto_figura[2]);
 
 				if(perfil.normales){
-					this.grilla.normal_buffer.push(perfil.normales[j][0]);
-					this.grilla.normal_buffer.push(perfil.normales[j][1]);
-					this.grilla.normal_buffer.push(perfil.normales[j][2]);
+					var normal_punto = vec3.fromValues(perfil.normales[j][0], perfil.normales[j][1], perfil.normales[j][2]);
+
+					//Roto
+					vec3.transformMat4(punto_figura, punto_figura, mat_rotacion_tan);
+					//Roto para que coincidan las normales
+					vec3.transformMat4(punto_figura, punto_figura, mat_rotacion_norm);
+					//Traslado el punto a la posicion del nivel en el camino
+					vec3.transformMat4(punto_figura, punto_figura, mat_traslacion);
+
+					vec3.normalize(normal_punto, normal_punto);
+
+					this.grilla.normal_buffer.push(normal_punto[0]);
+					this.grilla.normal_buffer.push(normal_punto[1]);
+					this.grilla.normal_buffer.push(normal_punto[2]);
 				}
 
 				if(!this.con_textura){

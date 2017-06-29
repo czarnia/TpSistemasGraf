@@ -124,7 +124,7 @@ function Autopista(){
 				farol.rotate_acum([0.0, 0.0, signo * 1.0], -Math.PI/2);
 				farol.rotate_acum([1.0, 0.0, 0.0], -Math.PI/2);
 
-				// farol.translate([0.0, 0.0, sube + -1]);
+				farol.translate([0.0, 0.0, sube + -1]);
 				vec3.add(punto, punto, [0.0, 0.0, sube + -1]);
 				farol.translate(punto);
 				this.faroles.push(farol);

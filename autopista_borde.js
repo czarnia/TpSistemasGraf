@@ -21,6 +21,9 @@ function Borde(){
 		this.perfil.normales.push([0.0, 1.0, 0.0]);
 
 		this.perfil.forma.push([-4.0, 1.5, 0.0]);
+		this.perfil.normales.push([1.0, 0.0, 0.0]);
+
+		this.perfil.forma.push([-4.0, 1.5, 0.0]);
 		this.perfil.normales.push([0.0, 1.0, 0.0]);
 
 		this.perfil.forma.push([-5.0, 1.5, 0.0]);
@@ -30,25 +33,31 @@ function Borde(){
 		this.perfil.normales.push([-1.0, 0.0, 0.0]);
 
 		this.perfil.forma.push([-5.0, -1.5, 0.0]);
-		this.perfil.normales.push([0.0, -1.0, 0.0]);
-
-		this.perfil.forma.push([-5.0, -1.5, 0.0]);
 		this.perfil.normales.push([-1.0, 0.0, 0.0]);
 
+		this.perfil.forma.push([-5.0, -1.5, 0.0]);
+		this.perfil.normales.push([0.0, -1.0, 0.0]);
+
 		this.perfil.forma.push([5.0, -1.5, 0.0]);
 		this.perfil.normales.push([0.0, -1.0, 0.0]);
 
 		this.perfil.forma.push([5.0, -1.5, 0.0]);
+		this.perfil.normales.push([1.0, 0.0, 0.0]);
+
+		this.perfil.forma.push([5.0, 1.5, 0.0]);
+		this.perfil.normales.push([1.0, 0.0, 0.0]);
+
+		this.perfil.forma.push([5.0, 1.5, 0.0]);
 		this.perfil.normales.push([1.0, 0.0, 0.0]);
 
 		this.perfil.forma.push([5.0, 1.5, 0.0]);
 		this.perfil.normales.push([0.0, 1.0, 0.0]);
-
-		this.perfil.forma.push([5.0, 1.5, 0.0]);
-		this.perfil.normales.push([1.0, 0.0, 0.0]);
 
 		this.perfil.forma.push([4.0, 1.5, 0.0]);
 		this.perfil.normales.push([0.0, 1.0, 0.0]);
+
+		this.perfil.forma.push([4.0, 1.5, 0.0]);
+		this.perfil.normales.push([-1.0, 0.0, 0.0]);
 
 		this.perfil.forma.push([3.0, 0.5, 0.0]);
 		this.perfil.normales.push([0.0, 1.0, 0.0]);
