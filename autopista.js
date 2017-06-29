@@ -276,4 +276,15 @@ function Autopista(){
 		this.borde_ida.setupWebGLBuffers();
 		this.borde_vuelta.setupWebGLBuffers();
 	}
+
+	this.posiciones_faroles = function(){
+		var posiciones_faroles = [];
+		for (var i = 0; i < this.faroles.length; i++){
+			var m_farol = this.faroles[i].obtener_matriz_foco();
+			var pos_farol = vec3.fromValues(1,1,1);
+			vec3.transformMat4(pos_farol, pos_farol, m_farol);
+			posiciones_faroles.push(pos_farol);
+		}
+		return posiciones_faroles;
+	}
 }
