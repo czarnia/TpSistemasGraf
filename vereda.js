@@ -110,18 +110,16 @@ function Vereda(){
       this.normales_tapa2.push([0.0, 1.0, 0.0]);
 	  // var aux = vec3.create();
 	  // vec3.normalize(aux, punto);
-      if(i < step/4)	     
-	    this.normales_borde.push([1.0, 0.0, 0.0]);
-	  else if(i < step/2)
-	  	this.normales_borde.push([0.0, 0.0, 1.0]);
-	  else if(i < 3*step/2)
-	  	this.normales_borde.push([-1.0, 0.0, 0.0]);
-	  else
-	  	this.normales_borde.push([0.0, 0.0, -1.0]);
-    }
 
-    this.perfil.normal.push([0,1,0]);
-    this.perfil.normal.push([0,0,1]);
+			var tangente = camino.get_tan(u);
+			var normal = vec3.create();
+			vec3.cross(normal, vec3.fromValues(0,1.0,0), tangente);
+			vec3.normalize(normal, normal);
+			this.normales_borde.push([normal[0], normal[1], normal[2]]);
+
+			this.perfil.normal.push([0,1,0]);
+			this.perfil.normal.push([0,0,1]);
+		}
   }
 
 	this.translate_acum = function(v){
@@ -150,18 +148,18 @@ function Vereda(){
 
 
 	this.create = function(color, lado, alto){
-        this.lado = lado;
-        this.alto = alto;
-        var camino = this.camino();
-        this.crear_perfil(100);
+    this.lado = lado;
+    this.alto = alto;
+    var camino = this.camino();
+    this.crear_perfil(100);
 
-        this.perfil.normales = this.normales_borde;
-        this.superficie.create(camino, 40, this.perfil, color);
+    this.perfil.normales = this.normales_borde;
+    this.superficie.create(camino, 40, this.perfil, color);
 
-        this.perfil.normales = this.normales_tapa1;
-        this.tapa1.create(this.perfil, color);
-        this.perfil.normales = this.normales_tapa2;
-        this.tapa2.create(this.perfil, color);
+    this.perfil.normales = this.normales_tapa1;
+    this.tapa1.create(this.perfil, color);
+    this.perfil.normales = this.normales_tapa2;
+    this.tapa2.create(this.perfil, color);
 
 		this.rotacion = mat4.create();
 		mat4.identity(this.rotacion);
