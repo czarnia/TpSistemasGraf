@@ -82,11 +82,9 @@ function supBarrido(){
 					var normal_punto = vec3.fromValues(perfil.normales[j][0], perfil.normales[j][1], perfil.normales[j][2]);
 
 					//Roto
-					vec3.transformMat4(punto_figura, punto_figura, mat_rotacion_tan);
+					vec3.transformMat4(normal_punto, normal_punto, mat_rotacion_tan);
 					//Roto para que coincidan las normales
-					vec3.transformMat4(punto_figura, punto_figura, mat_rotacion_norm);
-					//Traslado el punto a la posicion del nivel en el camino
-					vec3.transformMat4(punto_figura, punto_figura, mat_traslacion);
+					vec3.transformMat4(normal_punto, normal_punto, mat_rotacion_norm);
 
 					vec3.normalize(normal_punto, normal_punto);
 
