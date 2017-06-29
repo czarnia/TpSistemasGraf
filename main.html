@@ -963,7 +963,7 @@
 				// Preparamos una matriz de modelo+vista.
 				mat4.identity(mvMatrix);
 
-	            var lighting_direction = [1.0, 0.0, 0.0];
+	            var lighting_direction = [0.0, -0.2, 0.1];
 
 				if((cant_C == 0) || (primero == 1)){
 					mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
@@ -994,7 +994,7 @@
 				gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix);
 	            gl.uniform3fv(shaderProgramTexturedObject.lightingDirectionUniform, adjustedLD);
 	            gl.uniform3f(shaderProgramTexturedObject.ambientColorUniform, 0.2, 0.2, 0.2);
-            	gl.uniform3f(shaderProgramTexturedObject.directionalColorUniform, 0.8, 0.8, 0.8);
+            	gl.uniform3f(shaderProgramTexturedObject.directionalColorUniform, 0.8, 0.7, 0.4);
 				//--------------------------------
 				//PARA SHADER EDIFICIO
 				gl.useProgram(shaderProgramEdificio);
