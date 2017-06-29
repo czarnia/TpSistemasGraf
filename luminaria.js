@@ -228,9 +228,9 @@ function devolver_puntos_circulo(radio, step, perfil){
 		vec3.transformMat4(punto, punto, mat_rotacion);
 		puntos.push(punto);
 
-		var aux = vec3.create();
-		// vec3.negate(aux, punto);
-		vec3.normalize(aux, punto);
+		var aux = vec3.fromValues(punto[0], punto[1], punto[2]);
+		//vec3.negate(aux, punto);
+		vec3.normalize(aux, aux);
 		perfil.normales.push(aux);
 	};
 	valores.push(puntos);

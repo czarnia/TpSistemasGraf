@@ -148,8 +148,8 @@ function Escena(){
 		this.esc_autopista = [this.lado/final, this.lado/final, this.lado/final];
 	}
 
-	this.draw = function(mvScene){		
-		// this.cielo.draw(mvScene);
+	this.draw = function(mvScene){
+		this.cielo.draw(mvScene);
 
 		for (var i = 0; i < this.calles.length; i++) {
 			this.calles[i].drawCalle(mvScene, this.lado, this.lado_manzana, this.ancho_calle);
@@ -176,7 +176,7 @@ function Escena(){
 
 		gl.useProgram(shaderProgramTexturedObject);
 		gl.uniform3fv(shaderProgramTexturedObject.pointLightingLocationUniform, faroles[3]);
-		gl.uniform3f(shaderProgramTexturedObject.pointLightingColorUniform, 0.8, 0.8, 0.8);
+		gl.uniform3f(shaderProgramTexturedObject.pointLightingColorUniform, 1.0, 1.0, 1.0);
 		gl.useProgram(glProgram);
 
 	}

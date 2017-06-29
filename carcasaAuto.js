@@ -33,7 +33,7 @@ function CarcasaAuto(){
 
     this.perfil.normales = this.normales_tapa1;
     this.tapa1.create(this.perfil, color_tapa);
-    
+
     this.perfil.normales = this.normales_tapa2;
     this.tapa2.create(this.perfil, color_tapa);*/
 
@@ -302,7 +302,7 @@ function CarcasaAuto(){
       }if (dist == 0){
         longitudes.push(0);
       }else{
-          longitudes.push(long);
+        longitudes.push(long);
       }
     }
     return longitudes;

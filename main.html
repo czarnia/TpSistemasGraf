@@ -118,7 +118,7 @@
 			uniform mat4 uPMatrix;
 			uniform mat3 uNMatrix;
 
-		    // uniform bool uUseLighting;
+			uniform bool uUseNormalMap;
 
 			varying vec2 vTextureCoord;
 			// varying vec3 vLightWeighting;
@@ -131,7 +131,7 @@
 					gl_Position = uPMatrix * vPosition;
 					vTextureCoord = aTextureCoord;
 					vVertexNormal = aVertexNormal;
-			        vTransformedNormal = uNMatrix * aVertexNormal;			        
+			        vTransformedNormal = normalize(uNMatrix * aVertexNormal);
 			}
 	</script>
 
@@ -141,8 +141,8 @@
 	uniform vec3 uAmbientColor;
 	uniform bool uUseLighting;
 
-    // uniform vec3 uLightingDirection;
-    // uniform vec3 uDirectionalColor;
+    uniform vec3 uLightingDirection;
+    uniform vec3 uDirectionalColor;
     uniform vec3 uPointLightingLocation;
     uniform vec3 uPointLightingColor;
 
@@ -157,21 +157,33 @@
 
 	void main(void) {
 		vec3 lightWeighting;
-		float distancia = distance(vPosition.xyz, uPointLightingLocation);
+		vec3 normal = vTransformedNormal;
 
-		// if(distancia < 100.0){
-			vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz - vec3(0.0, 1.0, 0.0));
-			float directionalLightWeighting = max(dot(normalize(vTransformedNormal), lightDirection), 0.0);
-			directionalLightWeighting *= 6.0/distancia;
-			lightWeighting = uAmbientColor + uPointLightingColor * directionalLightWeighting;
-		// }else{
-		// 	lightWeighting = vec3(0.0, 0.0, 0.0);
-		// }
-		
+		if (!uUseLighting) {
+			    lightWeighting = vec3(0.8, 0.7, 0.4);
+		} else {
+				float distancia = distance(vPosition.xyz, uPointLightingLocation);
+
+			// if(distancia < 100.0){
+				//************LUZ PUNTUAL****************
+				vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz);
+				float directionalPointLightWeighting = max(dot(normalize(normal), lightDirection), 0.0);
+				directionalPointLightWeighting *= 2.0/distancia;
+
+				//************LUZ DIRECCIONAL****************
+				float directionalLightWeighting = max(dot(vTransformedNormal, uLightingDirection), 0.0);
+				// lightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+
+				lightWeighting = uAmbientColor + uPointLightingColor * directionalPointLightWeighting + uDirectionalColor * directionalLightWeighting;
+			// }else{
+			// 	lightWeighting = vec3(0.0, 0.0, 0.0);
+			// }
+		}
+
 		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 		gl_FragColor = vec4(textureColor.rgb * lightWeighting, textureColor.a);
-		// gl_FragColor = vec4(transformedNormal.rgb, 1.0);
-		// gl_FragColor = vec4(vVertexNormal.rgb, 1.0);
+		//gl_FragColor = vec4(transformedNormal.rgb, 1.0);
+		 //gl_FragColor = vec4(vVertexNormal.rgb*2.0-1.0, 1.0);
 	}
 
 	/*void main(void) {
@@ -222,6 +234,7 @@
 			            vLightWeighting = vec3(1.0, 1.0, 1.0);
 			        } else {
 			            vec3 transformedNormal = uNMatrix * aVertexNormal;
+									transformedNormal = normalize(transformedNormal);
 			            float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
 			            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
 			        }
@@ -295,9 +308,10 @@
 					vVertexNormal = aVertexNormal;
 
 					if (!uUseLighting) {
-			            vLightWeighting = vec3(1.0, 1.0, 1.0);
+			            vLightWeighting = vec3(0.8, 0.7, 0.4);
 			        } else {
 			            vec3 transformedNormal = uNMatrix * aVertexNormal;
+									transformedNormal = normalize(transformedNormal);
 			            float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
 			            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
 			        }
@@ -542,8 +556,8 @@
 		        shaderProgramTexturedObject.samplerUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uSampler");
 		        shaderProgramTexturedObject.useLightingUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uUseLighting");
 		        shaderProgramTexturedObject.ambientColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uAmbientColor");
-		        // shaderProgramTexturedObject.lightingDirectionUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uLightingDirection");
-		        // shaderProgramTexturedObject.directionalColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uDirectionalColor");
+		        shaderProgramTexturedObject.lightingDirectionUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uLightingDirection");
+		        shaderProgramTexturedObject.directionalColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uDirectionalColor");
 		        shaderProgramTexturedObject.pointLightingLocationUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPointLightingLocation");
        	 		shaderProgramTexturedObject.pointLightingColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPointLightingColor");
 
@@ -988,7 +1002,7 @@
 				mat4.identity(mvMatrix);
 				mat4.identity(modelMatrix);
 
-	            var lighting_direction = [-0.25, -0.25, -1.0];
+	            var lighting_direction = [0.0, -0.2, 0.1];
 
 				if((cant_C == 0) || (primero == 1)){
 					mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
@@ -1022,23 +1036,23 @@
 				//PARA SHADER TEXTURAS
 				gl.useProgram(shaderProgramTexturedObject);
 				gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix);
-	            // gl.uniform3fv(shaderProgramTexturedObject.lightingDirectionUniform, adjustedLD);
+	            gl.uniform3fv(shaderProgramTexturedObject.lightingDirectionUniform, adjustedLD);
 	            gl.uniform3f(shaderProgramTexturedObject.ambientColorUniform, 0.2, 0.2, 0.2);
-            	// gl.uniform3f(shaderProgramTexturedObject.directionalColorUniform, 0.8, 0.8, 0.8);
+            	gl.uniform3f(shaderProgramTexturedObject.directionalColorUniform, 0.8, 0.7, 0.4);
 				//--------------------------------
 				//PARA SHADER EDIFICIO
 				gl.useProgram(shaderProgramEdificio);
 				gl.uniformMatrix4fv(shaderProgramEdificio.ModelViewMatrixUniform, false, mvMatrix);
 				gl.uniform3fv(shaderProgramEdificio.lightingDirectionUniform, adjustedLD);
 				gl.uniform3f(shaderProgramEdificio.ambientColorUniform, 0.2, 0.2, 0.2);
-            	gl.uniform3f(shaderProgramEdificio.directionalColorUniform, 0.8, 0.8, 0.8);
+            	gl.uniform3f(shaderProgramEdificio.directionalColorUniform,  0.8, 0.7, 0.4);
 				//---------------
 				//PARA SHADER CALLE
 				gl.useProgram(shaderProgramCalle);
 				gl.uniformMatrix4fv(shaderProgramCalle.ModelViewMatrixUniform, false, mvMatrix);
 				gl.uniform3fv(shaderProgramCalle.lightingDirectionUniform, adjustedLD);
 				gl.uniform3f(shaderProgramCalle.ambientColorUniform, 0.2, 0.2, 0.2);
-            	gl.uniform3f(shaderProgramCalle.directionalColorUniform, 0.8, 0.8, 0.8);
+            	gl.uniform3f(shaderProgramCalle.directionalColorUniform,  0.8, 0.7, 0.4);
 				gl.useProgram(glProgram);
 				//---------------
 

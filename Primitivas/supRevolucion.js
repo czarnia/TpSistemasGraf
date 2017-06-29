@@ -38,6 +38,9 @@ function supRevolucion(){
         var normal = vec3.fromValues(perfil_normales[j][0], perfil_normales[j][1],
          perfil_normales[j][2]);
         vec3.transformMat4(normal, normal, mat_rotacion);
+
+        vec3.normalize(normal, normal);
+
         this.grilla.normal_buffer.push(normal[0]);
         this.grilla.normal_buffer.push(normal[1]);
         this.grilla.normal_buffer.push(normal[2]);
