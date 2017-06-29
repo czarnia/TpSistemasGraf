@@ -149,7 +149,7 @@ function Escena(){
 	}
 
 	this.draw = function(mvScene){
-		// this.cielo.draw(mvScene);
+		this.cielo.draw(mvScene);
 
 		for (var i = 0; i < this.calles.length; i++) {
 			this.calles[i].drawCalle(mvScene, this.lado, this.lado_manzana, this.ancho_calle);

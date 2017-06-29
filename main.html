@@ -137,7 +137,7 @@
 					vVertexNormal = aVertexNormal;
 
 					if (!uUseLighting) {
-			    		vLightWeighting = vec3(1.0, 1.0, 1.0);
+			    		vLightWeighting = vec3(0.8, 0.7, 0.4);
 			    } else {
 						//if (!uUseNormalMap){
 	            transformedNormal = uNMatrix * aVertexNormal;
@@ -280,7 +280,7 @@
 					vVertexNormal = aVertexNormal;
 
 					if (!uUseLighting) {
-			            vLightWeighting = vec3(1.0, 1.0, 1.0);
+			            vLightWeighting = vec3(0.8, 0.7, 0.4);
 			        } else {
 			            vec3 transformedNormal = uNMatrix * aVertexNormal;
 									transformedNormal = normalize(transformedNormal);
@@ -1001,14 +1001,14 @@
 				gl.uniformMatrix4fv(shaderProgramEdificio.ModelViewMatrixUniform, false, mvMatrix);
 				gl.uniform3fv(shaderProgramEdificio.lightingDirectionUniform, adjustedLD);
 				gl.uniform3f(shaderProgramEdificio.ambientColorUniform, 0.2, 0.2, 0.2);
-            	gl.uniform3f(shaderProgramEdificio.directionalColorUniform, 0.8, 0.8, 0.8);
+            	gl.uniform3f(shaderProgramEdificio.directionalColorUniform,  0.8, 0.7, 0.4);
 				//---------------
 				//PARA SHADER CALLE
 				gl.useProgram(shaderProgramCalle);
 				gl.uniformMatrix4fv(shaderProgramCalle.ModelViewMatrixUniform, false, mvMatrix);
 				gl.uniform3fv(shaderProgramCalle.lightingDirectionUniform, adjustedLD);
 				gl.uniform3f(shaderProgramCalle.ambientColorUniform, 0.2, 0.2, 0.2);
-            	gl.uniform3f(shaderProgramCalle.directionalColorUniform, 0.8, 0.8, 0.8);
+            	gl.uniform3f(shaderProgramCalle.directionalColorUniform,  0.8, 0.7, 0.4);
 				gl.useProgram(glProgram);
 				//---------------
 

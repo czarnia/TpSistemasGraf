@@ -97,7 +97,7 @@ function Cuadrado(){
       this.color_buffer.push(color[1]);
       this.color_buffer.push(color[2]);
     }
-    
+
     this.normal_buffer = [
             // Front face
              0.0,  0.0,  1.0,
@@ -289,7 +289,7 @@ function Cuadrado(){
 
           var mvMatrix_total = mat4.create();
           mat4.identity(mvMatrix_total);
-          mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_cuadrado);          
+          mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_cuadrado);
           mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
 
           gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix_total);
@@ -313,7 +313,7 @@ function Cuadrado(){
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
             gl.vertexAttribPointer(shaderProgramTexturedObject.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
-            gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, true);
+            gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, false);
 
             /*var normalMatrix = mat3.create();
             mat3.fromMat4(normalMatrix, mvMatrix_total);
