@@ -120,10 +120,11 @@
 
 			uniform vec3 uAmbientColor;
 
-		    uniform vec3 uLightingDirection;
-		    uniform vec3 uDirectionalColor;
+		  uniform vec3 uLightingDirection;
+		  uniform vec3 uDirectionalColor;
 
-		    uniform bool uUseLighting;
+		  uniform bool uUseLighting;
+			uniform bool uUseNormalMap;
 
 			varying vec2 vTextureCoord;
 			varying vec3 vLightWeighting;
@@ -136,12 +137,16 @@
 					vVertexNormal = aVertexNormal;
 
 					if (!uUseLighting) {
-			            vLightWeighting = vec3(1.0, 1.0, 1.0);
-			        } else {
-			            transformedNormal = uNMatrix * aVertexNormal;
-			            float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
-			            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
-			        }
+			    		vLightWeighting = vec3(1.0, 1.0, 1.0);
+			    } else {
+						//if (!uUseNormalMap){
+	            transformedNormal = uNMatrix * aVertexNormal;
+	            float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
+						/*} else {
+							float directionalLightWeighting =
+						}*/
+						vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+	        }
 			}
 	</script>
 
@@ -159,8 +164,8 @@
 	void main(void) {
 		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 		gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
-		// gl_FragColor = vec4(transformedNormal.rgb, 1.0);
-		// gl_FragColor = vec4(vVertexNormal.rgb, 1.0);
+		//gl_FragColor = vec4(transformedNormal.rgb, 1.0);
+		 //gl_FragColor = vec4(vVertexNormal.rgb*2.0-1.0, 1.0);
 	}
 	</script>
 
@@ -955,7 +960,7 @@
 				// Preparamos una matriz de modelo+vista.
 				mat4.identity(mvMatrix);
 
-	            var lighting_direction = [0.25, 0.25, 1.0];
+	            var lighting_direction = [-0.25, -0.25, -1.0];
 
 				if((cant_C == 0) || (primero == 1)){
 					mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);

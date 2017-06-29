@@ -159,8 +159,10 @@ function Calle(){
 
 		for(var i = 0; i < this.niveles; i++){
 			for (var j = 0; j < this.perfil.forma.length; j++) {
+				var punto = this.perfil.forma[j];
 				var v = repeticion*(this.path.distancias_discret[i]/long_curva);
-				switch(j){
+				var u = (punto[0]+this.ancho/2)/this.ancho;
+				/*switch(j){
 					case 0:
 						var u = 0;
 						break;
@@ -176,7 +178,7 @@ function Calle(){
 					case 4:
 						var u = 0;
 						break;
-				}
+				}*/
 
 				texture_buffer.push(u);
 				texture_buffer.push(v);
@@ -195,38 +197,9 @@ function Calle(){
 
 		for(var i = 0; i < this.niveles; i++){
 			for (var j = 0; j < this.perfil.forma.length; j++) {
-				var repeticion = 1;
-
-				/*if(this.path.distancias_discret[i] <= (this.lado_manzana * k)){
-					var dif = this.path.distancias_discret[i] - (this.lado_manzana + this.ancho) * (k - 1);
-					var v = repeticion*(dif/this.lado_manzana);
-				}else if(this.path.distancias_discret[i] <= ((this.lado_manzana + this.ancho) * k)){
-					var dif = this.path.distancias_discret[i] - this.lado_manzana * k;
-					var v = dif / this.ancho;
-				}else{
-					k++;
-					var dif = this.path.distancias_discret[i] - (this.lado_manzana + this.ancho) * (k - 1);
-					var v = repeticion*(dif/this.lado_manzana);
-				}*/
-				var v = repeticion*(this.path.distancias_discret[i]/*/long_curva*/);
-
-				switch(j){
-					case 0:
-						var u = 0;
-						break;
-					case 1:
-						var u = 0.125;
-						break;
-					case 2:
-						var u = 0.125 * 7;
-						break;
-					case 3:
-						var u = 0.125 * 8;
-						break;
-					case 4:
-						var u = 0;
-						break;
-				}
+				var punto = this.perfil.forma[j];
+				var v = (this.path.distancias_discret[i]/*/long_curva*/);
+				var u = (punto[0]+this.ancho/2)/this.ancho;
 				texture_buffer.push(u);
 				texture_buffer.push(v);
 			}
