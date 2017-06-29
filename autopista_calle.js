@@ -85,7 +85,7 @@ function Calle(){
 
 	this.create = function(curva_camino, es_autopista){
 		this.es_autopista = es_autopista;
-		
+
 		this.rotacion = mat4.create();
 		mat4.identity(this.rotacion);
 

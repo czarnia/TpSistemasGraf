@@ -11,8 +11,6 @@ function Luminaria(){
 	this.traslacion = null;
 	this.escalado = null;
 
-	this.traslacion_foco = null;
-
   this.camino = function(alto, largo){
 		var camino = new curvaBspline3();
 		var puntos_control = [];
@@ -176,6 +174,23 @@ function Luminaria(){
 		}
 
 		return texture_buffer;
+	}
+
+	this.obtener_matriz_foco = function(){
+		var mvMatrix_luminaria = mat4.create();
+    mat4.identity(mvMatrix_luminaria);
+    mat4.multiply(mvMatrix_luminaria, this.traslacion, this.rotacion);
+		mat4.rotate(mvMatrix_luminaria, mvMatrix_luminaria, Math.PI/2, vec3.fromValues(0, 1, 0));
+
+		var mvMatrix_foco = mat4.create();
+		mat4.identity(mvMatrix_foco);
+		mat4.multiply(mvMatrix_foco, this.traslacion, this.rotacion);
+
+		var mvMatrix_total = mat4.create();
+		mat4.identity(mvMatrix_total);
+		mat4.multiply(mvMatrix_total, mvMatrix_luminaria, mvMatrix_cuadrado);
+
+		return mvMatrix_total;
 	}
 }
 
