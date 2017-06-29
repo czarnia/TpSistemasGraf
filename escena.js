@@ -16,8 +16,8 @@ function Escena(){
 
 	this.autos = [];
 
-  //uv_grid2: 0, trama-doble: 1, cruce: 2, rueda: 3, plaza: 4, vereda: 5, autopista: 6, concreto: 7, cielo: 8, auto: 9.
-	this.texturas_nombres = ["Texturas/uv_grid2.jpg", "Texturas/tramo-dobleamarilla.jpg", "Texturas/cruce.jpg", "Texturas/rueda.jpg", "Texturas/plaza.jpg", "Texturas/vereda.jpg", "Texturas/autopista.jpg", "Texturas/concreto.jpg", "Texturas/Day_Skybox.jpg", "Texturas/auto.jpg"];
+  //uv_grid2: 0, trama-doble: 1, cruce: 2, rueda: 3, plaza: 4, vereda: 5, autopista: 6, concreto: 7, cielo: 8, auto: 9, farol: 10.
+	this.texturas_nombres = ["Texturas/uv_grid2.jpg", "Texturas/tramo-dobleamarilla.jpg", "Texturas/cruce.jpg", "Texturas/rueda.jpg", "Texturas/plaza.jpg", "Texturas/vereda.jpg", "Texturas/autopista.jpg", "Texturas/concreto.jpg", "Texturas/Day_Skybox.jpg", "Texturas/auto.jpg", "Texturas/farol3.jpg"];
 	this.texturas = [];
 
 
@@ -143,7 +143,7 @@ function Escena(){
 		this.autopista.create(camino, dist_pilares, dist_faroles);
 		this.autopista.scale(this.lado/final, this.lado/final, this.lado/final);
 		this.autopista.rotate([1.0, 0.0, 0.0], Math.PI / 2);
-		this.autopista.initTexture(this.texturas[6], this.texturas[7]);
+		this.autopista.initTexture(this.texturas[6], this.texturas[7], this.texturas[10]);
 
 		this.esc_autopista = [this.lado/final, this.lado/final, this.lado/final];
 	}

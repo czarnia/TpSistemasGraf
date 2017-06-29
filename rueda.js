@@ -23,11 +23,11 @@ function Rueda(){
 		this.perfil.forma.push([this.radio, 0.0, -this.profundidad/2]);
 
 		//Chequear si bien
+		this.perfil.normales.push([1.0, 0.0, 0.0]);
+		this.perfil.normales.push([0.0, 0.0, -1.0]);
 		this.perfil.normales.push([0.0, 0.0, 1.0]);
-		this.perfil.normales.push([0.0, 0.0, 1.0]);
-		this.perfil.normales.push([0.0, 0.0, 1.0]);
-		this.perfil.normales.push([0.0, 0.0, 1.0]);
-		this.perfil.normales.push([0.0, 0.0, 1.0]);
+		this.perfil.normales.push([1.0, 0.0, 0.0]);
+		this.perfil.normales.push([1.0, 0.0, 0.0]);
 	}
 
 	this.create = function(radio, profundidad, color){
