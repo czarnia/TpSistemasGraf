@@ -167,7 +167,17 @@ function Escena(){
 			this.autos[i].draw(mvScene);
 		}
 
+		this.autopista.modelMatrix = modelMatrix;
 		this.autopista.draw(mvScene);
+
+		var faroles = [];
+		faroles = this.autopista.posiciones_faroles();
+		// vec3.transformMat4(faroles[3], faroles[3], mvScene);
+
+		gl.useProgram(shaderProgramTexturedObject);
+		gl.uniform3fv(shaderProgramTexturedObject.pointLightingLocationUniform, faroles[3]);
+		gl.uniform3f(shaderProgramTexturedObject.pointLightingColorUniform, 1.0, 1.0, 1.0);
+		gl.useProgram(glProgram);
 
 	}
 

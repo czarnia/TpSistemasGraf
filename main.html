@@ -118,56 +118,84 @@
 			uniform mat4 uPMatrix;
 			uniform mat3 uNMatrix;
 
-			uniform vec3 uAmbientColor;
-
-		  uniform vec3 uLightingDirection;
-		  uniform vec3 uDirectionalColor;
-
-		  uniform bool uUseLighting;
 			uniform bool uUseNormalMap;
 
 			varying vec2 vTextureCoord;
-			varying vec3 vLightWeighting;
+			// varying vec3 vLightWeighting;
 			varying vec3 vVertexNormal;
-			varying vec3 transformedNormal;
+			varying vec3 vTransformedNormal;
+			varying vec4 vPosition;
 
 			void main(void) {
-					gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+					vPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
+					gl_Position = uPMatrix * vPosition;
 					vTextureCoord = aTextureCoord;
 					vVertexNormal = aVertexNormal;
-
-					if (!uUseLighting) {
-			    		vLightWeighting = vec3(0.8, 0.7, 0.4);
-			    } else {
-						//if (!uUseNormalMap){
-	            transformedNormal = uNMatrix * aVertexNormal;
-							transformedNormal = normalize(transformedNormal);
-	            float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
-						/*} else {
-							float directionalLightWeighting =
-						}*/
-						vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
-	        }
+			        vTransformedNormal = normalize(uNMatrix * aVertexNormal);
 			}
 	</script>
 
 	<!--Fragment shader Texturas	-->
 	<script id="shader-texture-fs" type="x-shader/x-fragment">
 	precision mediump float;
-	varying vec2 vTextureCoord;
-	varying vec3 vLightWeighting;
-	varying vec3 vVertexNormal;
+	uniform vec3 uAmbientColor;
+	uniform bool uUseLighting;
 
-	varying vec3 transformedNormal;
+    uniform vec3 uLightingDirection;
+    uniform vec3 uDirectionalColor;
+    uniform vec3 uPointLightingLocation;
+    uniform vec3 uPointLightingColor;
+
+	varying vec2 vTextureCoord;
+	// varying vec3 vLightWeighting;
+	varying vec3 vVertexNormal;
+	varying vec4 vPosition;
+
+	varying vec3 vTransformedNormal;
 
 	uniform sampler2D uSampler;
 
 	void main(void) {
+		vec3 lightWeighting;
+		vec3 normal = vTransformedNormal;
+
+		if (!uUseLighting) {
+			    lightWeighting = vec3(0.8, 0.7, 0.4);
+		} else {
+				float distancia = distance(vPosition.xyz, uPointLightingLocation);
+
+			// if(distancia < 100.0){
+				//************LUZ PUNTUAL****************
+				vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz);
+				float directionalPointLightWeighting = max(dot(normalize(normal), lightDirection), 0.0);
+				directionalPointLightWeighting *= 2.0/distancia;
+
+				//************LUZ DIRECCIONAL****************
+				float directionalLightWeighting = max(dot(vTransformedNormal, uLightingDirection), 0.0);
+				// lightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+
+				lightWeighting = uAmbientColor + uPointLightingColor * directionalPointLightWeighting + uDirectionalColor * directionalLightWeighting;
+			// }else{
+			// 	lightWeighting = vec3(0.0, 0.0, 0.0);
+			// }
+		}
+
 		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-		gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+		gl_FragColor = vec4(textureColor.rgb * lightWeighting, textureColor.a);
 		//gl_FragColor = vec4(transformedNormal.rgb, 1.0);
 		 //gl_FragColor = vec4(vVertexNormal.rgb*2.0-1.0, 1.0);
 	}
+
+	/*void main(void) {
+		vec3 lightWeighting;
+
+		float directionalLightWeighting = max(dot(vTransformedNormal, uLightingDirection), 0.0);
+		lightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+		gl_FragColor = vec4(textureColor.rgb * lightWeighting, textureColor.a);
+		// gl_FragColor = vec4(transformedNormal.rgb, 1.0);
+		// gl_FragColor = vec4(vVertexNormal.rgb, 1.0);
+	}*/
 	</script>
 
 	<!-- Vertex shader para texturas EDIFICIOS -->
@@ -377,7 +405,7 @@
 
 			var mvMatrix = mat4.create();
 			var pMatrix = mat4.create();
-			var mvMatrix2 = mat4.create();
+			var modelMatrix = mat4.create();
 
 			 // SHADERS FUNCTION
 			function getShader(gl, id) {
@@ -530,6 +558,8 @@
 		        shaderProgramTexturedObject.ambientColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uAmbientColor");
 		        shaderProgramTexturedObject.lightingDirectionUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uLightingDirection");
 		        shaderProgramTexturedObject.directionalColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uDirectionalColor");
+		        shaderProgramTexturedObject.pointLightingLocationUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPointLightingLocation");
+       	 		shaderProgramTexturedObject.pointLightingColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPointLightingColor");
 
 
 		        //SHADERS DE TEXTURAS EDIFICIOS
@@ -819,6 +849,14 @@
 	        			handleKeyDownFreeStreet.camera.pos[0] -= 1 * Math.sin(handleKeyDownFreeStreet.camera.theta) * Math.cos(handleKeyDownFreeStreet.camera.phi);
 	        			break;
 	        		}
+	        		case 81:{
+	        			handleKeyDownFreeStreet.camera.pos[1] -= 1;
+	        			break;
+	        		}
+	        		case 69:{
+	        			handleKeyDownFreeStreet.camera.pos[1] += 1;
+	        			break;
+	        		}
 	        		case 67:
 	        			handleCams();
 		    			break;
@@ -962,15 +1000,21 @@
 				var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 				// Preparamos una matriz de modelo+vista.
 				mat4.identity(mvMatrix);
+				mat4.identity(modelMatrix);
 
 	      var lighting_direction = [0.0, -0.5, 0.3];
 
 				if((cant_C == 0) || (primero == 1)){
 					mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
+					// modelMatrix = mvMatrix;
+
 					mat4.multiply(mvMatrix, mvMatrix, zoomMatrix);
 					mat4.multiply(mvMatrix, mvMatrix, escenaRotationMatrix);
+
 					//Traslado ancho y alto ciudad
 					mat4.translate(mvMatrix, mvMatrix, [-11.5, 0.0, -11.5]);
+					// mat4.translate(modelMatrix, mvMatrix, [-11.5, 0.0, -11.5]);
+
 					vec3.transformMat4(lighting_direction, lighting_direction, escenaRotationMatrix);
 				}else if(cant_C == 1){
 					vec3.transformMat4(lighting_direction, lighting_direction, rotationMatrixSt);
@@ -1017,7 +1061,8 @@
 				// ruta.draw();
 				// edif.tick(t);
 				// edif.draw(mvMatrix);
-				escena.tick(t);
+				// escena.tick(t);
+				escena.modelMatrix = modelMatrix;
 				escena.draw(mvMatrix);
 				// calle.drawCalle(mvMatrix, 35.0, 2.0, 5.0);
 				// calle.draw(mvMatrix);

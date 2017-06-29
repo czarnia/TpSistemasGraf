@@ -10,6 +10,7 @@ function Luminaria(){
 	this.rotacion = null;
 	this.traslacion = null;
 	this.escalado = null;
+	this.mat_ubicacion = null;
 
   this.camino = function(alto, largo){
 		var camino = new curvaBspline3();
@@ -49,6 +50,7 @@ function Luminaria(){
 	    this.foco.create(_z, _y, _x, color); //8,3,6
 
 	    var ubic_foco = camino.puntosDeControl[camino.puntosDeControl.length-1];
+	    // this.ubic_foco = ubic_foco;
 	    this.foco.translate(ubic_foco);
 
 			this.rotacion = mat4.create();
@@ -102,7 +104,12 @@ function Luminaria(){
 	    mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_luminaria);
 		mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
 
+		//Para determinar ubicacion del foco
+		mat4.multiply(this.modelMatrix, this.modelMatrix, mvMatrix_luminaria);
+		mat4.multiply(this.modelMatrix, this.modelMatrix, this.escalado);
+
 		this.poste.draw(mvMatrix_total);
+		this.foco.determinar_pos(mvMatrix_total);
 		this.foco.draw(mvMatrix_total);
 	}
 
@@ -177,9 +184,9 @@ function Luminaria(){
 	}
 
 	this.obtener_matriz_foco = function(){
-		var mvMatrix_luminaria = mat4.create();
-    mat4.identity(mvMatrix_luminaria);
-    mat4.multiply(mvMatrix_luminaria, this.traslacion, this.rotacion);
+		/*var mvMatrix_luminaria = mat4.create();
+	    mat4.identity(mvMatrix_luminaria);
+	    mat4.multiply(mvMatrix_luminaria, this.traslacion, this.rotacion);
 		mat4.rotate(mvMatrix_luminaria, mvMatrix_luminaria, Math.PI/2, vec3.fromValues(0, 1, 0));
 
 		var mvMatrix_foco = mat4.create();
@@ -188,9 +195,16 @@ function Luminaria(){
 
 		var mvMatrix_total = mat4.create();
 		mat4.identity(mvMatrix_total);
-		mat4.multiply(mvMatrix_total, mvMatrix_luminaria, mvMatrix_cuadrado);
+		// mat4.multiply(mvMatrix_total, mvMatrix_luminaria, mvMatrix_cuadrado);
+		mat4.multiply(mvMatrix_total, mvMatrix_luminaria, mvMatrix_foco);
+		mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);*/
 
-		return mvMatrix_total;
+		// return mvMatrix_total;
+		return this.foco.mat_ubicacion;
+	}
+
+	this.determinar_pos_final_foco = function(mvFinal){
+		this.foco.determinar_pos(mvFinal);
 	}
 }
 
