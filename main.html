@@ -141,6 +141,7 @@
 			    } else {
 						//if (!uUseNormalMap){
 	            transformedNormal = uNMatrix * aVertexNormal;
+							transformedNormal = normalize(transformedNormal);
 	            float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
 						/*} else {
 							float directionalLightWeighting =
@@ -205,6 +206,7 @@
 			            vLightWeighting = vec3(1.0, 1.0, 1.0);
 			        } else {
 			            vec3 transformedNormal = uNMatrix * aVertexNormal;
+									transformedNormal = normalize(transformedNormal);
 			            float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
 			            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
 			        }
@@ -281,6 +283,7 @@
 			            vLightWeighting = vec3(1.0, 1.0, 1.0);
 			        } else {
 			            vec3 transformedNormal = uNMatrix * aVertexNormal;
+									transformedNormal = normalize(transformedNormal);
 			            float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
 			            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
 			        }
@@ -960,7 +963,7 @@
 				// Preparamos una matriz de modelo+vista.
 				mat4.identity(mvMatrix);
 
-	            var lighting_direction = [-0.25, -0.25, -1.0];
+	            var lighting_direction = [1.0, 0.0, 0.0];
 
 				if((cant_C == 0) || (primero == 1)){
 					mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
