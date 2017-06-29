@@ -93,15 +93,15 @@ function Luminaria(){
 	this.draw = function(mvMatrix_scene){
 		var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 
-    var mvMatrix_luminaria = mat4.create();
-    mat4.identity(mvMatrix_luminaria);
-    mat4.multiply(mvMatrix_luminaria, this.traslacion, this.rotacion);
+	    var mvMatrix_luminaria = mat4.create();
+	    mat4.identity(mvMatrix_luminaria);
+	    mat4.multiply(mvMatrix_luminaria, this.traslacion, this.rotacion);
 
 		mat4.rotate(mvMatrix_luminaria, mvMatrix_luminaria, Math.PI/2, vec3.fromValues(0, 1, 0));
 
-    var mvMatrix_total = mat4.create();
-    mat4.identity(mvMatrix_total);
-    mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_luminaria);
+	    var mvMatrix_total = mat4.create();
+	    mat4.identity(mvMatrix_total);
+	    mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_luminaria);
 		mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
 
 		this.poste.draw(mvMatrix_total);
@@ -200,8 +200,9 @@ function devolver_puntos_circulo(radio, step, perfil){
 		puntos.push(punto);
 
 		var aux = vec3.create();
-		vec3.normalize(aux, punto);
-		perfil.normales.push(punto);
+		vec3.negate(aux, punto);
+		vec3.normalize(aux, aux);
+		perfil.normales.push(aux);
 	};
 	valores.push(puntos);
 	valores.push(normales);

@@ -289,10 +289,16 @@ function Cuadrado(){
 
           var mvMatrix_total = mat4.create();
           mat4.identity(mvMatrix_total);
-          mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_cuadrado);
+          mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_cuadrado);          
           mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
 
           gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix_total);
+
+          var normalMatrix = mat3.create();
+            mat3.fromMat4(normalMatrix, mvMatrix_total);
+            mat3.invert(normalMatrix, normalMatrix);
+            mat3.transpose(normalMatrix, normalMatrix);
+            gl.uniformMatrix3fv(shaderProgramTexturedObject.nMatrixUniform, false, normalMatrix);
 
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
           gl.vertexAttribPointer(shaderProgramTexturedObject.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
@@ -309,11 +315,11 @@ function Cuadrado(){
 
             gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, true);
 
-            var normalMatrix = mat3.create();
+            /*var normalMatrix = mat3.create();
             mat3.fromMat4(normalMatrix, mvMatrix_total);
             mat3.invert(normalMatrix, normalMatrix);
             mat3.transpose(normalMatrix, normalMatrix);
-            gl.uniformMatrix3fv(shaderProgramTexturedObject.nMatrixUniform, false, normalMatrix);
+            gl.uniformMatrix3fv(shaderProgramTexturedObject.nMatrixUniform, false, normalMatrix);*/
           }
         }else{
           var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
