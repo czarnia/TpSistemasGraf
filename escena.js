@@ -148,7 +148,7 @@ function Escena(){
 		this.esc_autopista = [this.lado/final, this.lado/final, this.lado/final];
 	}
 
-	this.draw = function(mvScene){
+	this.draw = function(mvScene){		
 		// this.cielo.draw(mvScene);
 
 		for (var i = 0; i < this.calles.length; i++) {
@@ -167,7 +167,17 @@ function Escena(){
 			this.autos[i].draw(mvScene);
 		}
 
+		this.autopista.modelMatrix = modelMatrix;
 		this.autopista.draw(mvScene);
+
+		var faroles = [];
+		faroles = this.autopista.posiciones_faroles();
+		// vec3.transformMat4(faroles[3], faroles[3], mvScene);
+
+		gl.useProgram(shaderProgramTexturedObject);
+		gl.uniform3fv(shaderProgramTexturedObject.pointLightingLocationUniform, faroles[3]);
+		gl.uniform3f(shaderProgramTexturedObject.pointLightingColorUniform, 0.8, 0.8, 0.8);
+		gl.useProgram(glProgram);
 
 	}
 

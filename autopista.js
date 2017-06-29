@@ -121,7 +121,7 @@ function Autopista(){
 				var eje = vec3.create();
 				vec3.cross(eje, tan, tan_l);
 				farol.rotate(eje, -angulo);
-				farol.rotate_acum([0.0, 0.0, signo * 1.0], -Math.PI/2);
+				// farol.rotate_acum([0.0, 0.0, signo * 1.0], -Math.PI/2);
 				farol.rotate_acum([1.0, 0.0, 0.0], -Math.PI/2);
 
 				// farol.translate([0.0, 0.0, sube + -1]);
@@ -252,6 +252,10 @@ function Autopista(){
 	    mat4.multiply(mvMatrix_total, mvMatrix_scene, mvMatrix_autopista);
 		mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
 
+		//Para determinar la ubicacion
+		mat4.multiply(this.modelMatrix, this.modelMatrix, mvMatrix_autopista);
+		mat4.multiply(this.modelMatrix, this.modelMatrix, this.escalado);
+
 		this.calle_ida.draw(mvMatrix_total);
 		this.borde_ida.draw(mvMatrix_total);
 		this.calle_vuelta.draw(mvMatrix_total);
@@ -260,7 +264,9 @@ function Autopista(){
 			this.pilares[i].draw(mvMatrix_total);
 		}
 		for (var i = 0; i < this.faroles.length; i++) {
-			this.faroles[i].draw(mvMatrix_total);
+			this.faroles[i].modelMatrix = this.modelMatrix;
+			this.faroles[i].draw(mvMatrix_total);			
+			// this.faroles[i].determinar_pos_final_foco(mvMatrix_ubicacion);
 		}
 	}
 
@@ -281,7 +287,7 @@ function Autopista(){
 		var posiciones_faroles = [];
 		for (var i = 0; i < this.faroles.length; i++){
 			var m_farol = this.faroles[i].obtener_matriz_foco();
-			var pos_farol = vec3.fromValues(1,1,1);
+			var pos_farol = vec3.fromValues(0.0, 0.0, 0.0);
 			vec3.transformMat4(pos_farol, pos_farol, m_farol);
 			posiciones_faroles.push(pos_farol);
 		}

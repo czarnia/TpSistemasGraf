@@ -24,6 +24,8 @@ function Cuadrado(){
   this.rotacion = null;
   this.escalado = null;
 
+  this.mat_ubicacion = null;
+
   this.create = function(x, y, z, color) {
     this.textures = [];
     this.textures_data = [];
@@ -233,6 +235,19 @@ function Cuadrado(){
     this.scale(x_esc, y_esc, z_esc);
   }
 
+  this.determinar_pos = function(mvFinal){
+    var mvMatrix_cuadrado = mat4.create();
+    mat4.identity(mvMatrix_cuadrado);
+    mat4.multiply(mvMatrix_cuadrado, this.traslacion, this.rotacion);
+
+    var mvMatrix_total = mat4.create();
+    mat4.identity(mvMatrix_total);
+    mat4.multiply(mvMatrix_total, mvFinal, mvMatrix_cuadrado);
+    mat4.multiply(mvMatrix_total, mvMatrix_total, this.escalado);
+
+    this.mat_ubicacion = mvMatrix_total; //VER SI FUNCIONA
+  }
+
   this.draw = function(mvMatrix_scene){
     if(this.textures.length > 1){
           gl.useProgram(shaderProgramEdificio);
@@ -294,12 +309,6 @@ function Cuadrado(){
 
           gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix_total);
 
-          var normalMatrix = mat3.create();
-            mat3.fromMat4(normalMatrix, mvMatrix_total);
-            mat3.invert(normalMatrix, normalMatrix);
-            mat3.transpose(normalMatrix, normalMatrix);
-            gl.uniformMatrix3fv(shaderProgramTexturedObject.nMatrixUniform, false, normalMatrix);
-
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
           gl.vertexAttribPointer(shaderProgramTexturedObject.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
 
@@ -315,11 +324,11 @@ function Cuadrado(){
 
             gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, true);
 
-            /*var normalMatrix = mat3.create();
+            var normalMatrix = mat3.create();
             mat3.fromMat4(normalMatrix, mvMatrix_total);
             mat3.invert(normalMatrix, normalMatrix);
             mat3.transpose(normalMatrix, normalMatrix);
-            gl.uniformMatrix3fv(shaderProgramTexturedObject.nMatrixUniform, false, normalMatrix);*/
+            gl.uniformMatrix3fv(shaderProgramTexturedObject.nMatrixUniform, false, normalMatrix);
           }
         }else{
           var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
