@@ -16,8 +16,8 @@ function Escena(){
 
 	this.autos = [];
 
-  //uv_grid2: 0, trama-doble: 1, cruce: 2, rueda: 3, plaza: 4, vereda: 5, autopista: 6, concreto: 7, cielo: 8, auto: 9, farol: 10, techo: 11, vereda_normal: 12.
-	this.texturas_nombres = ["Texturas/uv_grid2.jpg", "Texturas/tramo-dobleamarilla.jpg", "Texturas/cruce.jpg", "Texturas/rueda.jpg", "Texturas/plaza.jpg", "Texturas/vereda.jpg", "Texturas/autopista.jpg", "Texturas/concreto.jpg", "Texturas/Day_Skybox.jpg", "Texturas/auto.jpg", "Texturas/farol3.jpg", "Texturas/techo.jpg", "Texturas/vereda_normal.jpg"];
+  //uv_grid2: 0, trama-doble: 1, cruce: 2, rueda: 3, plaza: 4, vereda: 5, autopista: 6, concreto: 7, cielo: 8, auto: 9, farol: 10, techo: 11, vereda_normal: 12, calle_normal: 13.
+	this.texturas_nombres = ["Texturas/uv_grid2.jpg", "Texturas/tramo-dobleamarilla.jpg", "Texturas/cruce.jpg", "Texturas/rueda.jpg", "Texturas/plaza.jpg", "Texturas/vereda.jpg", "Texturas/autopista.jpg", "Texturas/concreto.jpg", "Texturas/Day_Skybox.jpg", "Texturas/auto.jpg", "Texturas/farol3.jpg", "Texturas/techo.jpg", "Texturas/vereda_normal.jpg", "Texturas/calle_normal.jpg"];
 	this.texturas = [];
 
 
@@ -64,28 +64,6 @@ function Escena(){
 
 			this.autos.push(auto);
 		}
-
-		/*var auto1 = new Auto();
-		auto1.create([0.6,0,0.4], [0.6,0.6,0.7], 0.5, 0.6, 1.3, 0.11, 0.07);
-		auto1.initTexture(this.texturas[9],this.texturas[3]);
-		auto1.translate([0,5.3,3]);
-
-		var curva_auto1 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
-		auto1.agregar_movimiento(curva_auto1, 250);
-
-
-
-		var auto2 = new Auto();
-		auto2.create([0,0.5,0.4], [0.6,0.6,0.7], 0.5, 0.6, 1.3, 0.11, 0.07);
-		auto2.initTexture(this.texturas[9],this.texturas[3]);
-		auto2.translate([0,5.3,2]);
-
-		var curva_auto2 = this.autopista.curva_camino.devolver_rotada_transladada(Math.PI / 2, [1.0, 0.0, 0.0], this.esc_autopista);
-		curva_auto2.dar_vuelta_curva();
-		auto2.agregar_movimiento(curva_auto2, 400);
-
-		this.autos.push(auto1);
-		this.autos.push(auto2);*/
 	}
 
 	this.create_mapa = function(){
@@ -146,6 +124,9 @@ function Escena(){
 		this.autopista.scale(this.lado/final, this.lado/final, this.lado/final);
 		this.autopista.rotate([1.0, 0.0, 0.0], Math.PI / 2);
 		this.autopista.initTexture(this.texturas[6], this.texturas[7], this.texturas[10]);
+
+		this.autopista.calle_ida.addNormalMap(this.texturas[13]);
+		//this.autopista.calle_vuelta.addNormalMap(this.texturas[13]);
 
 		this.esc_autopista = [this.lado/final, this.lado/final, this.lado/final];
 	}
