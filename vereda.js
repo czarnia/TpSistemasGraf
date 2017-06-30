@@ -3,15 +3,12 @@ function Vereda(){
 	this.perfil = {
 		forma:[],
 		normal:[],
-		normales:[]
+		normales:[],
+		tangentes:[]
 	}
 	this.normales_tapa1 = [];
 	this.normales_tapa2 = [];
 	this.normales_borde = [];
-
-	this.tangentes_borde = [];
-	this.tangentes_tapa1 = [];
-	this.tangentes_tapa2 = [];
 
 	this.camino_perfil = null;
 	this.tapa1 = new SupFan();
@@ -121,13 +118,12 @@ function Vereda(){
 			vec3.normalize(normal, normal);
 			vec3.normalize(tangente, tangente);
 			this.normales_borde.push([normal[0], normal[1], normal[2]]);
-			this.tangentes_borde.push([tangente[0], tangente[1], tangente[2]]);
 
 			this.normales_tapa1.push([0.0, -1.0, 0.0]);
-			this.tangentes_tapa1.push([tangente[0], tangente[1], tangente[2]]);
 
       this.normales_tapa2.push([0.0, 1.0, 0.0]);
-			this.tangentes_tapa2.push([tangente[0], tangente[1], tangente[2]]);
+
+			this.perfil.tangentes.push([tangente[0], tangente[1], tangente[2]]);
 
 			this.perfil.normal.push([0,1,0]);
 			this.perfil.normal.push([0,0,1]);
@@ -166,7 +162,6 @@ function Vereda(){
     this.crear_perfil(100);
 
     this.perfil.normales = this.normales_borde;
-		this.superficie.tangentes = this.tangentes_borde;
     this.superficie.create(camino, 40, this.perfil, color);
 
     this.perfil.normales = this.normales_tapa1;
@@ -186,8 +181,11 @@ function Vereda(){
 		mat4.identity(this.traslacion_tapa2);
 		mat4.translate(this.traslacion_tapa2, this.traslacion_tapa2, [0,alto,0]);
 
-		this.tapa1.tangentes = this.tangentes_tapa1;
-		this.tapa1.tangentes = this.tangentes_tapa2;
+		var tangentes_tapas = this.perfil.tangentes;
+		tangentes_tapas.unshift([0,0,1]);
+
+		this.tapa1.tangent_buffer = tangentes_tapas;
+		this.tapa1.tangent_buffer = tangentes_tapas;
 	}
 
 	this.create_text_buffer = function(){

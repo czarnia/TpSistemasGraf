@@ -93,8 +93,8 @@ function supBarrido(){
 					this.grilla.normal_buffer.push(normal_punto[2]);
 				}
 
-				if (this.tangentes){
-					var tangente_punto = vec3.fromValues(this.tangentes[j][0], this.tangentes[j][1], this.tangentes[j][2]);
+				if (perfil.tangentes && perfil.tangentes.length > 0){
+					var tangente_punto = vec3.fromValues(perfil.tangentes[j][0], perfil.tangentes[j][1], perfil.tangentes[j][2]);
 
 					//Roto
 					vec3.transformMat4(tangente_punto, tangente_punto, mat_rotacion_tan);
@@ -103,9 +103,9 @@ function supBarrido(){
 
 					vec3.normalize(tangente_punto, tangente_punto);
 
-					this.grilla.normal_buffer.push(tangente_punto[0]);
-					this.grilla.normal_buffer.push(tangente_punto[1]);
-					this.grilla.normal_buffer.push(tangente_punto[2]);
+					this.grilla.tangent_buffer.push(tangente_punto[0]);
+					this.grilla.tangent_buffer.push(tangente_punto[1]);
+					this.grilla.tangent_buffer.push(tangente_punto[2]);
 				}
 
 				if(!this.con_textura){
