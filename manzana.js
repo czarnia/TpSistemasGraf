@@ -149,4 +149,10 @@ function Manzana(){
 		this.terreno.initTexture(texture_file);
 	}
 
+  this.initTextureRoof = function(texture_file){
+    for (var i = 0; i < this.edificios.length; i++){
+      this.edificios[i].initTextureRoof(texture_file);
+    }
+  }
+
 }

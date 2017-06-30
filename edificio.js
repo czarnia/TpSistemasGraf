@@ -152,4 +152,15 @@ function Edificio(){
     this.techo.draw(mvMatrix_scene);
   }
 
+  this.initTextureRoof = function(texture){
+    var texture_buffer = [ 0, 0,
+                           0, 1,
+                           1, 1,
+                           1, 0
+                         ];
+
+    this.techo.addTexture(texture);
+    this.techo.asign_text_buffer(texture_buffer);
+  }
+
 }

@@ -16,8 +16,8 @@ function Escena(){
 
 	this.autos = [];
 
-  //uv_grid2: 0, trama-doble: 1, cruce: 2, rueda: 3, plaza: 4, vereda: 5, autopista: 6, concreto: 7, cielo: 8, auto: 9, farol: 10, vereda_normal: 11.
-	this.texturas_nombres = ["Texturas/uv_grid2.jpg", "Texturas/tramo-dobleamarilla.jpg", "Texturas/cruce.jpg", "Texturas/rueda.jpg", "Texturas/plaza.jpg", "Texturas/vereda.jpg", "Texturas/autopista.jpg", "Texturas/concreto.jpg", "Texturas/Day_Skybox.jpg", "Texturas/auto.jpg", "Texturas/farol3.jpg", "Texturas/vereda_normal.jpg"];
+  //uv_grid2: 0, trama-doble: 1, cruce: 2, rueda: 3, plaza: 4, vereda: 5, autopista: 6, concreto: 7, cielo: 8, auto: 9, farol: 10, techo: 11, vereda_normal: 12.
+	this.texturas_nombres = ["Texturas/uv_grid2.jpg", "Texturas/tramo-dobleamarilla.jpg", "Texturas/cruce.jpg", "Texturas/rueda.jpg", "Texturas/plaza.jpg", "Texturas/vereda.jpg", "Texturas/autopista.jpg", "Texturas/concreto.jpg", "Texturas/Day_Skybox.jpg", "Texturas/auto.jpg", "Texturas/farol3.jpg", "Texturas/techo.jpg", "Texturas/vereda_normal.jpg"];
 	this.texturas = [];
 
 
@@ -116,7 +116,8 @@ function Escena(){
 									this.lado_manzana/2 + i * (this.lado_manzana + this.ancho_calle)]);
 
 					manzana.initTexture(this.texturas[5]);
-					//manzana.terreno.addNormalMap(this.texturas[11]);
+					manzana.initTextureRoof(this.texturas[11]);
+					//manzana.terreno.addNormalMap(this.texturas[12]);
 					this.manzanas.push(manzana);
 					//Crear manzana
 				}
