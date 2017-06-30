@@ -10,6 +10,7 @@ function SkyBox(){
     this.z = _z;
 
     this.superficie = new Cuadrado();
+    this.superficie.skybox = true;
     this.superficie.create(this.x, this.y, this.z, color);
     this.superficie.translate([pos[0], pos[1], pos[2]]);
   }
