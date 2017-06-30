@@ -140,12 +140,17 @@
 		precision mediump float;
 		uniform vec3 uAmbientColor;
 		uniform bool uUseLighting;
+		uniform bool uShowSpecularHighlights;
 		//uniform bool uUseNormalMap;
+
+		uniform float uMaterialShininess;
 
 		uniform vec3 uLightingDirection;
 		uniform vec3 uDirectionalColor;
 		uniform vec3 uPointLightingLocation[10];
-		uniform vec3 uPointLightingColor;
+		// uniform vec3 uPointLightingColor;
+		uniform vec3 uPointLightingSpecularColor;
+    	uniform vec3 uPointLightingDiffuseColor;
 
 		varying vec2 vTextureCoord;
 		// varying vec3 vLightWeighting;
@@ -168,8 +173,6 @@
 			} else {
 				//************LUZ DIRECCIONAL****************
 				float directionalLightWeighting = max(dot(vTransformedNormal, uLightingDirection), 0.0);
-				// lightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
-
 				lightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
 
 				//************LUZ PUNTUAL****************
@@ -177,9 +180,17 @@
 					float distancia = distance(vPosition.xyz, uPointLightingLocation[i]);
 					if(distancia < 10.0){
 						vec3 lightDirection = normalize(uPointLightingLocation[i] - vPosition.xyz);
-						float directionalPointLightWeighting = max(dot(normalize(normal), lightDirection), 0.0);
-						directionalPointLightWeighting *= 5.0/(distancia*distancia);
-						lightWeighting += uPointLightingColor * directionalPointLightWeighting;
+						float specularLightWeighting = 0.0;
+						if (uShowSpecularHighlights) {
+			                vec3 eyeDirection = normalize(-vPosition.xyz);
+			                vec3 reflectionDirection = reflect(-lightDirection, normal);
+
+			                specularLightWeighting = pow(max(dot(reflectionDirection, eyeDirection), 0.0), uMaterialShininess);
+			            }
+						float diffuseLightWeighting = max(dot(normalize(normal), lightDirection), 0.0);
+						diffuseLightWeighting *= 5.0/(distancia*distancia);
+						// lightWeighting += uPointLightingColor * directionalPointLightWeighting;
+						lightWeighting += uPointLightingSpecularColor * specularLightWeighting + diffuseLightWeighting * diffuseLightWeighting;
 					}
 				}
 			}
@@ -676,12 +687,15 @@
 		        shaderProgramTexturedObject.nMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uNMatrix");
 		        shaderProgramTexturedObject.samplerUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uSampler");
 		        shaderProgramTexturedObject.useLightingUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uUseLighting");
-						//shaderProgramTexturedObject.useNormalMap = gl.getUniformLocation(shaderProgramTexturedObject, "uUseNormalMap");
+		        shaderProgramTexturedObject.useSpecular = gl.getUniformLocation(shaderProgramTexturedObject, "uShowSpecularHighlights");
 		        shaderProgramTexturedObject.ambientColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uAmbientColor");
 		        shaderProgramTexturedObject.lightingDirectionUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uLightingDirection");
 		        shaderProgramTexturedObject.directionalColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uDirectionalColor");
 		        shaderProgramTexturedObject.pointLightingLocationUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPointLightingLocation");
-       	 		shaderProgramTexturedObject.pointLightingColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPointLightingColor");
+       	 		// shaderProgramTexturedObject.pointLightingColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPointLightingColor");
+       	 		shaderProgramTexturedObject.pointLightingSpecularColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPointLightingSpecularColor");
+        		shaderProgramTexturedObject.pointLightingDiffuseColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPointLightingDiffuseColor");
+       	 		shaderProgramTexturedObject.materialShininessUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uMaterialShininess");
 
        	 		//SHADER NORMAL MAP
        	 		var fragmentShaderNormalMap = getShader(gl, "shader-normal-map-fs");
@@ -1176,7 +1190,7 @@
 				mat4.identity(mvMatrix);
 				mat4.identity(modelMatrix);
 
-	      var lighting_direction = [0.0, -0.5, 0.3];
+	     		var lighting_direction = [0.0, -0.5, 0.3];
 
 				if((cant_C == 0) || (primero == 1)){
 					mat4.translate(mvMatrix, mvMatrix, [0.0, -10.0, -20.0]);
@@ -1213,6 +1227,10 @@
 	            gl.uniform3fv(shaderProgramTexturedObject.lightingDirectionUniform, adjustedLD);
 	            gl.uniform3f(shaderProgramTexturedObject.ambientColorUniform, 0.2, 0.2, 0.2);
             	gl.uniform3f(shaderProgramTexturedObject.directionalColorUniform, 0.8, 0.7, 0.4);
+            	gl.uniform1i(shaderProgramTexturedObject.useSpecular, true);
+            	gl.uniform3f(shaderProgramTexturedObject.pointLightingSpecularColorUniform, 0.8, 0.8, 0.8);
+            	gl.uniform3f(shaderProgramTexturedObject.pointLightingDiffuseColorUniform, 0.8, 0.8, 0.8);
+            	gl.uniform1f(shaderProgramTexturedObject.materialShininessUniform, 32.0);
 				//--------------------------------
 				//PARA SHADER NORMAL MAP
 				gl.useProgram(shaderProgramNormalMap);
