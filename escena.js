@@ -40,6 +40,7 @@ function Escena(){
 			calle.create_calle_escena(this.lado, [0.0, 0.0, this.lado], this.lado_manzana);
 			calle.initTexture(this.texturas[1]);
 			calle.initTexture(this.texturas[2]);
+			calle.addNormalMap(this.texturas[13]);
 			this.calles.push(calle);
 		}
 	}

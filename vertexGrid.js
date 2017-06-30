@@ -135,6 +135,12 @@ function VertexGrid () {
     this.drawCalle = function(mvMatrix_total, long_calle, lado_manzana, lado_cruce){
       gl.useProgram(shaderProgramCalle);
 
+      shaderProgramCalle.vertexTangentAttribute = gl.getAttribLocation(shaderProgramCalle, "aVertexTangent");
+      gl.enableVertexAttribArray(shaderProgramCalle.vertexTangentAttribute);
+      gl.uniform1i(shaderProgramCalle.useNormalMap, true);
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+      gl.vertexAttribPointer(shaderProgramCalle.vertexTangentAttribute, 3, gl.FLOAT, false, 0, 0);
+
       gl.uniformMatrix4fv(shaderProgramCalle.ModelViewMatrixUniform, false, mvMatrix_total);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
@@ -147,6 +153,10 @@ function VertexGrid () {
       gl.activeTexture(gl.TEXTURE1);
       gl.bindTexture(gl.TEXTURE_2D, this.textures[1]);
       gl.uniform1i(shaderProgramCalle.samplerCruce, 1);
+
+      gl.activeTexture(gl.TEXTURE2);
+      gl.bindTexture(gl.TEXTURE_2D, this.normal_map);
+      gl.uniform1i(shaderProgramCalle.samplerNormalMap, 2);
 
       gl.uniform1f(shaderProgramCalle.largo, long_calle);
       gl.uniform1f(shaderProgramCalle.finManzana, lado_manzana - lado_cruce/6);

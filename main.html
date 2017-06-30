@@ -418,26 +418,22 @@
 			attribute vec3 aVertexPosition;
 			attribute vec3 aVertexNormal;
 			attribute vec2 aTextureCoord;
+			attribute vec3 aVertexTangent;
 
 			uniform mat4 uMVMatrix;
 			uniform mat4 uPMatrix;
 			uniform mat3 uNMatrix;
 
-			uniform vec3 uAmbientColor;
-
-		    uniform vec3 uLightingDirection;
-		    uniform vec3 uDirectionalColor;
-
-		    uniform bool uUseLighting;
-
 			varying vec2 vTextureCoord;
-			varying vec3 vLightWeighting;
 			varying vec3 vVertexNormal;
+			varying vec3 vTransformedNormal;
+			varying vec4 vPosition;
+			varying vec3 vVertexTangent;
 
 			uniform float uAltura;
 
 			void main(void) {
-					// vec3 aux = aVertexPosition;
+/*					// vec3 aux = aVertexPosition;
 					// aux.y *= uAltura; //probar en y sino
 					gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
 					vTextureCoord = aTextureCoord;
@@ -446,12 +442,18 @@
 
 					if (!uUseLighting) {
 			            vLightWeighting = vec3(0.8, 0.7, 0.4);
-			        } else {
-			            vec3 transformedNormal = uNMatrix * aVertexNormal;
-						transformedNormal = normalize(transformedNormal);
-			            float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
-			            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
-			        }
+			        } else {*/
+			   //          vec3 transformedNormal = uNMatrix * aVertexNormal;
+						// transformedNormal = normalize(transformedNormal);
+			   //          float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
+			   //          vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+					    vPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
+						gl_Position = uPMatrix * vPosition;
+						vTextureCoord = aTextureCoord;
+						vVertexNormal = aVertexNormal;
+				        vTransformedNormal = normalize(uNMatrix * aVertexNormal);
+				        vVertexTangent = aVertexTangent;
+			        // }
 			}
 
 	</script>
@@ -460,38 +462,94 @@
 	<script id="shader-texture-calle-fs" type="x-shader/x-fragment">
 	precision mediump float;
 	varying vec2 vTextureCoord;
-	varying vec3 vLightWeighting;
 	varying vec3 vVertexNormal;
+	varying vec3 vTransformedNormal;
+	varying vec4 vPosition;
+	varying vec3 vVertexTangent;
+	
+	uniform bool uUseLighting;
+	uniform bool uUseNormalMap;
+
+	uniform vec3 uAmbientColor;
+	uniform vec3 uLightingDirection;
+	uniform vec3 uDirectionalColor;
 
 	uniform float uFinManzana;
 	uniform float uFinCruce;
+
 	uniform sampler2D uSamplerCalle;
 	uniform sampler2D uSamplerCruce;
+	uniform sampler2D uSamplerMap;
+
+	// Funcion transponer auxiliar
+	mat3 transpose(mat3 m) {
+		mat3 aux = mat3(0.0);
+		aux[0][0] = m[0][0];
+		aux[1][1] = m[1][1];
+		aux[2][2] = m[2][2];
+
+		aux[0][1] = m[1][0];
+		aux[1][0] = m[0][1];
+
+		aux[0][2] = m[2][0];
+		aux[2][0] = m[0][2];
+
+		aux[1][2] = m[2][1];
+		aux[2][1] = m[1][2];
+		return aux;
+	}
 
 	void main(void) {
+		vec3 lightWeighting;
+		vec4 textureColor;
+		vec3 normal = normalize(vTransformedNormal);
+		vec3 tangent = normalize(vVertexTangent);
 		vec2 uv = vTextureCoord;
 		float k = 1.0;
 		int listorti = 0;
-		for(int i = 0; i >= 0; i++){
-			if(vTextureCoord.y < (uFinManzana * k + uFinCruce * (k - 1.0))){
-				listorti = 1;
-				uv.y -= (uFinManzana + uFinCruce) * (k - 1.0)/* - uFinCruce/6.0*/;
-				uv.y /= uFinManzana;
-				vec4 textureColor = texture2D(uSamplerCalle, uv);
-				gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
-				// gl_FragColor = vec4(vVertexNormal.rgb, 1.0);
-			}else if(vTextureCoord.y < ((uFinManzana + uFinCruce) * k)){
-				listorti = 1;
-				uv.y -= ((uFinManzana * k) + uFinCruce * (k - 1.0));
-				uv.y /= uFinCruce;
-				vec4 textureColor = texture2D(uSamplerCruce, uv);
-				gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
-				// gl_FragColor = vec4(vVertexNormal.rgb, 1.0);
+		if (!uUseLighting) {
+				    lightWeighting = vec3(0.8, 0.7, 0.4);
+		} else{
+			//************LUZ DIRECCIONAL****************
+			vec3 lightDirection = uLightingDirection;
+			float directionalLightWeighting;
+			if (uUseNormalMap){
+				vec4 normalMap = texture2D(uSamplerMap, vec2(vTextureCoord.s, vTextureCoord.t));
+				normalMap = normalMap * 2.0 - vec4(1.0, 1.0, 1.0, 1.0);
+
+				vec3 binormal = normalize(cross(normal, tangent));
+				mat3 base_p = transpose(mat3(tangent, binormal, normal));
+
+				lightDirection = base_p * lightDirection;
+
+				directionalLightWeighting = max(dot(normalMap.rgb, lightDirection), 0.0);
+			}else{
+				directionalLightWeighting = max(dot(normal, lightDirection), 0.0);
 			}
-			k += 1.0;
-			if(listorti == 1)
-				break;
+
+			lightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+			for(int i = 0; i >= 0; i++){
+				if(vTextureCoord.y < (uFinManzana * k + uFinCruce * (k - 1.0))){
+					listorti = 1;
+					uv.y -= (uFinManzana + uFinCruce) * (k - 1.0)/* - uFinCruce/6.0*/;
+					uv.y /= uFinManzana;
+					textureColor = texture2D(uSamplerCalle, uv);
+					// gl_FragColor = vec4(textureColor.rgb * lightWeighting, textureColor.a);
+					// gl_FragColor = vec4(vVertexNormal.rgb, 1.0);
+				}else if(vTextureCoord.y < ((uFinManzana + uFinCruce) * k)){
+					listorti = 1;
+					uv.y -= ((uFinManzana * k) + uFinCruce * (k - 1.0));
+					uv.y /= uFinCruce;
+					textureColor = texture2D(uSamplerCruce, uv);
+					// gl_FragColor = vec4(textureColor.rgb * lightWeighting, textureColor.a);
+					// gl_FragColor = vec4(vVertexNormal.rgb, 1.0);
+				}
+				k += 1.0;
+				if(listorti == 1)
+					break;
+			}			
 		}
+		gl_FragColor = vec4(textureColor.rgb * lightWeighting, textureColor.a);
 	}
 	</script>
 
@@ -813,11 +871,13 @@
 		        shaderProgramCalle.ModelViewMatrixUniform = gl.getUniformLocation(shaderProgramCalle, "uMVMatrix");
 		        shaderProgramCalle.nMatrixUniform = gl.getUniformLocation(shaderProgramCalle, "uNMatrix");
 			        shaderProgramCalle.useLightingUniform = gl.getUniformLocation(shaderProgramCalle, "uUseLighting");
+			        shaderProgramCalle.useNormalMap = gl.getUniformLocation(shaderProgramCalle, "uUseNormalMap");
 		        shaderProgramCalle.ambientColorUniform = gl.getUniformLocation(shaderProgramCalle, "uAmbientColor");
 		        shaderProgramCalle.lightingDirectionUniform = gl.getUniformLocation(shaderProgramCalle, "uLightingDirection");
 		        shaderProgramCalle.directionalColorUniform = gl.getUniformLocation(shaderProgramCalle, "uDirectionalColor");
 		        shaderProgramCalle.samplerCalle = gl.getUniformLocation(shaderProgramCalle, "uSamplerCalle");
 		        shaderProgramCalle.samplerCruce = gl.getUniformLocation(shaderProgramCalle, "uSamplerCruce");
+		        shaderProgramCalle.samplerNormalMap = gl.getUniformLocation(shaderProgramCalle, "uSamplerMap");
 		        shaderProgramCalle.largo = gl.getUniformLocation(shaderProgramCalle, "uAltura");
 		        shaderProgramCalle.finManzana = gl.getUniformLocation(shaderProgramCalle, "uFinManzana");
 		        shaderProgramCalle.finCruce = gl.getUniformLocation(shaderProgramCalle, "uFinCruce");
