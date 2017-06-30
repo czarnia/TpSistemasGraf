@@ -14,6 +14,8 @@ function Cuadrado(){
   this.texture_buffer = null;
   this.normal_buffer = null;
 
+  this.skybox = false;
+
   this.webgl_position_buffer = null;
   this.webgl_color_buffer = null;
   this.webgl_texture_buffer = null;
@@ -239,6 +241,7 @@ function Cuadrado(){
     var mvMatrix_cuadrado = mat4.create();
     mat4.identity(mvMatrix_cuadrado);
     mat4.multiply(mvMatrix_cuadrado, this.traslacion, this.rotacion);
+    mat4.translate(mvMatrix_cuadrado, mvMatrix_cuadrado, [0,-this.y,0]);
 
     var mvMatrix_total = mat4.create();
     mat4.identity(mvMatrix_total);
@@ -322,7 +325,12 @@ function Cuadrado(){
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
             gl.vertexAttribPointer(shaderProgramTexturedObject.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
-            gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, false);
+            if (!this.skybox){
+              gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, true);
+            }else{
+              gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, false);
+            }
+
 
             var normalMatrix = mat3.create();
             mat3.fromMat4(normalMatrix, mvMatrix_total);
