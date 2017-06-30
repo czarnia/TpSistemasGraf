@@ -102,7 +102,7 @@ function Borde(){
 
 		this.camino = curva_camino;
 
-		this.superficie.create(this.camino, 100.0, this.perfil, [0.66, 0.66, 0.66]);
+		this.superficie.create(this.camino, 130.0, this.perfil, [0.66, 0.66, 0.66]);
 	}
 
 	this.translate_acum = function(v){
@@ -155,7 +155,7 @@ function Borde(){
 	this.create_text_buffer = function(){
 		var texture_buffer = [];
 
-		for (var i = 0; i < 100; i++){
+		for (var i = 0; i < 130; i++){
 			for (var j = 0; j < this.perfil.forma.length; j++){
 				var punto = this.perfil.forma[j];
 				texture_buffer.push(punto[0]+punto[1]+6.5);

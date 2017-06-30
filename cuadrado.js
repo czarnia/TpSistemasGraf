@@ -241,7 +241,7 @@ function Cuadrado(){
     var mvMatrix_cuadrado = mat4.create();
     mat4.identity(mvMatrix_cuadrado);
     mat4.multiply(mvMatrix_cuadrado, this.traslacion, this.rotacion);
-    mat4.translate(mvMatrix_cuadrado, mvMatrix_cuadrado, [0,-this.y,0]);
+    mat4.translate(mvMatrix_cuadrado, mvMatrix_cuadrado, [0,-(this.y+this.y/8),0]);
 
     var mvMatrix_total = mat4.create();
     mat4.identity(mvMatrix_total);
