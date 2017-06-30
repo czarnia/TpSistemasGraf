@@ -126,7 +126,7 @@ function Escena(){
 		this.autopista.initTexture(this.texturas[6], this.texturas[7], this.texturas[10]);
 
 		this.autopista.calle_ida.addNormalMap(this.texturas[13]);
-		//this.autopista.calle_vuelta.addNormalMap(this.texturas[13]);
+		this.autopista.calle_vuelta.addNormalMap(this.texturas[13]);
 
 		this.esc_autopista = [this.lado/final, this.lado/final, this.lado/final];
 	}
@@ -168,10 +168,10 @@ function Escena(){
 		gl.uniform3f(shaderProgramTexturedObject.pointLightingColorUniform, 1.0, 1.0, 1.0);
 		gl.useProgram(glProgram);
 
-		// gl.useProgram(shaderProgramNormalMap);
-		// gl.uniform3fv(shaderProgramNormalMap.pointLightingLocationUniform, vectores);
-		// gl.uniform3f(shaderProgramNormalMap.pointLightingColorUniform, 1.0, 1.0, 1.0);
-		// gl.useProgram(glProgram);
+		gl.useProgram(shaderProgramNormalMap);
+		gl.uniform3fv(shaderProgramNormalMap.pointLightingLocationUniform, vectores);
+		gl.uniform3f(shaderProgramNormalMap.pointLightingColorUniform, 1.0, 1.0, 1.0);
+		gl.useProgram(glProgram);
 	}
 
 	this.tick = function(t){
