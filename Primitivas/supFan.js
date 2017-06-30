@@ -98,7 +98,7 @@ function SupFan(){
       gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
       if(this.normal_buffer.length > 0){
-        gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, true);            
+        gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, true);
       }else{
         gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, false);
       }
@@ -124,7 +124,7 @@ function SupFan(){
       gl.enableVertexAttribArray(vertexPositionAttribute);
       gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
       gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-    }    
+    }
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
@@ -139,5 +139,9 @@ function SupFan(){
 
   this.initTexture = function(texture){
     this.texture = texture;
+  }
+
+  this.addNormalMap = function(texture){
+    this.normal_map = texture;
   }
 }

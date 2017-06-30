@@ -121,7 +121,7 @@ function Autopista(){
 				var eje = vec3.create();
 				vec3.cross(eje, tan, tan_l);
 				farol.rotate(eje, -angulo);
-				// farol.rotate_acum([0.0, 0.0, signo * 1.0], -Math.PI/2);
+				farol.rotate_acum([0.0, 0.0, signo * 1.0], -Math.PI/2);
 				farol.rotate_acum([1.0, 0.0, 0.0], -Math.PI/2);
 
 				farol.translate([0.0, 0.0, sube + -1]);
@@ -265,7 +265,7 @@ function Autopista(){
 		}
 		for (var i = 0; i < this.faroles.length; i++) {
 			this.faroles[i].modelMatrix = this.modelMatrix;
-			this.faroles[i].draw(mvMatrix_total);			
+			this.faroles[i].draw(mvMatrix_total);
 			// this.faroles[i].determinar_pos_final_foco(mvMatrix_ubicacion);
 		}
 	}

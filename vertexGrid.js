@@ -10,6 +10,7 @@ function VertexGrid () {
     this.color_buffer = null;
     this.texture_buffer = null;
     this.normal_buffer = [];
+    this.tangent_buffer = [];
 
     this.webgl_position_buffer = null;
     this.webgl_color_buffer = null;
@@ -146,7 +147,7 @@ function VertexGrid () {
       gl.vertexAttribPointer(shaderProgramCalle.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
       if(this.normal_buffer.length > 0){
-        gl.uniform1i(shaderProgramCalle.useLightingUniform, true);        
+        gl.uniform1i(shaderProgramCalle.useLightingUniform, true);
       }else{
         gl.uniform1i(shaderProgramCalle.useLightingUniform, false);
       }
@@ -188,10 +189,17 @@ function VertexGrid () {
           gl.vertexAttribPointer(shaderProgramTexturedObject.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
           if(this.normal_buffer.length > 0){
-            gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, true);            
+            gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, true);
           }else{
             gl.uniform1i(shaderProgramTexturedObject.useLightingUniform, false);
           }
+
+          if(this.normal_map){
+            gl.uniform1i(shaderProgramTexturedObject.useNormalMap, true);
+          }else{
+            gl.uniform1i(shaderProgramTexturedObject.useNormalMap, false);
+          }
+
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
           gl.vertexAttribPointer(shaderProgramTexturedObject.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
@@ -228,5 +236,9 @@ function VertexGrid () {
 
     this.initTexture = function(texture){
       this.textures.push(texture);
+  	}
+
+    this.addNormalMap = function(texture){
+      this.normal_map = texture;
   	}
 }

@@ -8,6 +8,11 @@ function Vereda(){
 	this.normales_tapa1 = [];
 	this.normales_tapa2 = [];
 	this.normales_borde = [];
+
+	this.tangentes_borde = [];
+	this.tangentes_tapa1 = [];
+	this.tangentes_tapa2 = [];
+
 	this.camino_perfil = null;
 	this.tapa1 = new SupFan();
 	this.tapa2 = new SupFan();
@@ -106,8 +111,7 @@ function Vereda(){
       var u = (camino.valores_u/step)*i;
       var punto = camino.get_punto(u);
       this.perfil.forma.push(punto);
-      this.normales_tapa1.push([0.0, -1.0, 0.0]);
-      this.normales_tapa2.push([0.0, 1.0, 0.0]);
+
 	  // var aux = vec3.create();
 	  // vec3.normalize(aux, punto);
 
@@ -115,7 +119,15 @@ function Vereda(){
 			var normal = vec3.create();
 			vec3.cross(normal, vec3.fromValues(0,1.0,0), tangente);
 			vec3.normalize(normal, normal);
+			vec3.normalize(tangente, tangente);
 			this.normales_borde.push([normal[0], normal[1], normal[2]]);
+			this.tangentes_borde.push([tangente[0], tangente[1], tangente[2]]);
+
+			this.normales_tapa1.push([0.0, -1.0, 0.0]);
+			this.tangentes_tapa1.push([tangente[0], tangente[1], tangente[2]]);
+
+      this.normales_tapa2.push([0.0, 1.0, 0.0]);
+			this.tangentes_tapa2.push([tangente[0], tangente[1], tangente[2]]);
 
 			this.perfil.normal.push([0,1,0]);
 			this.perfil.normal.push([0,0,1]);
@@ -154,6 +166,7 @@ function Vereda(){
     this.crear_perfil(100);
 
     this.perfil.normales = this.normales_borde;
+		this.superficie.tangentes = this.tangentes_borde;
     this.superficie.create(camino, 40, this.perfil, color);
 
     this.perfil.normales = this.normales_tapa1;
@@ -172,6 +185,9 @@ function Vereda(){
 		this.traslacion_tapa2 = mat4.create();
 		mat4.identity(this.traslacion_tapa2);
 		mat4.translate(this.traslacion_tapa2, this.traslacion_tapa2, [0,alto,0]);
+
+		this.tapa1.tangentes = this.tangentes_tapa1;
+		this.tapa1.tangentes = this.tangentes_tapa2;
 	}
 
 	this.create_text_buffer = function(){
@@ -234,5 +250,11 @@ function Vereda(){
 		this.tapa2.initTexture(texture_file);
 		this.superficie.initTexture(texture_file);
 		this.create_text_buffer();
+	}
+
+	this.addNormalMap = function(texture_file){
+		this.tapa1.addNormalMap(texture_file);
+		this.tapa2.addNormalMap(texture_file);
+		this.superficie.addNormalMap(texture_file);
 	}
 }

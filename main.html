@@ -137,54 +137,71 @@
 
 	<!--Fragment shader Texturas	-->
 	<script id="shader-texture-fs" type="x-shader/x-fragment">
-	precision mediump float;
-	uniform vec3 uAmbientColor;
-	uniform bool uUseLighting;
+		precision mediump float;
+		uniform vec3 uAmbientColor;
+		uniform bool uUseLighting;
+		//uniform bool uUseNormalMap;
 
     uniform vec3 uLightingDirection;
     uniform vec3 uDirectionalColor;
     uniform vec3 uPointLightingLocation;
     uniform vec3 uPointLightingColor;
 
-	varying vec2 vTextureCoord;
-	// varying vec3 vLightWeighting;
-	varying vec3 vVertexNormal;
-	varying vec4 vPosition;
+		varying vec2 vTextureCoord;
+		// varying vec3 vLightWeighting;
+		varying vec3 vVertexNormal;
+		varying vec4 vPosition;
 
-	varying vec3 vTransformedNormal;
+		varying vec3 vTransformedNormal;
+		//varying vec3 vTransformedTangent;
 
-	uniform sampler2D uSampler;
+		uniform sampler2D uSampler;
+		//uniform sampler2D uSamplerMap;
 
-	void main(void) {
-		vec3 lightWeighting;
-		vec3 normal = vTransformedNormal;
+		void main(void) {
+			vec3 lightWeighting;
+			vec3 normal = normalize(vTransformedNormal);
+			//vec3 tangent = normalize(vTransformedTangent);
 
-		if (!uUseLighting) {
-			    lightWeighting = vec3(0.8, 0.7, 0.4);
-		} else {
-				float distancia = distance(vPosition.xyz, uPointLightingLocation);
+			if (!uUseLighting) {
+				    lightWeighting = vec3(0.8, 0.7, 0.4);
+			} else {
+					float distancia = distance(vPosition.xyz, uPointLightingLocation);
 
-			// if(distancia < 100.0){
-				//************LUZ PUNTUAL****************
-				vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz);
-				float directionalPointLightWeighting = max(dot(normalize(normal), lightDirection), 0.0);
-				directionalPointLightWeighting *= 2.0/distancia;
+					/*if (uUseNormalMap){
+						vec3 normalMap = texture2D(uSamplerMap, vec2(vUV.s, vUV.t));
+						normalMap = normalMap * 2.0 - vec3(1.0, 1.0, 1.0);
 
-				//************LUZ DIRECCIONAL****************
-				float directionalLightWeighting = max(dot(vTransformedNormal, uLightingDirection), 0.0);
-				// lightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+						vec3 binormal = normalize(cross(normal, tangent));
+						mat3 base_p = transpose(mat3(tangent, binormal, normal));
 
-				lightWeighting = uAmbientColor + uPointLightingColor * directionalPointLightWeighting + uDirectionalColor * directionalLightWeighting;
-			// }else{
-			// 	lightWeighting = vec3(0.0, 0.0, 0.0);
-			// }
+						lightDirection = base_p * lightDirection;
+						uLightingDirection = base_p * uLightingDirection;
+
+						normal = normalMap;
+					}*/
+
+				// if(distancia < 100.0){
+					//************LUZ PUNTUAL****************
+					vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz);
+					float directionalPointLightWeighting = max(dot(normalize(normal), lightDirection), 0.0);
+					directionalPointLightWeighting *= 2.0/distancia;
+
+					//************LUZ DIRECCIONAL****************
+					float directionalLightWeighting = max(dot(vTransformedNormal, uLightingDirection), 0.0);
+					// lightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+
+					lightWeighting = uAmbientColor + uPointLightingColor * directionalPointLightWeighting + uDirectionalColor * directionalLightWeighting;
+				// }else{
+				// 	lightWeighting = vec3(0.0, 0.0, 0.0);
+				// }
+			}
+
+			vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+			gl_FragColor = vec4(textureColor.rgb * lightWeighting, textureColor.a);
+			//gl_FragColor = vec4(transformedNormal.rgb, 1.0);
+			 //gl_FragColor = vec4(vVertexNormal.rgb*2.0-1.0, 1.0);
 		}
-
-		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-		gl_FragColor = vec4(textureColor.rgb * lightWeighting, textureColor.a);
-		//gl_FragColor = vec4(transformedNormal.rgb, 1.0);
-		 //gl_FragColor = vec4(vVertexNormal.rgb*2.0-1.0, 1.0);
-	}
 
 	/*void main(void) {
 		vec3 lightWeighting;
@@ -555,6 +572,7 @@
 		        shaderProgramTexturedObject.nMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uNMatrix");
 		        shaderProgramTexturedObject.samplerUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uSampler");
 		        shaderProgramTexturedObject.useLightingUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uUseLighting");
+						//shaderProgramTexturedObject.useNormalMap = gl.getUniformLocation(shaderProgramTexturedObject, "uUseNormalMap");
 		        shaderProgramTexturedObject.ambientColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uAmbientColor");
 		        shaderProgramTexturedObject.lightingDirectionUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uLightingDirection");
 		        shaderProgramTexturedObject.directionalColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uDirectionalColor");
@@ -1061,7 +1079,7 @@
 				// ruta.draw();
 				// edif.tick(t);
 				// edif.draw(mvMatrix);
-				// escena.tick(t);
+				escena.tick(t);
 				escena.modelMatrix = modelMatrix;
 				escena.draw(mvMatrix);
 				// calle.drawCalle(mvMatrix, 35.0, 2.0, 5.0);

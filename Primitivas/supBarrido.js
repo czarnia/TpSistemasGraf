@@ -93,6 +93,21 @@ function supBarrido(){
 					this.grilla.normal_buffer.push(normal_punto[2]);
 				}
 
+				if (this.tangentes){
+					var tangente_punto = vec3.fromValues(this.tangentes[j][0], this.tangentes[j][1], this.tangentes[j][2]);
+
+					//Roto
+					vec3.transformMat4(tangente_punto, tangente_punto, mat_rotacion_tan);
+					//Roto para que coincidan las normales
+					vec3.transformMat4(tangente_punto, tangente_punto, mat_rotacion_norm);
+
+					vec3.normalize(tangente_punto, tangente_punto);
+
+					this.grilla.normal_buffer.push(tangente_punto[0]);
+					this.grilla.normal_buffer.push(tangente_punto[1]);
+					this.grilla.normal_buffer.push(tangente_punto[2]);
+				}
+
 				if(!this.con_textura){
 					this.grilla.color_buffer.push(color[0]);
 					this.grilla.color_buffer.push(color[1]);
@@ -134,5 +149,9 @@ function supBarrido(){
 
 	this.asign_text_buffer = function(buffer){
 		this.grilla.asign_text_buffer(buffer);
+	}
+
+	this.addNormalMap = function(texture){
+		this.grilla.addNormalMap(texture);
 	}
 }
