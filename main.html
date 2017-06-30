@@ -178,7 +178,7 @@
 					// if(distancia < 100.0){
 					vec3 lightDirection = normalize(uPointLightingLocation[i] - vPosition.xyz);
 					float directionalPointLightWeighting = max(dot(normalize(normal), lightDirection), 0.0);
-					directionalPointLightWeighting *= 2.0/distancia;
+					directionalPointLightWeighting *= 1.0/distancia;
 					lightWeighting += uPointLightingColor * directionalPointLightWeighting;
 				}
 			}
@@ -1241,7 +1241,7 @@
 				// ruta.draw();
 				// edif.tick(t);
 				// edif.draw(mvMatrix);
-				// escena.tick(t);
+				escena.tick(t);
 				escena.draw(mvMatrix);
 				// calle.drawCalle(mvMatrix, 35.0, 2.0, 5.0);
 				// calle.draw(mvMatrix);

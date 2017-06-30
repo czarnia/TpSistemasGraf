@@ -39,7 +39,7 @@ function Escena(){
 			calle.create_perfil(this.ancho_calle, 0.5);
 			calle.create_calle_escena(this.lado, [0.0, 0.0, this.lado], this.lado_manzana);
 			calle.initTexture(this.texturas[1]);
-			calle.initTexture(this.texturas[0]);
+			calle.initTexture(this.texturas[2]);
 			this.calles.push(calle);
 		}
 	}
