@@ -73,6 +73,13 @@ function SupFan(){
         this.webgl_normal_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);
+
+        if (this.normal_map != null){
+          this.webgl_tangent_buffer = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.tangent_buffer), gl.STATIC_DRAW);
+        }
+
       }else{
         this.webgl_color_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
