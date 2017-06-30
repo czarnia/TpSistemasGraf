@@ -121,7 +121,7 @@ function Vereda(){
 
 			this.normales_tapa1.push([0.0, -1.0, 0.0]);
 
-      		this.normales_tapa2.push([0.0, 1.0, 0.0]);
+      this.normales_tapa2.push([0.0, 1.0, 0.0]);
 
 			this.perfil.tangentes.push([tangente[0], tangente[1], tangente[2]]);
 
