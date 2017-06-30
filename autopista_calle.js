@@ -26,7 +26,7 @@ function Calle(){
 		this.perfil.normal = [];
 		this.perfil.normales = [];
 		this.perfil.tangentes = [];
-		this.niveles = 100;
+		this.niveles = 130;
 
 		this.perfil.forma.push([-ancho / 2, -alto / 2, 0.0]);
 		this.perfil.normales.push([-1.0, 0.0, 0.0]);

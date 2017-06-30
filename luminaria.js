@@ -1,7 +1,7 @@
 function Luminaria(){
 	this.radio = null;
 	this.poste = new supBarrido();
-  	this.foco = new Cuadrado();
+  this.foco = new Cuadrado();
 	this.perfil = {
 		forma:null,
 		normal:null,
@@ -38,11 +38,11 @@ function Luminaria(){
 
 	this.create = function(radio, alto, largo, _x, _y, _z){
 		this.radio = radio;
-	    var puntos_forma = devolver_puntos_circulo(radio, 30, this.perfil);
+	    var puntos_forma = devolver_puntos_circulo(radio, 70, this.perfil);
 	    var camino = this.camino(alto, largo);
 		var color = [1,0.843,0];
 	    // this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1], color);
-	    this.poste.create(camino, 40, this.perfil, color);
+	    this.poste.create(camino, 70, this.perfil, color);
 			// this.perfil.forma = puntos_forma[0];
 
 	  //   this.poste.create(camino, 40, puntos_forma[0], puntos_forma[1], color);
@@ -169,7 +169,7 @@ function Luminaria(){
 	this.create_text_buffer_poste = function(){
 		var texture_buffer = []
 
-		for (var i = 0; i < 40; i++){
+		for (var i = 0; i < 70; i++){
 			for (var j = 0; j < this.perfil.forma.length; j++){
 				var punto = this.perfil.forma[j];
 				var u = (punto[1]+punto[2])/this.radio;
