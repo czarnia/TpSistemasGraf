@@ -117,7 +117,7 @@ function Escena(){
 
 					manzana.initTexture(this.texturas[5]);
 					manzana.initTextureRoof(this.texturas[11]);
-					//manzana.terreno.addNormalMap(this.texturas[12]);
+					// manzana.terreno.addNormalMap(this.texturas[12]);
 					this.manzanas.push(manzana);
 					//Crear manzana
 				}
@@ -175,9 +175,15 @@ function Escena(){
 		var faroles = [];
 		faroles = this.autopista.posiciones_faroles();
 		// vec3.transformMat4(faroles[3], faroles[3], mvScene);
+		var vectores = [];
+		for(var i = 0; i < faroles.length; i++){
+			vectores.push(faroles[i][0]);
+			vectores.push(faroles[i][1]);
+			vectores.push(faroles[i][2]);
+		}
 
 		gl.useProgram(shaderProgramTexturedObject);
-		gl.uniform3fv(shaderProgramTexturedObject.pointLightingLocationUniform, faroles[3]);
+		gl.uniform3fv(shaderProgramTexturedObject.pointLightingLocationUniform, vectores);
 		gl.uniform3f(shaderProgramTexturedObject.pointLightingColorUniform, 1.0, 1.0, 1.0);
 		gl.useProgram(glProgram);
 

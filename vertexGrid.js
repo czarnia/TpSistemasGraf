@@ -177,12 +177,47 @@ function VertexGrid () {
       gl.useProgram(glProgram);
     }
 
-    // Esta funci�n es la que se encarga de configurar todo lo necesario
-    // para dibujar el VertexGrid.
-    // En el caso del ejemplo puede observarse que la �ltima l�nea del m�todo
-    // indica dibujar tri�ngulos utilizando los 6 �ndices cargados en el Index_Buffer.
     this.drawVertexGrid = function(mvMatrix_total){
-      if(this.texture_buffer != null){
+      if(this.normal_map != null){
+          gl.useProgram(shaderProgramNormalMap);
+          shaderProgramNormalMap.vertexTangentAttribute = gl.getAttribLocation(shaderProgramNormalMap, "aVertexTangent");
+          gl.enableVertexAttribArray(shaderProgramNormalMap.vertexTangentAttribute);
+          gl.uniform1i(shaderProgramNormalMap.useNormalMap, true);
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+          gl.vertexAttribPointer(shaderProgramNormalMap.vertexTangentAttribute, 3, gl.FLOAT, false, 0, 0);
+          gl.disableVertexAttribArray(shaderProgramNormalMap.vertexTangentAttribute);
+
+          gl.uniformMatrix4fv(shaderProgramNormalMap.ModelViewMatrixUniform, false, mvMatrix_total);
+
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
+          gl.vertexAttribPointer(shaderProgramNormalMap.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+
+          gl.activeTexture(gl.TEXTURE0);
+          gl.bindTexture(gl.TEXTURE_2D, this.textures[0]);
+          gl.uniform1i(shaderProgramNormalMap.samplerUniform, 0);
+
+          gl.activeTexture(gl.TEXTURE1);
+          gl.bindTexture(gl.TEXTURE_2D, this.normal_map);
+          gl.uniform1i(shaderProgramNormalMap.samplerMap, 1);
+
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+          gl.vertexAttribPointer(shaderProgramNormalMap.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+          if(this.normal_buffer.length > 0){
+            gl.uniform1i(shaderProgramNormalMap.useLightingUniform, true);
+          }else{
+            gl.uniform1i(shaderProgramNormalMap.useLightingUniform, false);
+          }
+
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+          gl.vertexAttribPointer(shaderProgramNormalMap.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+
+          var normalMatrix = mat3.create();
+          mat3.fromMat4(normalMatrix, mvMatrix_total);
+          mat3.invert(normalMatrix, normalMatrix);
+          mat3.transpose(normalMatrix, normalMatrix);
+          gl.uniformMatrix3fv(shaderProgramNormalMap.nMatrixUniform, false, normalMatrix);
+      }else if(this.texture_buffer != null){
           gl.useProgram(shaderProgramTexturedObject);
 
           gl.uniformMatrix4fv(shaderProgramTexturedObject.ModelViewMatrixUniform, false, mvMatrix_total);
