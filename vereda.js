@@ -121,7 +121,7 @@ function Vereda(){
 
 			this.normales_tapa1.push([0.0, -1.0, 0.0]);
 
-      this.normales_tapa2.push([0.0, 1.0, 0.0]);
+      		this.normales_tapa2.push([0.0, 1.0, 0.0]);
 
 			this.perfil.tangentes.push([tangente[0], tangente[1], tangente[2]]);
 
@@ -156,18 +156,22 @@ function Vereda(){
 
 
 	this.create = function(color, lado, alto){
-    this.lado = lado;
-    this.alto = alto;
-    var camino = this.camino();
-    this.crear_perfil(100);
+	    this.lado = lado;
+	    this.alto = alto;
+	    var camino = this.camino();
+	    this.crear_perfil(100);
 
-    this.perfil.normales = this.normales_borde;
-    this.superficie.create(camino, 40, this.perfil, color);
+	    var tangentes_tapas = this.perfil.tangentes;
+		tangentes_tapas.unshift([0,0,1]);
 
-    this.perfil.normales = this.normales_tapa1;
-    this.tapa1.create(this.perfil, color);
-    this.perfil.normales = this.normales_tapa2;
-    this.tapa2.create(this.perfil, color);
+	    this.perfil.normales = this.normales_borde;
+	    this.superficie.create(camino, 40, this.perfil, color);
+
+	    this.perfil.normales = this.normales_tapa1;
+	    this.perfil.tangentes = tangentes_tapas;
+	    this.tapa1.create(this.perfil, color);
+	    this.perfil.normales = this.normales_tapa2;
+	    this.tapa2.create(this.perfil, color);
 
 		this.rotacion = mat4.create();
 		mat4.identity(this.rotacion);
@@ -181,8 +185,8 @@ function Vereda(){
 		mat4.identity(this.traslacion_tapa2);
 		mat4.translate(this.traslacion_tapa2, this.traslacion_tapa2, [0,alto,0]);
 
-		var tangentes_tapas = this.perfil.tangentes;
-		tangentes_tapas.unshift([0,0,1]);
+		// var tangentes_tapas = this.perfil.tangentes;
+		// tangentes_tapas.unshift([0,0,1]);
 
 		/*var tangentes_tapas = [];
 		for (var i = 0; i < this.perfil.forma.lenght+1; i++){
@@ -190,8 +194,8 @@ function Vereda(){
 		}
 		*/
 
-		this.tapa1.tangent_buffer = tangentes_tapas;
-		this.tapa1.tangent_buffer = tangentes_tapas;
+		// this.tapa1.tangent_buffer = tangentes_tapas;
+		// this.tapa1.tangent_buffer = tangentes_tapas;
 	}
 
 	this.create_text_buffer = function(){

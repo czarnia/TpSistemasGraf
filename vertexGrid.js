@@ -198,7 +198,7 @@ function VertexGrid () {
 
           gl.activeTexture(gl.TEXTURE1);
           gl.bindTexture(gl.TEXTURE_2D, this.normal_map);
-          gl.uniform1i(shaderProgramNormalMap.samplerMap, 1);
+          gl.uniform1i(shaderProgramNormalMap.samplerNormalMap, 1);
 
           gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
           gl.vertexAttribPointer(shaderProgramNormalMap.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);

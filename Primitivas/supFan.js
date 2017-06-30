@@ -27,6 +27,12 @@ function SupFan(){
     this.normal_buffer.push(perfil.normales[0][1]);
     this.normal_buffer.push(perfil.normales[0][2]);
 
+    if(perfil.tangentes){
+      this.tangent_buffer.push(perfil.tangentes[0][0]);
+      this.tangent_buffer.push(perfil.tangentes[0][1]);
+      this.tangent_buffer.push(perfil.tangentes[0][2]);
+    }
+
     this.color_buffer.push(color[0]);
     this.color_buffer.push(color[1]);
     this.color_buffer.push(color[2]);
@@ -40,6 +46,12 @@ function SupFan(){
         this.normal_buffer.push(perfil.normales[i][0]);
         this.normal_buffer.push(perfil.normales[i][1]);
         this.normal_buffer.push(perfil.normales[i][2]);
+      }
+
+      if(perfil.tangentes){
+        this.tangent_buffer.push(perfil.tangentes[i][0]);
+        this.tangent_buffer.push(perfil.tangentes[i][1]);
+        this.tangent_buffer.push(perfil.tangentes[i][2]);
       }
 
       this.index_buffer.push(i);
@@ -95,7 +107,7 @@ function SupFan(){
         gl.uniform1i(shaderProgramNormalMap.useNormalMap, true);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
         gl.vertexAttribPointer(shaderProgramNormalMap.vertexTangentAttribute, 3, gl.FLOAT, false, 0, 0);
-        gl.disableVertexAttribArray(shaderProgramNormalMap.vertexTangentAttribute);
+        // gl.disableVertexAttribArray(shaderProgramNormalMap.vertexTangentAttribute);
 
         gl.uniformMatrix4fv(shaderProgramNormalMap.ModelViewMatrixUniform, false, mvMatrix_total);
 
@@ -108,7 +120,7 @@ function SupFan(){
 
         gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, this.normal_map);
-        gl.uniform1i(shaderProgramNormalMap.samplerMap, 1);
+        gl.uniform1i(shaderProgramNormalMap.samplerNormalMap, 1);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgramNormalMap.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);

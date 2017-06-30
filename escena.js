@@ -117,7 +117,7 @@ function Escena(){
 
 					manzana.initTexture(this.texturas[5]);
 					manzana.initTextureRoof(this.texturas[11]);
-					// manzana.terreno.addNormalMap(this.texturas[12]);
+					manzana.terreno.addNormalMap(this.texturas[12]);
 					this.manzanas.push(manzana);
 					//Crear manzana
 				}
@@ -186,7 +186,6 @@ function Escena(){
 		gl.uniform3fv(shaderProgramTexturedObject.pointLightingLocationUniform, vectores);
 		gl.uniform3f(shaderProgramTexturedObject.pointLightingColorUniform, 1.0, 1.0, 1.0);
 		gl.useProgram(glProgram);
-
 	}
 
 	this.tick = function(t){
