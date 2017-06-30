@@ -18,6 +18,8 @@ function Calle(){
 
 	this.es_autopista = false;
 
+	this.mov = false;
+
 	this.create_perfil = function(ancho, alto){
 		this.ancho = ancho;
 		this.perfil.forma = [];
@@ -70,6 +72,7 @@ function Calle(){
 		for (var i = 0; i < this.perfil.forma.length; i++) {
             vec3.add(this.perfil.forma[i], mov, this.perfil.forma[i]);
 		}
+		this.mov = mov;
 	}
 
 	this.create = function(curva_camino, es_autopista){
@@ -146,25 +149,7 @@ function Calle(){
 			for (var j = 0; j < this.perfil.forma.length; j++) {
 				var punto = this.perfil.forma[j];
 				var v = repeticion*(this.path.distancias_discret[i]/long_curva);
-				var u = (punto[0]+this.ancho/2)/this.ancho;
-				/*switch(j){
-					case 0:
-						var u = 0;
-						break;
-					case 1:
-						var u = 0.125;
-						break;
-					case 2:
-						var u = 0.125 * 7;
-						break;
-					case 3:
-						var u = 0.125 * 8;
-						break;
-					case 4:
-						var u = 0;
-						break;
-				}*/
-
+				var u = (punto[0]+this.ancho/2-this.mov[0])/this.ancho;
 				texture_buffer.push(u);
 				texture_buffer.push(v);
 			}
