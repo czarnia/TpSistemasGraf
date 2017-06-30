@@ -184,6 +184,12 @@ function Vereda(){
 		var tangentes_tapas = this.perfil.tangentes;
 		tangentes_tapas.unshift([0,0,1]);
 
+		/*var tangentes_tapas = [];
+		for (var i = 0; i < this.perfil.forma.lenght+1; i++){
+			tangentes_tapas.push([1,0,0]);
+		}
+		*/
+
 		this.tapa1.tangent_buffer = tangentes_tapas;
 		this.tapa1.tangent_buffer = tangentes_tapas;
 	}
