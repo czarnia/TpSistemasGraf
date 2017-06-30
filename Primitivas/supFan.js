@@ -15,6 +15,9 @@ function SupFan(){
   this.normal_buffer = [];
   this.webgl_normal_buffer = null;
 
+  this.tangent_buffer = [];
+  this.webgl_tangent_buffer = null;
+
   this.create = function(perfil, color){
     this.position_buffer.push(0);
     this.position_buffer.push(0);

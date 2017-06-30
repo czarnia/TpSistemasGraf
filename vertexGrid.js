@@ -5,6 +5,7 @@ function VertexGrid () {
     this.rows = null;
     this.index_buffer = null;
     this.textures = [];
+    this.normal_map = null;
 
     this.position_buffer = null;
     this.color_buffer = null;
@@ -17,6 +18,7 @@ function VertexGrid () {
     this.webgl_texture_buffer = null;
     this.webgl_normal_buffer = null;
     this.webgl_index_buffer = null;
+    this.webgl_tangent_buffer = null;
 
     this.create = function(_rows, _cols){
       this.cols = _cols;
