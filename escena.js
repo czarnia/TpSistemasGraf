@@ -167,6 +167,11 @@ function Escena(){
 		gl.uniform3fv(shaderProgramTexturedObject.pointLightingLocationUniform, vectores);
 		gl.uniform3f(shaderProgramTexturedObject.pointLightingColorUniform, 1.0, 1.0, 1.0);
 		gl.useProgram(glProgram);
+
+		// gl.useProgram(shaderProgramNormalMap);
+		// gl.uniform3fv(shaderProgramNormalMap.pointLightingLocationUniform, vectores);
+		// gl.uniform3f(shaderProgramNormalMap.pointLightingColorUniform, 1.0, 1.0, 1.0);
+		// gl.useProgram(glProgram);
 	}
 
 	this.tick = function(t){
